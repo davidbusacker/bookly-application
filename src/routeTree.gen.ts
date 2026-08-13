@@ -16,7 +16,6 @@ import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminReturnsRouteImport } from './routes/admin.returns'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
-import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
 import { Route as AdminCustomersIndexRouteImport } from './routes/admin.customers.index'
 import { Route as AdminCustomersIdRouteImport } from './routes/admin.customers.$id'
@@ -91,11 +90,6 @@ const AdminReturnsRoute = AdminReturnsRouteImport.update({
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminTicketsRoute = AdminTicketsRouteImport.update({
-  id: '/tickets',
-  path: '/tickets',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
@@ -327,7 +321,6 @@ export interface FileRoutesByFullPath {
   '/llms.txt': typeof LlmsDottxtRoute
   '/admin/returns': typeof AdminReturnsRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/tickets': typeof AdminTicketsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
@@ -376,7 +369,6 @@ export interface FileRoutesByTo {
   '/llms.txt': typeof LlmsDottxtRoute
   '/admin/returns': typeof AdminReturnsRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/tickets': typeof AdminTicketsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin': typeof AdminIndexRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
@@ -427,7 +419,6 @@ export interface FileRoutesById {
   '/llms.txt': typeof LlmsDottxtRoute
   '/admin/returns': typeof AdminReturnsRoute
   '/admin/settings': typeof AdminSettingsRoute
-  '/admin/tickets': typeof AdminTicketsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
@@ -479,7 +470,6 @@ export interface FileRouteTypes {
     | '/llms.txt'
     | '/admin/returns'
     | '/admin/settings'
-    | '/admin/tickets'
     | '/admin/transactions'
     | '/admin/'
     | '/admin/customers/$id'
@@ -528,7 +518,6 @@ export interface FileRouteTypes {
     | '/llms.txt'
     | '/admin/returns'
     | '/admin/settings'
-    | '/admin/tickets'
     | '/admin/transactions'
     | '/admin'
     | '/admin/customers/$id'
@@ -578,7 +567,6 @@ export interface FileRouteTypes {
     | '/llms.txt'
     | '/admin/returns'
     | '/admin/settings'
-    | '/admin/tickets'
     | '/admin/transactions'
     | '/admin/'
     | '/admin/customers/$id'
@@ -711,13 +699,6 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/admin/settings'
       preLoaderRoute: typeof AdminSettingsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/tickets': {
-      id: '/admin/tickets'
-      path: '/tickets'
-      fullPath: '/admin/tickets'
-      preLoaderRoute: typeof AdminTicketsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/transactions': {
@@ -1006,7 +987,6 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminReturnsRoute: typeof AdminReturnsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
-  AdminTicketsRoute: typeof AdminTicketsRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCustomersIdRoute: typeof AdminCustomersIdRoute
@@ -1020,7 +1000,6 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminReturnsRoute: AdminReturnsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
-  AdminTicketsRoute: AdminTicketsRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminCustomersIdRoute: AdminCustomersIdRoute,
