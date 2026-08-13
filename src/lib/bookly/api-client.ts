@@ -25,6 +25,23 @@ export async function apiGet<T>(path: string): Promise<ApiEnvelope<T>> {
   return json;
 }
 
+export async function apiSend<T>(
+  path: string,
+  method: "POST" | "PATCH",
+  body: unknown,
+): Promise<ApiEnvelope<T>> {
+  const res = await fetch(path, {
+    method,
+    headers: { "content-type": "application/json", accept: "application/json" },
+    body: JSON.stringify(body),
+  });
+  const json = (await res.json()) as ApiEnvelope<T> & { error?: { title?: string; detail?: string } };
+  if (!res.ok) {
+    throw new Error(json.error?.detail || json.error?.title || `Request failed (${res.status})`);
+  }
+  return json;
+}
+
 export function qs(params: Record<string, string | number | undefined | null>) {
   const sp = new URLSearchParams();
   for (const [k, v] of Object.entries(params)) {
@@ -129,6 +146,18 @@ export type ReturnRow = {
   items?: Array<{ id: string; quantity: number; condition?: string | null }>;
 };
 
+export type RefundEvent = {
+  id: string;
+  type: string;
+  status_from?: string | null;
+  status_to?: string | null;
+  actor: string;
+  note?: string | null;
+  amount_cents?: number | null;
+  metadata?: Record<string, unknown>;
+  created_at: string;
+};
+
 export type Refund = {
   id: string;
   refund_number: string;
@@ -139,7 +168,9 @@ export type Refund = {
   reason?: string | null;
   created_at?: string;
   processed_at?: string | null;
-  order?: { id: string; order_number: string } | null;
+  order?: { id: string; order_number: string; status?: string; total_cents?: number } | null;
+  return?: { id: string; rma_number: string; status?: string } | null;
+  events?: RefundEvent[];
 };
 
 export type Transaction = {

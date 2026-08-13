@@ -11,9 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as DocsRouteImport } from './routes/docs'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
-import { Route as AdminRefundsRouteImport } from './routes/admin.refunds'
 import { Route as AdminReturnsRouteImport } from './routes/admin.returns'
 import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
@@ -21,6 +21,8 @@ import { Route as AdminCustomersIndexRouteImport } from './routes/admin.customer
 import { Route as AdminCustomersIdRouteImport } from './routes/admin.customers.$id'
 import { Route as AdminOrdersIndexRouteImport } from './routes/admin.orders.index'
 import { Route as AdminOrdersIdRouteImport } from './routes/admin.orders.$id'
+import { Route as AdminRefundsIndexRouteImport } from './routes/admin.refunds.index'
+import { Route as AdminRefundsIdRouteImport } from './routes/admin.refunds.$id'
 import { Route as ApiPublicOpenapiDotjsonRouteImport } from './routes/api/public/openapi[.]json'
 import { Route as ApiPublicToolsDotjsonRouteImport } from './routes/api/public/tools[.]json'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
@@ -64,6 +66,11 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
   id: '/llms.txt',
   path: '/llms.txt',
@@ -72,11 +79,6 @@ const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminRefundsRoute = AdminRefundsRouteImport.update({
-  id: '/refunds',
-  path: '/refunds',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminReturnsRoute = AdminReturnsRouteImport.update({
@@ -112,6 +114,16 @@ const AdminOrdersIndexRoute = AdminOrdersIndexRouteImport.update({
 const AdminOrdersIdRoute = AdminOrdersIdRouteImport.update({
   id: '/orders/$id',
   path: '/orders/$id',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRefundsIndexRoute = AdminRefundsIndexRouteImport.update({
+  id: '/refunds/',
+  path: '/refunds/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRefundsIdRoute = AdminRefundsIdRouteImport.update({
+  id: '/refunds/$id',
+  path: '/refunds/$id',
   getParentRoute: () => AdminRoute,
 } as any)
 const ApiPublicOpenapiDotjsonRoute = ApiPublicOpenapiDotjsonRouteImport.update({
@@ -298,18 +310,20 @@ const ApiPublicV1OrdersIdReturnsEligibilityRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/docs': typeof DocsRoute
   '/llms.txt': typeof LlmsDottxtRoute
-  '/admin/refunds': typeof AdminRefundsRoute
   '/admin/returns': typeof AdminReturnsRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
+  '/admin/refunds/$id': typeof AdminRefundsIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/admin/customers/': typeof AdminCustomersIndexRoute
   '/admin/orders/': typeof AdminOrdersIndexRoute
+  '/admin/refunds/': typeof AdminRefundsIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
@@ -343,18 +357,20 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/docs': typeof DocsRoute
   '/llms.txt': typeof LlmsDottxtRoute
-  '/admin/refunds': typeof AdminRefundsRoute
   '/admin/returns': typeof AdminReturnsRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin': typeof AdminIndexRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
+  '/admin/refunds/$id': typeof AdminRefundsIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/admin/customers': typeof AdminCustomersIndexRoute
   '/admin/orders': typeof AdminOrdersIndexRoute
+  '/admin/refunds': typeof AdminRefundsIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
@@ -390,18 +406,20 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/docs': typeof DocsRoute
   '/llms.txt': typeof LlmsDottxtRoute
-  '/admin/refunds': typeof AdminRefundsRoute
   '/admin/returns': typeof AdminReturnsRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
+  '/admin/refunds/$id': typeof AdminRefundsIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/admin/customers/': typeof AdminCustomersIndexRoute
   '/admin/orders/': typeof AdminOrdersIndexRoute
+  '/admin/refunds/': typeof AdminRefundsIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
@@ -438,18 +456,20 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/docs'
     | '/llms.txt'
-    | '/admin/refunds'
     | '/admin/returns'
     | '/admin/tickets'
     | '/admin/transactions'
     | '/admin/'
     | '/admin/customers/$id'
     | '/admin/orders/$id'
+    | '/admin/refunds/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/admin/customers/'
     | '/admin/orders/'
+    | '/admin/refunds/'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/books/$id'
@@ -483,18 +503,20 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/docs'
     | '/llms.txt'
-    | '/admin/refunds'
     | '/admin/returns'
     | '/admin/tickets'
     | '/admin/transactions'
     | '/admin'
     | '/admin/customers/$id'
     | '/admin/orders/$id'
+    | '/admin/refunds/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/admin/customers'
     | '/admin/orders'
+    | '/admin/refunds'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/books/$id'
@@ -529,18 +551,20 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/docs'
     | '/llms.txt'
-    | '/admin/refunds'
     | '/admin/returns'
     | '/admin/tickets'
     | '/admin/transactions'
     | '/admin/'
     | '/admin/customers/$id'
     | '/admin/orders/$id'
+    | '/admin/refunds/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/admin/customers/'
     | '/admin/orders/'
+    | '/admin/refunds/'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/books/$id'
@@ -576,6 +600,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  DocsRoute: typeof DocsRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   ApiPublicOpenapiDotjsonRoute: typeof ApiPublicOpenapiDotjsonRoute
   ApiPublicToolsDotjsonRoute: typeof ApiPublicToolsDotjsonRoute
@@ -627,6 +652,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/llms.txt': {
       id: '/llms.txt'
       path: '/llms.txt'
@@ -639,13 +671,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/refunds': {
-      id: '/admin/refunds'
-      path: '/refunds'
-      fullPath: '/admin/refunds'
-      preLoaderRoute: typeof AdminRefundsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/returns': {
@@ -695,6 +720,20 @@ declare module '@tanstack/react-router' {
       path: '/orders/$id'
       fullPath: '/admin/orders/$id'
       preLoaderRoute: typeof AdminOrdersIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/refunds/': {
+      id: '/admin/refunds/'
+      path: '/refunds'
+      fullPath: '/admin/refunds/'
+      preLoaderRoute: typeof AdminRefundsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/refunds/$id': {
+      id: '/admin/refunds/$id'
+      path: '/refunds/$id'
+      fullPath: '/admin/refunds/$id'
+      preLoaderRoute: typeof AdminRefundsIdRouteImport
       parentRoute: typeof AdminRoute
     }
     '/api/public/openapi.json': {
@@ -925,27 +964,29 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
-  AdminRefundsRoute: typeof AdminRefundsRoute
   AdminReturnsRoute: typeof AdminReturnsRoute
   AdminTicketsRoute: typeof AdminTicketsRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCustomersIdRoute: typeof AdminCustomersIdRoute
   AdminOrdersIdRoute: typeof AdminOrdersIdRoute
+  AdminRefundsIdRoute: typeof AdminRefundsIdRoute
   AdminCustomersIndexRoute: typeof AdminCustomersIndexRoute
   AdminOrdersIndexRoute: typeof AdminOrdersIndexRoute
+  AdminRefundsIndexRoute: typeof AdminRefundsIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
-  AdminRefundsRoute: AdminRefundsRoute,
   AdminReturnsRoute: AdminReturnsRoute,
   AdminTicketsRoute: AdminTicketsRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminCustomersIdRoute: AdminCustomersIdRoute,
   AdminOrdersIdRoute: AdminOrdersIdRoute,
+  AdminRefundsIdRoute: AdminRefundsIdRoute,
   AdminCustomersIndexRoute: AdminCustomersIndexRoute,
   AdminOrdersIndexRoute: AdminOrdersIndexRoute,
+  AdminRefundsIndexRoute: AdminRefundsIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
@@ -953,6 +994,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  DocsRoute: DocsRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   ApiPublicOpenapiDotjsonRoute: ApiPublicOpenapiDotjsonRoute,
   ApiPublicToolsDotjsonRoute: ApiPublicToolsDotjsonRoute,

@@ -54,7 +54,7 @@ function ConsoleLayout() {
             ))}
           </nav>
           <a
-            href="/"
+            href="/docs"
             className="ml-auto rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-accent"
           >
             API docs

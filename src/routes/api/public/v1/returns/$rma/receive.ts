@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { booklyDb } from "@/lib/bookly/db";
 import { conflict, dbErr, handler, ok, parseBody, preflight } from "@/lib/bookly/http";
+import { logRefundEvent, settleRefund } from "@/lib/bookly/refunds";
 import { findReturn } from "@/lib/bookly/returns";
 import { RETURN_SELECT } from "@/lib/bookly/selects";
 
@@ -44,6 +45,50 @@ export const Route = createFileRoute("/api/public/v1/returns/$rma/receive")({
 
         let refund: unknown = null;
         if (body.auto_refund) {
+          const { data: pending } = await db
+            .from("refunds")
+            .select("*")
+            .eq("return_id", ret["id"] as string)
+            .neq("status", "succeeded")
+            .maybeSingle();
+
+          if (pending) {
+            await db
+              .from("refunds")
+              .update({ status: "succeeded", processed_at: now })
+              .eq("id", pending.id as string);
+            await logRefundEvent(db, {
+              refund_id: pending.id as string,
+              status_from: pending.status as string,
+              status_to: "succeeded",
+              actor: "warehouse",
+              amount_cents: pending.amount_cents as number,
+              note: `Return ${ret["rma_number"] as string} received — pending refund released`,
+            });
+            const { data: order } = await db
+              .from("orders")
+              .select("id,order_number,customer_id,total_cents")
+              .eq("id", ret["order_id"] as string)
+              .single();
+            if (order) {
+              await settleRefund(
+                db,
+                {
+                  id: pending.id as string,
+                  refund_number: pending.refund_number as string,
+                  amount_cents: pending.amount_cents as number,
+                  method: pending.method as string,
+                },
+                order as { id: string; order_number: string; customer_id: string; total_cents: number },
+              );
+            }
+            const { data: fresh } = await db.from("refunds").select("*").eq("id", pending.id as string).single();
+            refund = fresh;
+            await db.from("returns").update({ status: "refunded", closed_at: now }).eq("id", ret["id"] as string);
+            const { data: full0 } = await db.from("returns").select(RETURN_SELECT).eq("id", ret["id"] as string).single();
+            return ok({ return: full0, refund });
+          }
+
           const { data } = await db
             .from("refunds")
             .insert({
@@ -59,6 +104,16 @@ export const Route = createFileRoute("/api/public/v1/returns/$rma/receive")({
             .select("*")
             .single();
           refund = data;
+          if (data) {
+            await logRefundEvent(db, {
+              refund_id: data.id as string,
+              type: "created",
+              status_to: "succeeded",
+              actor: "warehouse",
+              amount_cents: data.amount_cents as number,
+              note: `Refund issued on receipt of return ${ret["rma_number"] as string}`,
+            });
+          }
           await db.from("returns").update({ status: "refunded", closed_at: now }).eq("id", ret["id"] as string);
         }
 

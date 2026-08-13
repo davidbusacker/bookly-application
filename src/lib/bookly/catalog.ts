@@ -5,6 +5,7 @@
 import {
   ORDER_STATUSES,
   REFUND_METHODS,
+  REFUND_STATUSES,
   RETURN_REASONS,
   RETURN_STATUSES,
   RULES,
@@ -210,7 +211,8 @@ export const ENDPOINTS: EndpointDef[] = [
     summary: "Create a return (RMA)",
     description:
       "Creates an RMA with a prepaid label and computes the expected refund. Rejects with 409 when the order is not eligible unless `override_eligibility` is true.",
-    agentUse: "Call after eligibility passes; pass order_item_id values from the order items endpoint.",
+    agentUse:
+      "Call after eligibility passes. `items` is optional — omit it to return every line on the order, or match lines by order_item_id, isbn or title. Set initiate_refund to open the refund in the same call.",
     body: [
       { name: "order_id", type: "string", required: true, description: "Order UUID or order number." },
       { name: "reason", type: "string", required: true, enum: RETURN_REASONS, description: "Return reason." },
@@ -218,16 +220,25 @@ export const ENDPOINTS: EndpointDef[] = [
       {
         name: "items",
         type: "array",
-        required: true,
-        description: "Line items to return.",
+        description: "Line items to return. Omit to return every item on the order.",
         items: {
           type: "object",
           fields: [
-            { name: "order_item_id", type: "string", required: true, description: "Order item UUID." },
-            { name: "quantity", type: "integer", required: true, description: "Units returned." },
+            { name: "order_item_id", type: "string", description: "Order item UUID." },
+            { name: "isbn", type: "string", description: "Match the line by ISBN instead of UUID." },
+            { name: "title", type: "string", description: "Match the line by (partial) book title." },
+            { name: "quantity", type: "integer", description: "Units returned; defaults to the full line quantity." },
           ],
         },
       },
+      {
+        name: "initiate_refund",
+        type: "string",
+        enum: ["none", "pending_return", "immediate"],
+        description:
+          "Open a refund with the RMA: `pending_return` parks the money until the book is received, `immediate` settles it now (loyalty / goodwill).",
+      },
+      { name: "actor", type: "string", description: "Who is acting, recorded on the refund timeline." },
       {
         name: "override_eligibility",
         type: "boolean",
@@ -287,8 +298,8 @@ export const ENDPOINTS: EndpointDef[] = [
     description: "Paginated refunds with their parent order.",
     agentUse: "Confirm whether money already went back before promising a new refund.",
     params: [
-      { name: "status", in: "query", description: "Comma-separated refund statuses." },
-      { name: "order_id", in: "query", description: "Filter by order UUID." },
+      { name: "status", in: "query", enum: REFUND_STATUSES, description: "Comma-separated refund statuses." },
+      { name: "order_id", in: "query", description: "Filter by order UUID or order number." },
       ...PAGE_PARAMS,
     ],
     example: { path: "/api/public/v1/refunds?limit=3" },
@@ -307,7 +318,16 @@ export const ENDPOINTS: EndpointDef[] = [
       { name: "amount_cents", type: "integer", description: "Defaults to the full remaining refundable amount." },
       { name: "method", type: "string", enum: REFUND_METHODS, description: "Default original_payment." },
       { name: "return_id", type: "string", description: "Link the refund to an existing return." },
+      {
+        name: "status",
+        type: "string",
+        enum: REFUND_STATUSES,
+        description:
+          "Initial status. Default `succeeded` (money moves now). Use `pending_return` to promise a refund once the book is received.",
+      },
       { name: "reason", type: "string", description: "Reason recorded on the ledger." },
+      { name: "note", type: "string", description: "Free-text note stored on the refund timeline." },
+      { name: "actor", type: "string", description: "Who is acting (e.g. support_agent, ai_agent)." },
     ],
     example: { path: "/api/public/v1/refunds", body: { order_id: "BK-10042", amount_cents: 500, reason: "Late delivery goodwill" } },
     errors: ["400 invalid_request when amount exceeds the refundable remainder"],
@@ -322,6 +342,31 @@ export const ENDPOINTS: EndpointDef[] = [
     agentUse: "Give the customer the exact refund amount and timing.",
     params: [{ name: "id", in: "path", required: true, description: "Refund number or UUID." }],
     example: { path: "/api/public/v1/refunds/RF-12345" },
+  },
+  {
+    id: "updateRefund",
+    method: "PATCH",
+    path: "/api/public/v1/refunds/{id}",
+    tag: "Refunds",
+    summary: "Update a refund status",
+    description:
+      "Moves a refund to any status. Settling (`succeeded`) writes the ledger transaction, applies store credit and flips the order to refunded once fully covered; cancelling or failing a settled refund writes a reversal. Every change appends to the refund timeline (`events`).",
+    agentUse:
+      "Use to release a `pending_return` refund early for a loyal customer, or to cancel a refund the customer no longer wants.",
+    params: [{ name: "id", in: "path", required: true, description: "Refund number or UUID." }],
+    body: [
+      { name: "status", type: "string", enum: REFUND_STATUSES, description: "Target status." },
+      { name: "amount_cents", type: "integer", description: "Adjust the amount (only before it settles)." },
+      { name: "method", type: "string", enum: REFUND_METHODS, description: "Switch payout method." },
+      { name: "reason", type: "string", description: "Updated reason." },
+      { name: "note", type: "string", description: "Why the decision was made — shown on the timeline." },
+      { name: "actor", type: "string", description: "Who is acting." },
+    ],
+    example: {
+      path: "/api/public/v1/refunds/RF-12345",
+      body: { status: "succeeded", actor: "ai_agent", note: "Loyal customer since 2019 — releasing refund before return arrives" },
+    },
+    errors: ["404 not_found", "400 invalid_request when changing the amount of a settled refund"],
   },
   {
     id: "listTransactions",
