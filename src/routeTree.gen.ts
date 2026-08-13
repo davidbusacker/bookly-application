@@ -18,6 +18,7 @@ import { Route as ApiPublicV1OrdersIdCancelRouteImport } from './routes/api/publ
 import { Route as ApiPublicV1OrdersIdItemsRouteImport } from './routes/api/public/v1/orders/$id/items'
 import { Route as ApiPublicV1OrdersIdReshipRouteImport } from './routes/api/public/v1/orders/$id/reship'
 import { Route as ApiPublicV1OrdersIdShipmentsRouteImport } from './routes/api/public/v1/orders/$id/shipments'
+import { Route as ApiPublicV1OrdersIdReturnsEligibilityRouteImport } from './routes/api/public/v1/orders/$id/returns/eligibility'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -69,6 +70,12 @@ const ApiPublicV1OrdersIdShipmentsRoute =
     path: '/api/public/v1/orders/$id/shipments',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicV1OrdersIdReturnsEligibilityRoute =
+  ApiPublicV1OrdersIdReturnsEligibilityRouteImport.update({
+    id: '/api/public/v1/orders/$id/returns/eligibility',
+    path: '/api/public/v1/orders/$id/returns/eligibility',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -80,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
   '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
+  '/api/public/v1/orders/$id/returns/eligibility': typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -91,6 +99,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
   '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
   '/api/public/v1/orders/$id': typeof ApiPublicV1OrdersIdIndexRoute
+  '/api/public/v1/orders/$id/returns/eligibility': typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -103,6 +112,7 @@ export interface FileRoutesById {
   '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
   '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
+  '/api/public/v1/orders/$id/returns/eligibility': typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/orders/$id/reship'
     | '/api/public/v1/orders/$id/shipments'
     | '/api/public/v1/orders/$id/'
+    | '/api/public/v1/orders/$id/returns/eligibility'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/orders/$id/reship'
     | '/api/public/v1/orders/$id/shipments'
     | '/api/public/v1/orders/$id'
+    | '/api/public/v1/orders/$id/returns/eligibility'
   id:
     | '__root__'
     | '/'
@@ -138,6 +150,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/orders/$id/reship'
     | '/api/public/v1/orders/$id/shipments'
     | '/api/public/v1/orders/$id/'
+    | '/api/public/v1/orders/$id/returns/eligibility'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -150,6 +163,7 @@ export interface RootRouteChildren {
   ApiPublicV1OrdersIdReshipRoute: typeof ApiPublicV1OrdersIdReshipRoute
   ApiPublicV1OrdersIdShipmentsRoute: typeof ApiPublicV1OrdersIdShipmentsRoute
   ApiPublicV1OrdersIdIndexRoute: typeof ApiPublicV1OrdersIdIndexRoute
+  ApiPublicV1OrdersIdReturnsEligibilityRoute: typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -217,6 +231,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1OrdersIdShipmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/orders/$id/returns/eligibility': {
+      id: '/api/public/v1/orders/$id/returns/eligibility'
+      path: '/api/public/v1/orders/$id/returns/eligibility'
+      fullPath: '/api/public/v1/orders/$id/returns/eligibility'
+      preLoaderRoute: typeof ApiPublicV1OrdersIdReturnsEligibilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -230,6 +251,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1OrdersIdReshipRoute: ApiPublicV1OrdersIdReshipRoute,
   ApiPublicV1OrdersIdShipmentsRoute: ApiPublicV1OrdersIdShipmentsRoute,
   ApiPublicV1OrdersIdIndexRoute: ApiPublicV1OrdersIdIndexRoute,
+  ApiPublicV1OrdersIdReturnsEligibilityRoute:
+    ApiPublicV1OrdersIdReturnsEligibilityRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
