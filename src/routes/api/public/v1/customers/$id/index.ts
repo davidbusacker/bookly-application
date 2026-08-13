@@ -12,7 +12,7 @@ export const Route = createFileRoute("/api/public/v1/customers/$id/")({
         const key = id.includes("@") ? "email" : "id";
         const { data, error } = await db
           .from("customers")
-          .select("*, addresses(*)")
+          .select("*, recent_orders:orders(id,order_number,status,total_cents,placed_at)")
           .eq(key, id)
           .maybeSingle();
         dbErr(error);
