@@ -24,6 +24,7 @@ export const Route = createFileRoute("/")({
 });
 
 const LINKS = [
+  { href: "/admin", label: "Store console (staff view)" },
   { href: "/api/public/openapi.json", label: "OpenAPI 3.1 spec" },
   { href: "/api/public/tools.json", label: "Agent tool manifest" },
   { href: "/llms.txt", label: "llms.txt" },

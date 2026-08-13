@@ -41,6 +41,11 @@ export const Route = createFileRoute("/api/public/v1/support/tickets/")({
           query = query.eq("customer_id", c?.id ?? "00000000-0000-0000-0000-000000000000");
         }
 
+        const customerId = sp.get("customer_id");
+        if (customerId) query = query.eq("customer_id", customerId);
+        const orderId = sp.get("order_id");
+        if (orderId) query = query.eq("order_id", orderId);
+
         const { data, error, count } = await query
           .order("created_at", { ascending: false })
           .range(offset, offset + limit - 1);
