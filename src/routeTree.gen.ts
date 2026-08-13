@@ -22,6 +22,7 @@ import { Route as AdminCustomersIdRouteImport } from './routes/admin.customers.$
 import { Route as AdminOrdersIndexRouteImport } from './routes/admin.orders.index'
 import { Route as AdminOrdersIdRouteImport } from './routes/admin.orders.$id'
 import { Route as AdminRefundsIndexRouteImport } from './routes/admin.refunds.index'
+import { Route as AdminRefundsIdRouteImport } from './routes/admin.refunds.$id'
 import { Route as ApiPublicOpenapiDotjsonRouteImport } from './routes/api/public/openapi[.]json'
 import { Route as ApiPublicToolsDotjsonRouteImport } from './routes/api/public/tools[.]json'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
@@ -118,6 +119,11 @@ const AdminOrdersIdRoute = AdminOrdersIdRouteImport.update({
 const AdminRefundsIndexRoute = AdminRefundsIndexRouteImport.update({
   id: '/refunds/',
   path: '/refunds/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminRefundsIdRoute = AdminRefundsIdRouteImport.update({
+  id: '/refunds/$id',
+  path: '/refunds/$id',
   getParentRoute: () => AdminRoute,
 } as any)
 const ApiPublicOpenapiDotjsonRoute = ApiPublicOpenapiDotjsonRouteImport.update({
@@ -312,6 +318,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
+  '/admin/refunds/$id': typeof AdminRefundsIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/admin/customers/': typeof AdminCustomersIndexRoute
@@ -358,6 +365,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
+  '/admin/refunds/$id': typeof AdminRefundsIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/admin/customers': typeof AdminCustomersIndexRoute
@@ -406,6 +414,7 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
+  '/admin/refunds/$id': typeof AdminRefundsIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/admin/customers/': typeof AdminCustomersIndexRoute
@@ -455,6 +464,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/admin/customers/$id'
     | '/admin/orders/$id'
+    | '/admin/refunds/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/admin/customers/'
@@ -501,6 +511,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/admin/customers/$id'
     | '/admin/orders/$id'
+    | '/admin/refunds/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/admin/customers'
@@ -548,6 +559,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/admin/customers/$id'
     | '/admin/orders/$id'
+    | '/admin/refunds/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/admin/customers/'
@@ -715,6 +727,13 @@ declare module '@tanstack/react-router' {
       path: '/refunds'
       fullPath: '/admin/refunds/'
       preLoaderRoute: typeof AdminRefundsIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/refunds/$id': {
+      id: '/admin/refunds/$id'
+      path: '/refunds/$id'
+      fullPath: '/admin/refunds/$id'
+      preLoaderRoute: typeof AdminRefundsIdRouteImport
       parentRoute: typeof AdminRoute
     }
     '/api/public/openapi.json': {
@@ -951,6 +970,7 @@ interface AdminRouteChildren {
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCustomersIdRoute: typeof AdminCustomersIdRoute
   AdminOrdersIdRoute: typeof AdminOrdersIdRoute
+  AdminRefundsIdRoute: typeof AdminRefundsIdRoute
   AdminCustomersIndexRoute: typeof AdminCustomersIndexRoute
   AdminOrdersIndexRoute: typeof AdminOrdersIndexRoute
   AdminRefundsIndexRoute: typeof AdminRefundsIndexRoute
@@ -963,6 +983,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminIndexRoute: AdminIndexRoute,
   AdminCustomersIdRoute: AdminCustomersIdRoute,
   AdminOrdersIdRoute: AdminOrdersIdRoute,
+  AdminRefundsIdRoute: AdminRefundsIdRoute,
   AdminCustomersIndexRoute: AdminCustomersIndexRoute,
   AdminOrdersIndexRoute: AdminOrdersIndexRoute,
   AdminRefundsIndexRoute: AdminRefundsIndexRoute,
