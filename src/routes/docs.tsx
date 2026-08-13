@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { endpointsByTag, ENDPOINTS } from "@/lib/bookly/catalog";
 import { RULES } from "@/lib/bookly/rules";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/docs")({
   head: () => ({
     meta: [
       { title: "Bookly Support API — Order, Returns & Refunds API Docs" },

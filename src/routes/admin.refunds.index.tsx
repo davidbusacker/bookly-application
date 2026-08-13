@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { apiGet, money, when, type Refund } from "@/lib/bookly/api-client";
 import { Card, Empty, ErrorNote, Loading, StatusBadge, Table } from "@/components/console/ui";
 
-export const Route = createFileRoute("/admin/refunds")({
+export const Route = createFileRoute("/admin/refunds/")({
   component: RefundsPage,
 });
 
