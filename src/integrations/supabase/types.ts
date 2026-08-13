@@ -778,6 +778,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      reset_bookly_demo: { Args: never; Returns: Json }
       seed_bookly_demo: { Args: never; Returns: Json }
     }
     Enums: {
