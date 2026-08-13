@@ -16,6 +16,7 @@ import { Route as ApiPublicV1OrdersIndexRouteImport } from './routes/api/public/
 import { Route as ApiPublicV1OrdersIdIndexRouteImport } from './routes/api/public/v1/orders/$id/index'
 import { Route as ApiPublicV1OrdersIdCancelRouteImport } from './routes/api/public/v1/orders/$id/cancel'
 import { Route as ApiPublicV1OrdersIdItemsRouteImport } from './routes/api/public/v1/orders/$id/items'
+import { Route as ApiPublicV1OrdersIdReshipRouteImport } from './routes/api/public/v1/orders/$id/reship'
 import { Route as ApiPublicV1OrdersIdShipmentsRouteImport } from './routes/api/public/v1/orders/$id/shipments'
 
 const IndexRoute = IndexRouteImport.update({
@@ -56,6 +57,12 @@ const ApiPublicV1OrdersIdItemsRoute =
     path: '/api/public/v1/orders/$id/items',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicV1OrdersIdReshipRoute =
+  ApiPublicV1OrdersIdReshipRouteImport.update({
+    id: '/api/public/v1/orders/$id/reship',
+    path: '/api/public/v1/orders/$id/reship',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1OrdersIdShipmentsRoute =
   ApiPublicV1OrdersIdShipmentsRouteImport.update({
     id: '/api/public/v1/orders/$id/shipments',
@@ -70,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/orders/': typeof ApiPublicV1OrdersIndexRoute
   '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
+  '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
   '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
 }
@@ -80,6 +88,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/orders': typeof ApiPublicV1OrdersIndexRoute
   '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
+  '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
   '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
   '/api/public/v1/orders/$id': typeof ApiPublicV1OrdersIdIndexRoute
 }
@@ -91,6 +100,7 @@ export interface FileRoutesById {
   '/api/public/v1/orders/': typeof ApiPublicV1OrdersIndexRoute
   '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
+  '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
   '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
 }
@@ -103,6 +113,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/orders/'
     | '/api/public/v1/orders/$id/cancel'
     | '/api/public/v1/orders/$id/items'
+    | '/api/public/v1/orders/$id/reship'
     | '/api/public/v1/orders/$id/shipments'
     | '/api/public/v1/orders/$id/'
   fileRoutesByTo: FileRoutesByTo
@@ -113,6 +124,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/orders'
     | '/api/public/v1/orders/$id/cancel'
     | '/api/public/v1/orders/$id/items'
+    | '/api/public/v1/orders/$id/reship'
     | '/api/public/v1/orders/$id/shipments'
     | '/api/public/v1/orders/$id'
   id:
@@ -123,6 +135,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/orders/'
     | '/api/public/v1/orders/$id/cancel'
     | '/api/public/v1/orders/$id/items'
+    | '/api/public/v1/orders/$id/reship'
     | '/api/public/v1/orders/$id/shipments'
     | '/api/public/v1/orders/$id/'
   fileRoutesById: FileRoutesById
@@ -134,6 +147,7 @@ export interface RootRouteChildren {
   ApiPublicV1OrdersIndexRoute: typeof ApiPublicV1OrdersIndexRoute
   ApiPublicV1OrdersIdCancelRoute: typeof ApiPublicV1OrdersIdCancelRoute
   ApiPublicV1OrdersIdItemsRoute: typeof ApiPublicV1OrdersIdItemsRoute
+  ApiPublicV1OrdersIdReshipRoute: typeof ApiPublicV1OrdersIdReshipRoute
   ApiPublicV1OrdersIdShipmentsRoute: typeof ApiPublicV1OrdersIdShipmentsRoute
   ApiPublicV1OrdersIdIndexRoute: typeof ApiPublicV1OrdersIdIndexRoute
 }
@@ -189,6 +203,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1OrdersIdItemsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/orders/$id/reship': {
+      id: '/api/public/v1/orders/$id/reship'
+      path: '/api/public/v1/orders/$id/reship'
+      fullPath: '/api/public/v1/orders/$id/reship'
+      preLoaderRoute: typeof ApiPublicV1OrdersIdReshipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/orders/$id/shipments': {
       id: '/api/public/v1/orders/$id/shipments'
       path: '/api/public/v1/orders/$id/shipments'
@@ -206,6 +227,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1OrdersIndexRoute: ApiPublicV1OrdersIndexRoute,
   ApiPublicV1OrdersIdCancelRoute: ApiPublicV1OrdersIdCancelRoute,
   ApiPublicV1OrdersIdItemsRoute: ApiPublicV1OrdersIdItemsRoute,
+  ApiPublicV1OrdersIdReshipRoute: ApiPublicV1OrdersIdReshipRoute,
   ApiPublicV1OrdersIdShipmentsRoute: ApiPublicV1OrdersIdShipmentsRoute,
   ApiPublicV1OrdersIdIndexRoute: ApiPublicV1OrdersIdIndexRoute,
 }
