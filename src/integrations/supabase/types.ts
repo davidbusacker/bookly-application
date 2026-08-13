@@ -327,6 +327,53 @@ export type Database = {
         }
         Relationships: []
       }
+      refund_events: {
+        Row: {
+          actor: string
+          amount_cents: number | null
+          created_at: string
+          id: string
+          metadata: Json
+          note: string | null
+          refund_id: string
+          status_from: string | null
+          status_to: string | null
+          type: string
+        }
+        Insert: {
+          actor?: string
+          amount_cents?: number | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          note?: string | null
+          refund_id: string
+          status_from?: string | null
+          status_to?: string | null
+          type?: string
+        }
+        Update: {
+          actor?: string
+          amount_cents?: number | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          note?: string | null
+          refund_id?: string
+          status_from?: string | null
+          status_to?: string | null
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "refund_events_refund_id_fkey"
+            columns: ["refund_id"]
+            isOneToOne: false
+            referencedRelation: "refunds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       refunds: {
         Row: {
           amount_cents: number
