@@ -15,9 +15,9 @@ export const Route = createFileRoute("/api/public/v1/customers/")({
         const email = sp.get("email");
         if (email) query = query.ilike("email", email);
         const q = sp.get("q");
-        if (q) query = query.or(`name.ilike.%${q}%,email.ilike.%${q}%`);
+        if (q) query = query.or(`full_name.ilike.%${q}%,email.ilike.%${q}%`);
         const tier = sp.get("tier");
-        if (tier) query = query.eq("tier", tier);
+        if (tier) query = query.eq("member_tier", tier);
 
         const { data, error, count } = await query
           .order("created_at", { ascending: false })
