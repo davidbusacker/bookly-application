@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as ApiPublicOpenapiDotjsonRouteImport } from './routes/api/public/openapi[.]json'
 import { Route as ApiPublicToolsDotjsonRouteImport } from './routes/api/public/tools[.]json'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
@@ -46,6 +47,11 @@ import { Route as ApiPublicV1OrdersIdReturnsEligibilityRouteImport } from './rou
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicOpenapiDotjsonRoute = ApiPublicOpenapiDotjsonRouteImport.update({
@@ -231,6 +237,7 @@ const ApiPublicV1OrdersIdReturnsEligibilityRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
@@ -266,6 +273,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
@@ -302,6 +310,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
@@ -339,6 +348,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/llms.txt'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/api/public/v1/health'
@@ -374,6 +384,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/llms.txt'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/api/public/v1/health'
@@ -409,6 +420,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/llms.txt'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/api/public/v1/health'
@@ -445,6 +457,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
   ApiPublicOpenapiDotjsonRoute: typeof ApiPublicOpenapiDotjsonRoute
   ApiPublicToolsDotjsonRoute: typeof ApiPublicToolsDotjsonRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
@@ -486,6 +499,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/openapi.json': {
@@ -717,6 +737,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LlmsDottxtRoute: LlmsDottxtRoute,
   ApiPublicOpenapiDotjsonRoute: ApiPublicOpenapiDotjsonRoute,
   ApiPublicToolsDotjsonRoute: ApiPublicToolsDotjsonRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
