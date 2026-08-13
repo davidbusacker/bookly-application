@@ -39,8 +39,8 @@ export type ApiErrorBody = {
 export class ApiError extends Error {
   status: number;
   code: string;
-  detail?: string;
-  errors?: unknown;
+  detail: string | undefined;
+  errors: unknown;
 
   constructor(status: number, code: string, message: string, detail?: string, errors?: unknown) {
     super(message);
