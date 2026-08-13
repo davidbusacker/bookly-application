@@ -13,5 +13,5 @@ export async function findOrder(
   const { data, error } = await db.from("orders").select(select).eq(key, value).maybeSingle();
   dbErr(error);
   if (!data) throw notFound(`Order "${idOrNumber}"`);
-  return data as Record<string, unknown>;
+  return data as unknown as Record<string, unknown>;
 }
