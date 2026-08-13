@@ -35,6 +35,7 @@ import { Route as ApiPublicV1ReturnsRmaCancelRouteImport } from './routes/api/pu
 import { Route as ApiPublicV1ReturnsRmaReceiveRouteImport } from './routes/api/public/v1/returns/$rma/receive'
 import { Route as ApiPublicV1ShipmentsTrackingIndexRouteImport } from './routes/api/public/v1/shipments/$tracking/index'
 import { Route as ApiPublicV1ShipmentsTrackingEventsRouteImport } from './routes/api/public/v1/shipments/$tracking/events'
+import { Route as ApiPublicV1SupportTicketsIndexRouteImport } from './routes/api/public/v1/support/tickets/index'
 import { Route as ApiPublicV1OrdersIdReturnsEligibilityRouteImport } from './routes/api/public/v1/orders/$id/returns/eligibility'
 
 const IndexRoute = IndexRouteImport.update({
@@ -182,6 +183,12 @@ const ApiPublicV1ShipmentsTrackingEventsRoute =
     path: '/api/public/v1/shipments/$tracking/events',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicV1SupportTicketsIndexRoute =
+  ApiPublicV1SupportTicketsIndexRouteImport.update({
+    id: '/api/public/v1/support/tickets/',
+    path: '/api/public/v1/support/tickets/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1OrdersIdReturnsEligibilityRoute =
   ApiPublicV1OrdersIdReturnsEligibilityRouteImport.update({
     id: '/api/public/v1/orders/$id/returns/eligibility',
@@ -216,6 +223,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/returns/$rma/': typeof ApiPublicV1ReturnsRmaIndexRoute
   '/api/public/v1/shipments/$tracking/': typeof ApiPublicV1ShipmentsTrackingIndexRoute
+  '/api/public/v1/support/tickets/': typeof ApiPublicV1SupportTicketsIndexRoute
   '/api/public/v1/orders/$id/returns/eligibility': typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
 }
 export interface FileRoutesByTo {
@@ -245,6 +253,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/orders/$id': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/returns/$rma': typeof ApiPublicV1ReturnsRmaIndexRoute
   '/api/public/v1/shipments/$tracking': typeof ApiPublicV1ShipmentsTrackingIndexRoute
+  '/api/public/v1/support/tickets': typeof ApiPublicV1SupportTicketsIndexRoute
   '/api/public/v1/orders/$id/returns/eligibility': typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
 }
 export interface FileRoutesById {
@@ -275,6 +284,7 @@ export interface FileRoutesById {
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/returns/$rma/': typeof ApiPublicV1ReturnsRmaIndexRoute
   '/api/public/v1/shipments/$tracking/': typeof ApiPublicV1ShipmentsTrackingIndexRoute
+  '/api/public/v1/support/tickets/': typeof ApiPublicV1SupportTicketsIndexRoute
   '/api/public/v1/orders/$id/returns/eligibility': typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
 }
 export interface FileRouteTypes {
@@ -306,6 +316,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/orders/$id/'
     | '/api/public/v1/returns/$rma/'
     | '/api/public/v1/shipments/$tracking/'
+    | '/api/public/v1/support/tickets/'
     | '/api/public/v1/orders/$id/returns/eligibility'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -335,6 +346,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/orders/$id'
     | '/api/public/v1/returns/$rma'
     | '/api/public/v1/shipments/$tracking'
+    | '/api/public/v1/support/tickets'
     | '/api/public/v1/orders/$id/returns/eligibility'
   id:
     | '__root__'
@@ -364,6 +376,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/orders/$id/'
     | '/api/public/v1/returns/$rma/'
     | '/api/public/v1/shipments/$tracking/'
+    | '/api/public/v1/support/tickets/'
     | '/api/public/v1/orders/$id/returns/eligibility'
   fileRoutesById: FileRoutesById
 }
@@ -394,6 +407,7 @@ export interface RootRouteChildren {
   ApiPublicV1OrdersIdIndexRoute: typeof ApiPublicV1OrdersIdIndexRoute
   ApiPublicV1ReturnsRmaIndexRoute: typeof ApiPublicV1ReturnsRmaIndexRoute
   ApiPublicV1ShipmentsTrackingIndexRoute: typeof ApiPublicV1ShipmentsTrackingIndexRoute
+  ApiPublicV1SupportTicketsIndexRoute: typeof ApiPublicV1SupportTicketsIndexRoute
   ApiPublicV1OrdersIdReturnsEligibilityRoute: typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
 }
 
@@ -581,6 +595,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1ShipmentsTrackingEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/support/tickets/': {
+      id: '/api/public/v1/support/tickets/'
+      path: '/api/public/v1/support/tickets'
+      fullPath: '/api/public/v1/support/tickets/'
+      preLoaderRoute: typeof ApiPublicV1SupportTicketsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/orders/$id/returns/eligibility': {
       id: '/api/public/v1/orders/$id/returns/eligibility'
       path: '/api/public/v1/orders/$id/returns/eligibility'
@@ -620,6 +641,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1ReturnsRmaIndexRoute: ApiPublicV1ReturnsRmaIndexRoute,
   ApiPublicV1ShipmentsTrackingIndexRoute:
     ApiPublicV1ShipmentsTrackingIndexRoute,
+  ApiPublicV1SupportTicketsIndexRoute: ApiPublicV1SupportTicketsIndexRoute,
   ApiPublicV1OrdersIdReturnsEligibilityRoute:
     ApiPublicV1OrdersIdReturnsEligibilityRoute,
 }
