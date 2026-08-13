@@ -33,7 +33,7 @@ const STATUS_TONE: Record<string, keyof typeof TONE> = {
   returned: "amber",
 };
 
-export function StatusBadge({ value }: { value?: string | null }) {
+export function StatusBadge({ value }: { value?: string | null | undefined }) {
   if (!value) return <span className="text-muted-foreground">—</span>;
   const tone = TONE[STATUS_TONE[value] ?? "gray"];
   return (

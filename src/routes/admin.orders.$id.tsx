@@ -59,7 +59,7 @@ function OrderDetail() {
             <Field label="Tier"><span className="capitalize">{o.customer?.member_tier ?? "—"}</span></Field>
             <Field label="Ship to">
               <span className="text-muted-foreground">
-                {[addr.name, addr.line1, addr.line2, [addr.city, addr.state, addr.postal_code].filter(Boolean).join(", "), addr.country]
+                {[addr["name"], addr["line1"], addr["line2"], [addr["city"], addr["state"], addr["postal_code"]].filter(Boolean).join(", "), addr["country"]]
                   .filter(Boolean)
                   .join(" · ") || "—"}
               </span>
