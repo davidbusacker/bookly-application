@@ -24,7 +24,7 @@ export const Route = createFileRoute("/api/public/v1/transactions/")({
         if (status) query = query.in("status", status.split(","));
 
         const { data, error, count } = await query
-          .order("created_at", { ascending: false })
+          .order("occurred_at", { ascending: false })
           .range(offset, offset + limit - 1);
         dbErr(error);
         return ok(data ?? [], listMeta(count, limit, offset));
