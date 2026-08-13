@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicOpenapiDotjsonRouteImport } from './routes/api/public/openapi[.]json'
+import { Route as ApiPublicToolsDotjsonRouteImport } from './routes/api/public/tools[.]json'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as ApiPublicV1MetaRouteImport } from './routes/api/public/v1/meta'
 import { Route as ApiPublicV1BooksIndexRouteImport } from './routes/api/public/v1/books/index'
@@ -50,6 +51,11 @@ const IndexRoute = IndexRouteImport.update({
 const ApiPublicOpenapiDotjsonRoute = ApiPublicOpenapiDotjsonRouteImport.update({
   id: '/api/public/openapi.json',
   path: '/api/public/openapi.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicToolsDotjsonRoute = ApiPublicToolsDotjsonRouteImport.update({
+  id: '/api/public/tools.json',
+  path: '/api/public/tools.json',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicV1HealthRoute = ApiPublicV1HealthRouteImport.update({
@@ -226,6 +232,7 @@ const ApiPublicV1OrdersIdReturnsEligibilityRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
+  '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
@@ -260,6 +267,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
+  '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
@@ -295,6 +303,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
+  '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
@@ -331,6 +340,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/api/public/openapi.json'
+    | '/api/public/tools.json'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/books/$id'
@@ -365,6 +375,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/api/public/openapi.json'
+    | '/api/public/tools.json'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/books/$id'
@@ -399,6 +410,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/api/public/openapi.json'
+    | '/api/public/tools.json'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/books/$id'
@@ -434,6 +446,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiPublicOpenapiDotjsonRoute: typeof ApiPublicOpenapiDotjsonRoute
+  ApiPublicToolsDotjsonRoute: typeof ApiPublicToolsDotjsonRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
   ApiPublicV1MetaRoute: typeof ApiPublicV1MetaRoute
   ApiPublicV1BooksIdRoute: typeof ApiPublicV1BooksIdRoute
@@ -480,6 +493,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/openapi.json'
       fullPath: '/api/public/openapi.json'
       preLoaderRoute: typeof ApiPublicOpenapiDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/tools.json': {
+      id: '/api/public/tools.json'
+      path: '/api/public/tools.json'
+      fullPath: '/api/public/tools.json'
+      preLoaderRoute: typeof ApiPublicToolsDotjsonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/health': {
@@ -698,6 +718,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiPublicOpenapiDotjsonRoute: ApiPublicOpenapiDotjsonRoute,
+  ApiPublicToolsDotjsonRoute: ApiPublicToolsDotjsonRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
   ApiPublicV1MetaRoute: ApiPublicV1MetaRoute,
   ApiPublicV1BooksIdRoute: ApiPublicV1BooksIdRoute,
