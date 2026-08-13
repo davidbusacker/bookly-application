@@ -18,6 +18,7 @@ import { Route as ApiPublicV1RefundsIndexRouteImport } from './routes/api/public
 import { Route as ApiPublicV1RefundsIdRouteImport } from './routes/api/public/v1/refunds/$id'
 import { Route as ApiPublicV1ReturnsIndexRouteImport } from './routes/api/public/v1/returns/index'
 import { Route as ApiPublicV1TransactionsIndexRouteImport } from './routes/api/public/v1/transactions/index'
+import { Route as ApiPublicV1CustomersIdIndexRouteImport } from './routes/api/public/v1/customers/$id/index'
 import { Route as ApiPublicV1OrdersIdIndexRouteImport } from './routes/api/public/v1/orders/$id/index'
 import { Route as ApiPublicV1OrdersIdCancelRouteImport } from './routes/api/public/v1/orders/$id/cancel'
 import { Route as ApiPublicV1OrdersIdItemsRouteImport } from './routes/api/public/v1/orders/$id/items'
@@ -75,6 +76,12 @@ const ApiPublicV1TransactionsIndexRoute =
   ApiPublicV1TransactionsIndexRouteImport.update({
     id: '/api/public/v1/transactions/',
     path: '/api/public/v1/transactions/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1CustomersIdIndexRoute =
+  ApiPublicV1CustomersIdIndexRouteImport.update({
+    id: '/api/public/v1/customers/$id/',
+    path: '/api/public/v1/customers/$id/',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicV1OrdersIdIndexRoute =
@@ -161,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/returns/$rma/cancel': typeof ApiPublicV1ReturnsRmaCancelRoute
   '/api/public/v1/returns/$rma/receive': typeof ApiPublicV1ReturnsRmaReceiveRoute
   '/api/public/v1/shipments/$tracking/events': typeof ApiPublicV1ShipmentsTrackingEventsRoute
+  '/api/public/v1/customers/$id/': typeof ApiPublicV1CustomersIdIndexRoute
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/returns/$rma/': typeof ApiPublicV1ReturnsRmaIndexRoute
   '/api/public/v1/shipments/$tracking/': typeof ApiPublicV1ShipmentsTrackingIndexRoute
@@ -183,6 +191,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/returns/$rma/cancel': typeof ApiPublicV1ReturnsRmaCancelRoute
   '/api/public/v1/returns/$rma/receive': typeof ApiPublicV1ReturnsRmaReceiveRoute
   '/api/public/v1/shipments/$tracking/events': typeof ApiPublicV1ShipmentsTrackingEventsRoute
+  '/api/public/v1/customers/$id': typeof ApiPublicV1CustomersIdIndexRoute
   '/api/public/v1/orders/$id': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/returns/$rma': typeof ApiPublicV1ReturnsRmaIndexRoute
   '/api/public/v1/shipments/$tracking': typeof ApiPublicV1ShipmentsTrackingIndexRoute
@@ -206,6 +215,7 @@ export interface FileRoutesById {
   '/api/public/v1/returns/$rma/cancel': typeof ApiPublicV1ReturnsRmaCancelRoute
   '/api/public/v1/returns/$rma/receive': typeof ApiPublicV1ReturnsRmaReceiveRoute
   '/api/public/v1/shipments/$tracking/events': typeof ApiPublicV1ShipmentsTrackingEventsRoute
+  '/api/public/v1/customers/$id/': typeof ApiPublicV1CustomersIdIndexRoute
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/returns/$rma/': typeof ApiPublicV1ReturnsRmaIndexRoute
   '/api/public/v1/shipments/$tracking/': typeof ApiPublicV1ShipmentsTrackingIndexRoute
@@ -230,6 +240,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/returns/$rma/cancel'
     | '/api/public/v1/returns/$rma/receive'
     | '/api/public/v1/shipments/$tracking/events'
+    | '/api/public/v1/customers/$id/'
     | '/api/public/v1/orders/$id/'
     | '/api/public/v1/returns/$rma/'
     | '/api/public/v1/shipments/$tracking/'
@@ -252,6 +263,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/returns/$rma/cancel'
     | '/api/public/v1/returns/$rma/receive'
     | '/api/public/v1/shipments/$tracking/events'
+    | '/api/public/v1/customers/$id'
     | '/api/public/v1/orders/$id'
     | '/api/public/v1/returns/$rma'
     | '/api/public/v1/shipments/$tracking'
@@ -274,6 +286,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/returns/$rma/cancel'
     | '/api/public/v1/returns/$rma/receive'
     | '/api/public/v1/shipments/$tracking/events'
+    | '/api/public/v1/customers/$id/'
     | '/api/public/v1/orders/$id/'
     | '/api/public/v1/returns/$rma/'
     | '/api/public/v1/shipments/$tracking/'
@@ -297,6 +310,7 @@ export interface RootRouteChildren {
   ApiPublicV1ReturnsRmaCancelRoute: typeof ApiPublicV1ReturnsRmaCancelRoute
   ApiPublicV1ReturnsRmaReceiveRoute: typeof ApiPublicV1ReturnsRmaReceiveRoute
   ApiPublicV1ShipmentsTrackingEventsRoute: typeof ApiPublicV1ShipmentsTrackingEventsRoute
+  ApiPublicV1CustomersIdIndexRoute: typeof ApiPublicV1CustomersIdIndexRoute
   ApiPublicV1OrdersIdIndexRoute: typeof ApiPublicV1OrdersIdIndexRoute
   ApiPublicV1ReturnsRmaIndexRoute: typeof ApiPublicV1ReturnsRmaIndexRoute
   ApiPublicV1ShipmentsTrackingIndexRoute: typeof ApiPublicV1ShipmentsTrackingIndexRoute
@@ -366,6 +380,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/v1/transactions'
       fullPath: '/api/public/v1/transactions/'
       preLoaderRoute: typeof ApiPublicV1TransactionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/customers/$id/': {
+      id: '/api/public/v1/customers/$id/'
+      path: '/api/public/v1/customers/$id'
+      fullPath: '/api/public/v1/customers/$id/'
+      preLoaderRoute: typeof ApiPublicV1CustomersIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/orders/$id/': {
@@ -466,6 +487,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1ReturnsRmaReceiveRoute: ApiPublicV1ReturnsRmaReceiveRoute,
   ApiPublicV1ShipmentsTrackingEventsRoute:
     ApiPublicV1ShipmentsTrackingEventsRoute,
+  ApiPublicV1CustomersIdIndexRoute: ApiPublicV1CustomersIdIndexRoute,
   ApiPublicV1OrdersIdIndexRoute: ApiPublicV1OrdersIdIndexRoute,
   ApiPublicV1ReturnsRmaIndexRoute: ApiPublicV1ReturnsRmaIndexRoute,
   ApiPublicV1ShipmentsTrackingIndexRoute:
