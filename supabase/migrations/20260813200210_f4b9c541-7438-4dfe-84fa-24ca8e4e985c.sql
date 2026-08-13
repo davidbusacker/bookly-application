@@ -1,0 +1,1 @@
+ALTER FUNCTION public.seed_bookly_demo() SECURITY INVOKER;

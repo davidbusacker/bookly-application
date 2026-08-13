@@ -10,33 +10,486 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as ApiPublicOpenapiDotjsonRouteImport } from './routes/api/public/openapi[.]json'
+import { Route as ApiPublicToolsDotjsonRouteImport } from './routes/api/public/tools[.]json'
+import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
+import { Route as ApiPublicV1MetaRouteImport } from './routes/api/public/v1/meta'
+import { Route as ApiPublicV1BooksIndexRouteImport } from './routes/api/public/v1/books/index'
+import { Route as ApiPublicV1BooksIdRouteImport } from './routes/api/public/v1/books/$id'
+import { Route as ApiPublicV1CustomersIndexRouteImport } from './routes/api/public/v1/customers/index'
+import { Route as ApiPublicV1FaqsIndexRouteImport } from './routes/api/public/v1/faqs/index'
+import { Route as ApiPublicV1OrdersIndexRouteImport } from './routes/api/public/v1/orders/index'
+import { Route as ApiPublicV1PoliciesIndexRouteImport } from './routes/api/public/v1/policies/index'
+import { Route as ApiPublicV1PoliciesSlugRouteImport } from './routes/api/public/v1/policies/$slug'
+import { Route as ApiPublicV1RefundsIndexRouteImport } from './routes/api/public/v1/refunds/index'
+import { Route as ApiPublicV1RefundsIdRouteImport } from './routes/api/public/v1/refunds/$id'
+import { Route as ApiPublicV1ReturnsIndexRouteImport } from './routes/api/public/v1/returns/index'
+import { Route as ApiPublicV1TransactionsIndexRouteImport } from './routes/api/public/v1/transactions/index'
+import { Route as ApiPublicV1CustomersIdIndexRouteImport } from './routes/api/public/v1/customers/$id/index'
+import { Route as ApiPublicV1CustomersIdOrdersRouteImport } from './routes/api/public/v1/customers/$id/orders'
+import { Route as ApiPublicV1OrdersIdIndexRouteImport } from './routes/api/public/v1/orders/$id/index'
+import { Route as ApiPublicV1OrdersIdCancelRouteImport } from './routes/api/public/v1/orders/$id/cancel'
+import { Route as ApiPublicV1OrdersIdItemsRouteImport } from './routes/api/public/v1/orders/$id/items'
+import { Route as ApiPublicV1OrdersIdReshipRouteImport } from './routes/api/public/v1/orders/$id/reship'
+import { Route as ApiPublicV1OrdersIdShipmentsRouteImport } from './routes/api/public/v1/orders/$id/shipments'
+import { Route as ApiPublicV1ReturnsRmaIndexRouteImport } from './routes/api/public/v1/returns/$rma/index'
+import { Route as ApiPublicV1ReturnsRmaCancelRouteImport } from './routes/api/public/v1/returns/$rma/cancel'
+import { Route as ApiPublicV1ReturnsRmaReceiveRouteImport } from './routes/api/public/v1/returns/$rma/receive'
+import { Route as ApiPublicV1ShipmentsTrackingIndexRouteImport } from './routes/api/public/v1/shipments/$tracking/index'
+import { Route as ApiPublicV1ShipmentsTrackingEventsRouteImport } from './routes/api/public/v1/shipments/$tracking/events'
+import { Route as ApiPublicV1SupportActionsAddressChangeRouteImport } from './routes/api/public/v1/support/actions/address-change'
+import { Route as ApiPublicV1SupportActionsPasswordResetRouteImport } from './routes/api/public/v1/support/actions/password-reset'
+import { Route as ApiPublicV1SupportTicketsIndexRouteImport } from './routes/api/public/v1/support/tickets/index'
+import { Route as ApiPublicV1SupportTicketsIdRouteImport } from './routes/api/public/v1/support/tickets/$id'
+import { Route as ApiPublicV1OrdersIdReturnsEligibilityRouteImport } from './routes/api/public/v1/orders/$id/returns/eligibility'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicOpenapiDotjsonRoute = ApiPublicOpenapiDotjsonRouteImport.update({
+  id: '/api/public/openapi.json',
+  path: '/api/public/openapi.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicToolsDotjsonRoute = ApiPublicToolsDotjsonRouteImport.update({
+  id: '/api/public/tools.json',
+  path: '/api/public/tools.json',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1HealthRoute = ApiPublicV1HealthRouteImport.update({
+  id: '/api/public/v1/health',
+  path: '/api/public/v1/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1MetaRoute = ApiPublicV1MetaRouteImport.update({
+  id: '/api/public/v1/meta',
+  path: '/api/public/v1/meta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1BooksIndexRoute = ApiPublicV1BooksIndexRouteImport.update({
+  id: '/api/public/v1/books/',
+  path: '/api/public/v1/books/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1BooksIdRoute = ApiPublicV1BooksIdRouteImport.update({
+  id: '/api/public/v1/books/$id',
+  path: '/api/public/v1/books/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1CustomersIndexRoute =
+  ApiPublicV1CustomersIndexRouteImport.update({
+    id: '/api/public/v1/customers/',
+    path: '/api/public/v1/customers/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1FaqsIndexRoute = ApiPublicV1FaqsIndexRouteImport.update({
+  id: '/api/public/v1/faqs/',
+  path: '/api/public/v1/faqs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1OrdersIndexRoute = ApiPublicV1OrdersIndexRouteImport.update({
+  id: '/api/public/v1/orders/',
+  path: '/api/public/v1/orders/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1PoliciesIndexRoute =
+  ApiPublicV1PoliciesIndexRouteImport.update({
+    id: '/api/public/v1/policies/',
+    path: '/api/public/v1/policies/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1PoliciesSlugRoute = ApiPublicV1PoliciesSlugRouteImport.update({
+  id: '/api/public/v1/policies/$slug',
+  path: '/api/public/v1/policies/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1RefundsIndexRoute = ApiPublicV1RefundsIndexRouteImport.update({
+  id: '/api/public/v1/refunds/',
+  path: '/api/public/v1/refunds/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1RefundsIdRoute = ApiPublicV1RefundsIdRouteImport.update({
+  id: '/api/public/v1/refunds/$id',
+  path: '/api/public/v1/refunds/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1ReturnsIndexRoute = ApiPublicV1ReturnsIndexRouteImport.update({
+  id: '/api/public/v1/returns/',
+  path: '/api/public/v1/returns/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1TransactionsIndexRoute =
+  ApiPublicV1TransactionsIndexRouteImport.update({
+    id: '/api/public/v1/transactions/',
+    path: '/api/public/v1/transactions/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1CustomersIdIndexRoute =
+  ApiPublicV1CustomersIdIndexRouteImport.update({
+    id: '/api/public/v1/customers/$id/',
+    path: '/api/public/v1/customers/$id/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1CustomersIdOrdersRoute =
+  ApiPublicV1CustomersIdOrdersRouteImport.update({
+    id: '/api/public/v1/customers/$id/orders',
+    path: '/api/public/v1/customers/$id/orders',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1OrdersIdIndexRoute =
+  ApiPublicV1OrdersIdIndexRouteImport.update({
+    id: '/api/public/v1/orders/$id/',
+    path: '/api/public/v1/orders/$id/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1OrdersIdCancelRoute =
+  ApiPublicV1OrdersIdCancelRouteImport.update({
+    id: '/api/public/v1/orders/$id/cancel',
+    path: '/api/public/v1/orders/$id/cancel',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1OrdersIdItemsRoute =
+  ApiPublicV1OrdersIdItemsRouteImport.update({
+    id: '/api/public/v1/orders/$id/items',
+    path: '/api/public/v1/orders/$id/items',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1OrdersIdReshipRoute =
+  ApiPublicV1OrdersIdReshipRouteImport.update({
+    id: '/api/public/v1/orders/$id/reship',
+    path: '/api/public/v1/orders/$id/reship',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1OrdersIdShipmentsRoute =
+  ApiPublicV1OrdersIdShipmentsRouteImport.update({
+    id: '/api/public/v1/orders/$id/shipments',
+    path: '/api/public/v1/orders/$id/shipments',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1ReturnsRmaIndexRoute =
+  ApiPublicV1ReturnsRmaIndexRouteImport.update({
+    id: '/api/public/v1/returns/$rma/',
+    path: '/api/public/v1/returns/$rma/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1ReturnsRmaCancelRoute =
+  ApiPublicV1ReturnsRmaCancelRouteImport.update({
+    id: '/api/public/v1/returns/$rma/cancel',
+    path: '/api/public/v1/returns/$rma/cancel',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1ReturnsRmaReceiveRoute =
+  ApiPublicV1ReturnsRmaReceiveRouteImport.update({
+    id: '/api/public/v1/returns/$rma/receive',
+    path: '/api/public/v1/returns/$rma/receive',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1ShipmentsTrackingIndexRoute =
+  ApiPublicV1ShipmentsTrackingIndexRouteImport.update({
+    id: '/api/public/v1/shipments/$tracking/',
+    path: '/api/public/v1/shipments/$tracking/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1ShipmentsTrackingEventsRoute =
+  ApiPublicV1ShipmentsTrackingEventsRouteImport.update({
+    id: '/api/public/v1/shipments/$tracking/events',
+    path: '/api/public/v1/shipments/$tracking/events',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1SupportActionsAddressChangeRoute =
+  ApiPublicV1SupportActionsAddressChangeRouteImport.update({
+    id: '/api/public/v1/support/actions/address-change',
+    path: '/api/public/v1/support/actions/address-change',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1SupportActionsPasswordResetRoute =
+  ApiPublicV1SupportActionsPasswordResetRouteImport.update({
+    id: '/api/public/v1/support/actions/password-reset',
+    path: '/api/public/v1/support/actions/password-reset',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1SupportTicketsIndexRoute =
+  ApiPublicV1SupportTicketsIndexRouteImport.update({
+    id: '/api/public/v1/support/tickets/',
+    path: '/api/public/v1/support/tickets/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1SupportTicketsIdRoute =
+  ApiPublicV1SupportTicketsIdRouteImport.update({
+    id: '/api/public/v1/support/tickets/$id',
+    path: '/api/public/v1/support/tickets/$id',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1OrdersIdReturnsEligibilityRoute =
+  ApiPublicV1OrdersIdReturnsEligibilityRouteImport.update({
+    id: '/api/public/v1/orders/$id/returns/eligibility',
+    path: '/api/public/v1/orders/$id/returns/eligibility',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
+  '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
+  '/api/public/v1/health': typeof ApiPublicV1HealthRoute
+  '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
+  '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
+  '/api/public/v1/policies/$slug': typeof ApiPublicV1PoliciesSlugRoute
+  '/api/public/v1/refunds/$id': typeof ApiPublicV1RefundsIdRoute
+  '/api/public/v1/books/': typeof ApiPublicV1BooksIndexRoute
+  '/api/public/v1/customers/': typeof ApiPublicV1CustomersIndexRoute
+  '/api/public/v1/faqs/': typeof ApiPublicV1FaqsIndexRoute
+  '/api/public/v1/orders/': typeof ApiPublicV1OrdersIndexRoute
+  '/api/public/v1/policies/': typeof ApiPublicV1PoliciesIndexRoute
+  '/api/public/v1/refunds/': typeof ApiPublicV1RefundsIndexRoute
+  '/api/public/v1/returns/': typeof ApiPublicV1ReturnsIndexRoute
+  '/api/public/v1/transactions/': typeof ApiPublicV1TransactionsIndexRoute
+  '/api/public/v1/customers/$id/orders': typeof ApiPublicV1CustomersIdOrdersRoute
+  '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
+  '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
+  '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
+  '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
+  '/api/public/v1/returns/$rma/cancel': typeof ApiPublicV1ReturnsRmaCancelRoute
+  '/api/public/v1/returns/$rma/receive': typeof ApiPublicV1ReturnsRmaReceiveRoute
+  '/api/public/v1/shipments/$tracking/events': typeof ApiPublicV1ShipmentsTrackingEventsRoute
+  '/api/public/v1/support/actions/address-change': typeof ApiPublicV1SupportActionsAddressChangeRoute
+  '/api/public/v1/support/actions/password-reset': typeof ApiPublicV1SupportActionsPasswordResetRoute
+  '/api/public/v1/support/tickets/$id': typeof ApiPublicV1SupportTicketsIdRoute
+  '/api/public/v1/customers/$id/': typeof ApiPublicV1CustomersIdIndexRoute
+  '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
+  '/api/public/v1/returns/$rma/': typeof ApiPublicV1ReturnsRmaIndexRoute
+  '/api/public/v1/shipments/$tracking/': typeof ApiPublicV1ShipmentsTrackingIndexRoute
+  '/api/public/v1/support/tickets/': typeof ApiPublicV1SupportTicketsIndexRoute
+  '/api/public/v1/orders/$id/returns/eligibility': typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
+  '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
+  '/api/public/v1/health': typeof ApiPublicV1HealthRoute
+  '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
+  '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
+  '/api/public/v1/policies/$slug': typeof ApiPublicV1PoliciesSlugRoute
+  '/api/public/v1/refunds/$id': typeof ApiPublicV1RefundsIdRoute
+  '/api/public/v1/books': typeof ApiPublicV1BooksIndexRoute
+  '/api/public/v1/customers': typeof ApiPublicV1CustomersIndexRoute
+  '/api/public/v1/faqs': typeof ApiPublicV1FaqsIndexRoute
+  '/api/public/v1/orders': typeof ApiPublicV1OrdersIndexRoute
+  '/api/public/v1/policies': typeof ApiPublicV1PoliciesIndexRoute
+  '/api/public/v1/refunds': typeof ApiPublicV1RefundsIndexRoute
+  '/api/public/v1/returns': typeof ApiPublicV1ReturnsIndexRoute
+  '/api/public/v1/transactions': typeof ApiPublicV1TransactionsIndexRoute
+  '/api/public/v1/customers/$id/orders': typeof ApiPublicV1CustomersIdOrdersRoute
+  '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
+  '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
+  '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
+  '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
+  '/api/public/v1/returns/$rma/cancel': typeof ApiPublicV1ReturnsRmaCancelRoute
+  '/api/public/v1/returns/$rma/receive': typeof ApiPublicV1ReturnsRmaReceiveRoute
+  '/api/public/v1/shipments/$tracking/events': typeof ApiPublicV1ShipmentsTrackingEventsRoute
+  '/api/public/v1/support/actions/address-change': typeof ApiPublicV1SupportActionsAddressChangeRoute
+  '/api/public/v1/support/actions/password-reset': typeof ApiPublicV1SupportActionsPasswordResetRoute
+  '/api/public/v1/support/tickets/$id': typeof ApiPublicV1SupportTicketsIdRoute
+  '/api/public/v1/customers/$id': typeof ApiPublicV1CustomersIdIndexRoute
+  '/api/public/v1/orders/$id': typeof ApiPublicV1OrdersIdIndexRoute
+  '/api/public/v1/returns/$rma': typeof ApiPublicV1ReturnsRmaIndexRoute
+  '/api/public/v1/shipments/$tracking': typeof ApiPublicV1ShipmentsTrackingIndexRoute
+  '/api/public/v1/support/tickets': typeof ApiPublicV1SupportTicketsIndexRoute
+  '/api/public/v1/orders/$id/returns/eligibility': typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/llms.txt': typeof LlmsDottxtRoute
+  '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
+  '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
+  '/api/public/v1/health': typeof ApiPublicV1HealthRoute
+  '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
+  '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
+  '/api/public/v1/policies/$slug': typeof ApiPublicV1PoliciesSlugRoute
+  '/api/public/v1/refunds/$id': typeof ApiPublicV1RefundsIdRoute
+  '/api/public/v1/books/': typeof ApiPublicV1BooksIndexRoute
+  '/api/public/v1/customers/': typeof ApiPublicV1CustomersIndexRoute
+  '/api/public/v1/faqs/': typeof ApiPublicV1FaqsIndexRoute
+  '/api/public/v1/orders/': typeof ApiPublicV1OrdersIndexRoute
+  '/api/public/v1/policies/': typeof ApiPublicV1PoliciesIndexRoute
+  '/api/public/v1/refunds/': typeof ApiPublicV1RefundsIndexRoute
+  '/api/public/v1/returns/': typeof ApiPublicV1ReturnsIndexRoute
+  '/api/public/v1/transactions/': typeof ApiPublicV1TransactionsIndexRoute
+  '/api/public/v1/customers/$id/orders': typeof ApiPublicV1CustomersIdOrdersRoute
+  '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
+  '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
+  '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
+  '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
+  '/api/public/v1/returns/$rma/cancel': typeof ApiPublicV1ReturnsRmaCancelRoute
+  '/api/public/v1/returns/$rma/receive': typeof ApiPublicV1ReturnsRmaReceiveRoute
+  '/api/public/v1/shipments/$tracking/events': typeof ApiPublicV1ShipmentsTrackingEventsRoute
+  '/api/public/v1/support/actions/address-change': typeof ApiPublicV1SupportActionsAddressChangeRoute
+  '/api/public/v1/support/actions/password-reset': typeof ApiPublicV1SupportActionsPasswordResetRoute
+  '/api/public/v1/support/tickets/$id': typeof ApiPublicV1SupportTicketsIdRoute
+  '/api/public/v1/customers/$id/': typeof ApiPublicV1CustomersIdIndexRoute
+  '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
+  '/api/public/v1/returns/$rma/': typeof ApiPublicV1ReturnsRmaIndexRoute
+  '/api/public/v1/shipments/$tracking/': typeof ApiPublicV1ShipmentsTrackingIndexRoute
+  '/api/public/v1/support/tickets/': typeof ApiPublicV1SupportTicketsIndexRoute
+  '/api/public/v1/orders/$id/returns/eligibility': typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/llms.txt'
+    | '/api/public/openapi.json'
+    | '/api/public/tools.json'
+    | '/api/public/v1/health'
+    | '/api/public/v1/meta'
+    | '/api/public/v1/books/$id'
+    | '/api/public/v1/policies/$slug'
+    | '/api/public/v1/refunds/$id'
+    | '/api/public/v1/books/'
+    | '/api/public/v1/customers/'
+    | '/api/public/v1/faqs/'
+    | '/api/public/v1/orders/'
+    | '/api/public/v1/policies/'
+    | '/api/public/v1/refunds/'
+    | '/api/public/v1/returns/'
+    | '/api/public/v1/transactions/'
+    | '/api/public/v1/customers/$id/orders'
+    | '/api/public/v1/orders/$id/cancel'
+    | '/api/public/v1/orders/$id/items'
+    | '/api/public/v1/orders/$id/reship'
+    | '/api/public/v1/orders/$id/shipments'
+    | '/api/public/v1/returns/$rma/cancel'
+    | '/api/public/v1/returns/$rma/receive'
+    | '/api/public/v1/shipments/$tracking/events'
+    | '/api/public/v1/support/actions/address-change'
+    | '/api/public/v1/support/actions/password-reset'
+    | '/api/public/v1/support/tickets/$id'
+    | '/api/public/v1/customers/$id/'
+    | '/api/public/v1/orders/$id/'
+    | '/api/public/v1/returns/$rma/'
+    | '/api/public/v1/shipments/$tracking/'
+    | '/api/public/v1/support/tickets/'
+    | '/api/public/v1/orders/$id/returns/eligibility'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/llms.txt'
+    | '/api/public/openapi.json'
+    | '/api/public/tools.json'
+    | '/api/public/v1/health'
+    | '/api/public/v1/meta'
+    | '/api/public/v1/books/$id'
+    | '/api/public/v1/policies/$slug'
+    | '/api/public/v1/refunds/$id'
+    | '/api/public/v1/books'
+    | '/api/public/v1/customers'
+    | '/api/public/v1/faqs'
+    | '/api/public/v1/orders'
+    | '/api/public/v1/policies'
+    | '/api/public/v1/refunds'
+    | '/api/public/v1/returns'
+    | '/api/public/v1/transactions'
+    | '/api/public/v1/customers/$id/orders'
+    | '/api/public/v1/orders/$id/cancel'
+    | '/api/public/v1/orders/$id/items'
+    | '/api/public/v1/orders/$id/reship'
+    | '/api/public/v1/orders/$id/shipments'
+    | '/api/public/v1/returns/$rma/cancel'
+    | '/api/public/v1/returns/$rma/receive'
+    | '/api/public/v1/shipments/$tracking/events'
+    | '/api/public/v1/support/actions/address-change'
+    | '/api/public/v1/support/actions/password-reset'
+    | '/api/public/v1/support/tickets/$id'
+    | '/api/public/v1/customers/$id'
+    | '/api/public/v1/orders/$id'
+    | '/api/public/v1/returns/$rma'
+    | '/api/public/v1/shipments/$tracking'
+    | '/api/public/v1/support/tickets'
+    | '/api/public/v1/orders/$id/returns/eligibility'
+  id:
+    | '__root__'
+    | '/'
+    | '/llms.txt'
+    | '/api/public/openapi.json'
+    | '/api/public/tools.json'
+    | '/api/public/v1/health'
+    | '/api/public/v1/meta'
+    | '/api/public/v1/books/$id'
+    | '/api/public/v1/policies/$slug'
+    | '/api/public/v1/refunds/$id'
+    | '/api/public/v1/books/'
+    | '/api/public/v1/customers/'
+    | '/api/public/v1/faqs/'
+    | '/api/public/v1/orders/'
+    | '/api/public/v1/policies/'
+    | '/api/public/v1/refunds/'
+    | '/api/public/v1/returns/'
+    | '/api/public/v1/transactions/'
+    | '/api/public/v1/customers/$id/orders'
+    | '/api/public/v1/orders/$id/cancel'
+    | '/api/public/v1/orders/$id/items'
+    | '/api/public/v1/orders/$id/reship'
+    | '/api/public/v1/orders/$id/shipments'
+    | '/api/public/v1/returns/$rma/cancel'
+    | '/api/public/v1/returns/$rma/receive'
+    | '/api/public/v1/shipments/$tracking/events'
+    | '/api/public/v1/support/actions/address-change'
+    | '/api/public/v1/support/actions/password-reset'
+    | '/api/public/v1/support/tickets/$id'
+    | '/api/public/v1/customers/$id/'
+    | '/api/public/v1/orders/$id/'
+    | '/api/public/v1/returns/$rma/'
+    | '/api/public/v1/shipments/$tracking/'
+    | '/api/public/v1/support/tickets/'
+    | '/api/public/v1/orders/$id/returns/eligibility'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
+  ApiPublicOpenapiDotjsonRoute: typeof ApiPublicOpenapiDotjsonRoute
+  ApiPublicToolsDotjsonRoute: typeof ApiPublicToolsDotjsonRoute
+  ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
+  ApiPublicV1MetaRoute: typeof ApiPublicV1MetaRoute
+  ApiPublicV1BooksIdRoute: typeof ApiPublicV1BooksIdRoute
+  ApiPublicV1PoliciesSlugRoute: typeof ApiPublicV1PoliciesSlugRoute
+  ApiPublicV1RefundsIdRoute: typeof ApiPublicV1RefundsIdRoute
+  ApiPublicV1BooksIndexRoute: typeof ApiPublicV1BooksIndexRoute
+  ApiPublicV1CustomersIndexRoute: typeof ApiPublicV1CustomersIndexRoute
+  ApiPublicV1FaqsIndexRoute: typeof ApiPublicV1FaqsIndexRoute
+  ApiPublicV1OrdersIndexRoute: typeof ApiPublicV1OrdersIndexRoute
+  ApiPublicV1PoliciesIndexRoute: typeof ApiPublicV1PoliciesIndexRoute
+  ApiPublicV1RefundsIndexRoute: typeof ApiPublicV1RefundsIndexRoute
+  ApiPublicV1ReturnsIndexRoute: typeof ApiPublicV1ReturnsIndexRoute
+  ApiPublicV1TransactionsIndexRoute: typeof ApiPublicV1TransactionsIndexRoute
+  ApiPublicV1CustomersIdOrdersRoute: typeof ApiPublicV1CustomersIdOrdersRoute
+  ApiPublicV1OrdersIdCancelRoute: typeof ApiPublicV1OrdersIdCancelRoute
+  ApiPublicV1OrdersIdItemsRoute: typeof ApiPublicV1OrdersIdItemsRoute
+  ApiPublicV1OrdersIdReshipRoute: typeof ApiPublicV1OrdersIdReshipRoute
+  ApiPublicV1OrdersIdShipmentsRoute: typeof ApiPublicV1OrdersIdShipmentsRoute
+  ApiPublicV1ReturnsRmaCancelRoute: typeof ApiPublicV1ReturnsRmaCancelRoute
+  ApiPublicV1ReturnsRmaReceiveRoute: typeof ApiPublicV1ReturnsRmaReceiveRoute
+  ApiPublicV1ShipmentsTrackingEventsRoute: typeof ApiPublicV1ShipmentsTrackingEventsRoute
+  ApiPublicV1SupportActionsAddressChangeRoute: typeof ApiPublicV1SupportActionsAddressChangeRoute
+  ApiPublicV1SupportActionsPasswordResetRoute: typeof ApiPublicV1SupportActionsPasswordResetRoute
+  ApiPublicV1SupportTicketsIdRoute: typeof ApiPublicV1SupportTicketsIdRoute
+  ApiPublicV1CustomersIdIndexRoute: typeof ApiPublicV1CustomersIdIndexRoute
+  ApiPublicV1OrdersIdIndexRoute: typeof ApiPublicV1OrdersIdIndexRoute
+  ApiPublicV1ReturnsRmaIndexRoute: typeof ApiPublicV1ReturnsRmaIndexRoute
+  ApiPublicV1ShipmentsTrackingIndexRoute: typeof ApiPublicV1ShipmentsTrackingIndexRoute
+  ApiPublicV1SupportTicketsIndexRoute: typeof ApiPublicV1SupportTicketsIndexRoute
+  ApiPublicV1OrdersIdReturnsEligibilityRoute: typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +501,280 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/openapi.json': {
+      id: '/api/public/openapi.json'
+      path: '/api/public/openapi.json'
+      fullPath: '/api/public/openapi.json'
+      preLoaderRoute: typeof ApiPublicOpenapiDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/tools.json': {
+      id: '/api/public/tools.json'
+      path: '/api/public/tools.json'
+      fullPath: '/api/public/tools.json'
+      preLoaderRoute: typeof ApiPublicToolsDotjsonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/health': {
+      id: '/api/public/v1/health'
+      path: '/api/public/v1/health'
+      fullPath: '/api/public/v1/health'
+      preLoaderRoute: typeof ApiPublicV1HealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/meta': {
+      id: '/api/public/v1/meta'
+      path: '/api/public/v1/meta'
+      fullPath: '/api/public/v1/meta'
+      preLoaderRoute: typeof ApiPublicV1MetaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/books/': {
+      id: '/api/public/v1/books/'
+      path: '/api/public/v1/books'
+      fullPath: '/api/public/v1/books/'
+      preLoaderRoute: typeof ApiPublicV1BooksIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/books/$id': {
+      id: '/api/public/v1/books/$id'
+      path: '/api/public/v1/books/$id'
+      fullPath: '/api/public/v1/books/$id'
+      preLoaderRoute: typeof ApiPublicV1BooksIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/customers/': {
+      id: '/api/public/v1/customers/'
+      path: '/api/public/v1/customers'
+      fullPath: '/api/public/v1/customers/'
+      preLoaderRoute: typeof ApiPublicV1CustomersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/faqs/': {
+      id: '/api/public/v1/faqs/'
+      path: '/api/public/v1/faqs'
+      fullPath: '/api/public/v1/faqs/'
+      preLoaderRoute: typeof ApiPublicV1FaqsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/orders/': {
+      id: '/api/public/v1/orders/'
+      path: '/api/public/v1/orders'
+      fullPath: '/api/public/v1/orders/'
+      preLoaderRoute: typeof ApiPublicV1OrdersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/policies/': {
+      id: '/api/public/v1/policies/'
+      path: '/api/public/v1/policies'
+      fullPath: '/api/public/v1/policies/'
+      preLoaderRoute: typeof ApiPublicV1PoliciesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/policies/$slug': {
+      id: '/api/public/v1/policies/$slug'
+      path: '/api/public/v1/policies/$slug'
+      fullPath: '/api/public/v1/policies/$slug'
+      preLoaderRoute: typeof ApiPublicV1PoliciesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/refunds/': {
+      id: '/api/public/v1/refunds/'
+      path: '/api/public/v1/refunds'
+      fullPath: '/api/public/v1/refunds/'
+      preLoaderRoute: typeof ApiPublicV1RefundsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/refunds/$id': {
+      id: '/api/public/v1/refunds/$id'
+      path: '/api/public/v1/refunds/$id'
+      fullPath: '/api/public/v1/refunds/$id'
+      preLoaderRoute: typeof ApiPublicV1RefundsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/returns/': {
+      id: '/api/public/v1/returns/'
+      path: '/api/public/v1/returns'
+      fullPath: '/api/public/v1/returns/'
+      preLoaderRoute: typeof ApiPublicV1ReturnsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/transactions/': {
+      id: '/api/public/v1/transactions/'
+      path: '/api/public/v1/transactions'
+      fullPath: '/api/public/v1/transactions/'
+      preLoaderRoute: typeof ApiPublicV1TransactionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/customers/$id/': {
+      id: '/api/public/v1/customers/$id/'
+      path: '/api/public/v1/customers/$id'
+      fullPath: '/api/public/v1/customers/$id/'
+      preLoaderRoute: typeof ApiPublicV1CustomersIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/customers/$id/orders': {
+      id: '/api/public/v1/customers/$id/orders'
+      path: '/api/public/v1/customers/$id/orders'
+      fullPath: '/api/public/v1/customers/$id/orders'
+      preLoaderRoute: typeof ApiPublicV1CustomersIdOrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/orders/$id/': {
+      id: '/api/public/v1/orders/$id/'
+      path: '/api/public/v1/orders/$id'
+      fullPath: '/api/public/v1/orders/$id/'
+      preLoaderRoute: typeof ApiPublicV1OrdersIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/orders/$id/cancel': {
+      id: '/api/public/v1/orders/$id/cancel'
+      path: '/api/public/v1/orders/$id/cancel'
+      fullPath: '/api/public/v1/orders/$id/cancel'
+      preLoaderRoute: typeof ApiPublicV1OrdersIdCancelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/orders/$id/items': {
+      id: '/api/public/v1/orders/$id/items'
+      path: '/api/public/v1/orders/$id/items'
+      fullPath: '/api/public/v1/orders/$id/items'
+      preLoaderRoute: typeof ApiPublicV1OrdersIdItemsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/orders/$id/reship': {
+      id: '/api/public/v1/orders/$id/reship'
+      path: '/api/public/v1/orders/$id/reship'
+      fullPath: '/api/public/v1/orders/$id/reship'
+      preLoaderRoute: typeof ApiPublicV1OrdersIdReshipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/orders/$id/shipments': {
+      id: '/api/public/v1/orders/$id/shipments'
+      path: '/api/public/v1/orders/$id/shipments'
+      fullPath: '/api/public/v1/orders/$id/shipments'
+      preLoaderRoute: typeof ApiPublicV1OrdersIdShipmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/returns/$rma/': {
+      id: '/api/public/v1/returns/$rma/'
+      path: '/api/public/v1/returns/$rma'
+      fullPath: '/api/public/v1/returns/$rma/'
+      preLoaderRoute: typeof ApiPublicV1ReturnsRmaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/returns/$rma/cancel': {
+      id: '/api/public/v1/returns/$rma/cancel'
+      path: '/api/public/v1/returns/$rma/cancel'
+      fullPath: '/api/public/v1/returns/$rma/cancel'
+      preLoaderRoute: typeof ApiPublicV1ReturnsRmaCancelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/returns/$rma/receive': {
+      id: '/api/public/v1/returns/$rma/receive'
+      path: '/api/public/v1/returns/$rma/receive'
+      fullPath: '/api/public/v1/returns/$rma/receive'
+      preLoaderRoute: typeof ApiPublicV1ReturnsRmaReceiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/shipments/$tracking/': {
+      id: '/api/public/v1/shipments/$tracking/'
+      path: '/api/public/v1/shipments/$tracking'
+      fullPath: '/api/public/v1/shipments/$tracking/'
+      preLoaderRoute: typeof ApiPublicV1ShipmentsTrackingIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/shipments/$tracking/events': {
+      id: '/api/public/v1/shipments/$tracking/events'
+      path: '/api/public/v1/shipments/$tracking/events'
+      fullPath: '/api/public/v1/shipments/$tracking/events'
+      preLoaderRoute: typeof ApiPublicV1ShipmentsTrackingEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/support/actions/address-change': {
+      id: '/api/public/v1/support/actions/address-change'
+      path: '/api/public/v1/support/actions/address-change'
+      fullPath: '/api/public/v1/support/actions/address-change'
+      preLoaderRoute: typeof ApiPublicV1SupportActionsAddressChangeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/support/actions/password-reset': {
+      id: '/api/public/v1/support/actions/password-reset'
+      path: '/api/public/v1/support/actions/password-reset'
+      fullPath: '/api/public/v1/support/actions/password-reset'
+      preLoaderRoute: typeof ApiPublicV1SupportActionsPasswordResetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/support/tickets/': {
+      id: '/api/public/v1/support/tickets/'
+      path: '/api/public/v1/support/tickets'
+      fullPath: '/api/public/v1/support/tickets/'
+      preLoaderRoute: typeof ApiPublicV1SupportTicketsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/support/tickets/$id': {
+      id: '/api/public/v1/support/tickets/$id'
+      path: '/api/public/v1/support/tickets/$id'
+      fullPath: '/api/public/v1/support/tickets/$id'
+      preLoaderRoute: typeof ApiPublicV1SupportTicketsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/orders/$id/returns/eligibility': {
+      id: '/api/public/v1/orders/$id/returns/eligibility'
+      path: '/api/public/v1/orders/$id/returns/eligibility'
+      fullPath: '/api/public/v1/orders/$id/returns/eligibility'
+      preLoaderRoute: typeof ApiPublicV1OrdersIdReturnsEligibilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LlmsDottxtRoute: LlmsDottxtRoute,
+  ApiPublicOpenapiDotjsonRoute: ApiPublicOpenapiDotjsonRoute,
+  ApiPublicToolsDotjsonRoute: ApiPublicToolsDotjsonRoute,
+  ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
+  ApiPublicV1MetaRoute: ApiPublicV1MetaRoute,
+  ApiPublicV1BooksIdRoute: ApiPublicV1BooksIdRoute,
+  ApiPublicV1PoliciesSlugRoute: ApiPublicV1PoliciesSlugRoute,
+  ApiPublicV1RefundsIdRoute: ApiPublicV1RefundsIdRoute,
+  ApiPublicV1BooksIndexRoute: ApiPublicV1BooksIndexRoute,
+  ApiPublicV1CustomersIndexRoute: ApiPublicV1CustomersIndexRoute,
+  ApiPublicV1FaqsIndexRoute: ApiPublicV1FaqsIndexRoute,
+  ApiPublicV1OrdersIndexRoute: ApiPublicV1OrdersIndexRoute,
+  ApiPublicV1PoliciesIndexRoute: ApiPublicV1PoliciesIndexRoute,
+  ApiPublicV1RefundsIndexRoute: ApiPublicV1RefundsIndexRoute,
+  ApiPublicV1ReturnsIndexRoute: ApiPublicV1ReturnsIndexRoute,
+  ApiPublicV1TransactionsIndexRoute: ApiPublicV1TransactionsIndexRoute,
+  ApiPublicV1CustomersIdOrdersRoute: ApiPublicV1CustomersIdOrdersRoute,
+  ApiPublicV1OrdersIdCancelRoute: ApiPublicV1OrdersIdCancelRoute,
+  ApiPublicV1OrdersIdItemsRoute: ApiPublicV1OrdersIdItemsRoute,
+  ApiPublicV1OrdersIdReshipRoute: ApiPublicV1OrdersIdReshipRoute,
+  ApiPublicV1OrdersIdShipmentsRoute: ApiPublicV1OrdersIdShipmentsRoute,
+  ApiPublicV1ReturnsRmaCancelRoute: ApiPublicV1ReturnsRmaCancelRoute,
+  ApiPublicV1ReturnsRmaReceiveRoute: ApiPublicV1ReturnsRmaReceiveRoute,
+  ApiPublicV1ShipmentsTrackingEventsRoute:
+    ApiPublicV1ShipmentsTrackingEventsRoute,
+  ApiPublicV1SupportActionsAddressChangeRoute:
+    ApiPublicV1SupportActionsAddressChangeRoute,
+  ApiPublicV1SupportActionsPasswordResetRoute:
+    ApiPublicV1SupportActionsPasswordResetRoute,
+  ApiPublicV1SupportTicketsIdRoute: ApiPublicV1SupportTicketsIdRoute,
+  ApiPublicV1CustomersIdIndexRoute: ApiPublicV1CustomersIdIndexRoute,
+  ApiPublicV1OrdersIdIndexRoute: ApiPublicV1OrdersIdIndexRoute,
+  ApiPublicV1ReturnsRmaIndexRoute: ApiPublicV1ReturnsRmaIndexRoute,
+  ApiPublicV1ShipmentsTrackingIndexRoute:
+    ApiPublicV1ShipmentsTrackingIndexRoute,
+  ApiPublicV1SupportTicketsIndexRoute: ApiPublicV1SupportTicketsIndexRoute,
+  ApiPublicV1OrdersIdReturnsEligibilityRoute:
+    ApiPublicV1OrdersIdReturnsEligibilityRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
