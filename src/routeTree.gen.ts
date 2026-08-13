@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as ApiPublicV1MetaRouteImport } from './routes/api/public/v1/meta'
 import { Route as ApiPublicV1OrdersIndexRouteImport } from './routes/api/public/v1/orders/index'
+import { Route as ApiPublicV1RefundsIndexRouteImport } from './routes/api/public/v1/refunds/index'
 import { Route as ApiPublicV1ReturnsIndexRouteImport } from './routes/api/public/v1/returns/index'
 import { Route as ApiPublicV1OrdersIdIndexRouteImport } from './routes/api/public/v1/orders/$id/index'
 import { Route as ApiPublicV1OrdersIdCancelRouteImport } from './routes/api/public/v1/orders/$id/cancel'
@@ -44,6 +45,11 @@ const ApiPublicV1MetaRoute = ApiPublicV1MetaRouteImport.update({
 const ApiPublicV1OrdersIndexRoute = ApiPublicV1OrdersIndexRouteImport.update({
   id: '/api/public/v1/orders/',
   path: '/api/public/v1/orders/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicV1RefundsIndexRoute = ApiPublicV1RefundsIndexRouteImport.update({
+  id: '/api/public/v1/refunds/',
+  path: '/api/public/v1/refunds/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicV1ReturnsIndexRoute = ApiPublicV1ReturnsIndexRouteImport.update({
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/orders/': typeof ApiPublicV1OrdersIndexRoute
+  '/api/public/v1/refunds/': typeof ApiPublicV1RefundsIndexRoute
   '/api/public/v1/returns/': typeof ApiPublicV1ReturnsIndexRoute
   '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/orders': typeof ApiPublicV1OrdersIndexRoute
+  '/api/public/v1/refunds': typeof ApiPublicV1RefundsIndexRoute
   '/api/public/v1/returns': typeof ApiPublicV1ReturnsIndexRoute
   '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/orders/': typeof ApiPublicV1OrdersIndexRoute
+  '/api/public/v1/refunds/': typeof ApiPublicV1RefundsIndexRoute
   '/api/public/v1/returns/': typeof ApiPublicV1ReturnsIndexRoute
   '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/orders/'
+    | '/api/public/v1/refunds/'
     | '/api/public/v1/returns/'
     | '/api/public/v1/orders/$id/cancel'
     | '/api/public/v1/orders/$id/items'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/orders'
+    | '/api/public/v1/refunds'
     | '/api/public/v1/returns'
     | '/api/public/v1/orders/$id/cancel'
     | '/api/public/v1/orders/$id/items'
@@ -216,6 +227,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/orders/'
+    | '/api/public/v1/refunds/'
     | '/api/public/v1/returns/'
     | '/api/public/v1/orders/$id/cancel'
     | '/api/public/v1/orders/$id/items'
@@ -235,6 +247,7 @@ export interface RootRouteChildren {
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
   ApiPublicV1MetaRoute: typeof ApiPublicV1MetaRoute
   ApiPublicV1OrdersIndexRoute: typeof ApiPublicV1OrdersIndexRoute
+  ApiPublicV1RefundsIndexRoute: typeof ApiPublicV1RefundsIndexRoute
   ApiPublicV1ReturnsIndexRoute: typeof ApiPublicV1ReturnsIndexRoute
   ApiPublicV1OrdersIdCancelRoute: typeof ApiPublicV1OrdersIdCancelRoute
   ApiPublicV1OrdersIdItemsRoute: typeof ApiPublicV1OrdersIdItemsRoute
@@ -277,6 +290,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/v1/orders'
       fullPath: '/api/public/v1/orders/'
       preLoaderRoute: typeof ApiPublicV1OrdersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/refunds/': {
+      id: '/api/public/v1/refunds/'
+      path: '/api/public/v1/refunds'
+      fullPath: '/api/public/v1/refunds/'
+      preLoaderRoute: typeof ApiPublicV1RefundsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/returns/': {
@@ -371,6 +391,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
   ApiPublicV1MetaRoute: ApiPublicV1MetaRoute,
   ApiPublicV1OrdersIndexRoute: ApiPublicV1OrdersIndexRoute,
+  ApiPublicV1RefundsIndexRoute: ApiPublicV1RefundsIndexRoute,
   ApiPublicV1ReturnsIndexRoute: ApiPublicV1ReturnsIndexRoute,
   ApiPublicV1OrdersIdCancelRoute: ApiPublicV1OrdersIdCancelRoute,
   ApiPublicV1OrdersIdItemsRoute: ApiPublicV1OrdersIdItemsRoute,
