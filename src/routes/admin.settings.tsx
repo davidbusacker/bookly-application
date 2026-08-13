@@ -19,7 +19,7 @@ export const Route = createFileRoute("/admin/settings")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: AdminSettings;
+  component: AdminSettings,
 });
 
 type ResetResult = { reset: boolean; reset_at: string; summary?: unknown };
