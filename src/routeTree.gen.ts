@@ -16,6 +16,7 @@ import { Route as ApiPublicV1BooksIndexRouteImport } from './routes/api/public/v
 import { Route as ApiPublicV1BooksIdRouteImport } from './routes/api/public/v1/books/$id'
 import { Route as ApiPublicV1CustomersIndexRouteImport } from './routes/api/public/v1/customers/index'
 import { Route as ApiPublicV1OrdersIndexRouteImport } from './routes/api/public/v1/orders/index'
+import { Route as ApiPublicV1PoliciesIndexRouteImport } from './routes/api/public/v1/policies/index'
 import { Route as ApiPublicV1RefundsIndexRouteImport } from './routes/api/public/v1/refunds/index'
 import { Route as ApiPublicV1RefundsIdRouteImport } from './routes/api/public/v1/refunds/$id'
 import { Route as ApiPublicV1ReturnsIndexRouteImport } from './routes/api/public/v1/returns/index'
@@ -70,6 +71,12 @@ const ApiPublicV1OrdersIndexRoute = ApiPublicV1OrdersIndexRouteImport.update({
   path: '/api/public/v1/orders/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1PoliciesIndexRoute =
+  ApiPublicV1PoliciesIndexRouteImport.update({
+    id: '/api/public/v1/policies/',
+    path: '/api/public/v1/policies/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1RefundsIndexRoute = ApiPublicV1RefundsIndexRouteImport.update({
   id: '/api/public/v1/refunds/',
   path: '/api/public/v1/refunds/',
@@ -179,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/books/': typeof ApiPublicV1BooksIndexRoute
   '/api/public/v1/customers/': typeof ApiPublicV1CustomersIndexRoute
   '/api/public/v1/orders/': typeof ApiPublicV1OrdersIndexRoute
+  '/api/public/v1/policies/': typeof ApiPublicV1PoliciesIndexRoute
   '/api/public/v1/refunds/': typeof ApiPublicV1RefundsIndexRoute
   '/api/public/v1/returns/': typeof ApiPublicV1ReturnsIndexRoute
   '/api/public/v1/transactions/': typeof ApiPublicV1TransactionsIndexRoute
@@ -205,6 +213,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/books': typeof ApiPublicV1BooksIndexRoute
   '/api/public/v1/customers': typeof ApiPublicV1CustomersIndexRoute
   '/api/public/v1/orders': typeof ApiPublicV1OrdersIndexRoute
+  '/api/public/v1/policies': typeof ApiPublicV1PoliciesIndexRoute
   '/api/public/v1/refunds': typeof ApiPublicV1RefundsIndexRoute
   '/api/public/v1/returns': typeof ApiPublicV1ReturnsIndexRoute
   '/api/public/v1/transactions': typeof ApiPublicV1TransactionsIndexRoute
@@ -232,6 +241,7 @@ export interface FileRoutesById {
   '/api/public/v1/books/': typeof ApiPublicV1BooksIndexRoute
   '/api/public/v1/customers/': typeof ApiPublicV1CustomersIndexRoute
   '/api/public/v1/orders/': typeof ApiPublicV1OrdersIndexRoute
+  '/api/public/v1/policies/': typeof ApiPublicV1PoliciesIndexRoute
   '/api/public/v1/refunds/': typeof ApiPublicV1RefundsIndexRoute
   '/api/public/v1/returns/': typeof ApiPublicV1ReturnsIndexRoute
   '/api/public/v1/transactions/': typeof ApiPublicV1TransactionsIndexRoute
@@ -260,6 +270,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/books/'
     | '/api/public/v1/customers/'
     | '/api/public/v1/orders/'
+    | '/api/public/v1/policies/'
     | '/api/public/v1/refunds/'
     | '/api/public/v1/returns/'
     | '/api/public/v1/transactions/'
@@ -286,6 +297,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/books'
     | '/api/public/v1/customers'
     | '/api/public/v1/orders'
+    | '/api/public/v1/policies'
     | '/api/public/v1/refunds'
     | '/api/public/v1/returns'
     | '/api/public/v1/transactions'
@@ -312,6 +324,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/books/'
     | '/api/public/v1/customers/'
     | '/api/public/v1/orders/'
+    | '/api/public/v1/policies/'
     | '/api/public/v1/refunds/'
     | '/api/public/v1/returns/'
     | '/api/public/v1/transactions/'
@@ -339,6 +352,7 @@ export interface RootRouteChildren {
   ApiPublicV1BooksIndexRoute: typeof ApiPublicV1BooksIndexRoute
   ApiPublicV1CustomersIndexRoute: typeof ApiPublicV1CustomersIndexRoute
   ApiPublicV1OrdersIndexRoute: typeof ApiPublicV1OrdersIndexRoute
+  ApiPublicV1PoliciesIndexRoute: typeof ApiPublicV1PoliciesIndexRoute
   ApiPublicV1RefundsIndexRoute: typeof ApiPublicV1RefundsIndexRoute
   ApiPublicV1ReturnsIndexRoute: typeof ApiPublicV1ReturnsIndexRoute
   ApiPublicV1TransactionsIndexRoute: typeof ApiPublicV1TransactionsIndexRoute
@@ -406,6 +420,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/v1/orders'
       fullPath: '/api/public/v1/orders/'
       preLoaderRoute: typeof ApiPublicV1OrdersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/policies/': {
+      id: '/api/public/v1/policies/'
+      path: '/api/public/v1/policies'
+      fullPath: '/api/public/v1/policies/'
+      preLoaderRoute: typeof ApiPublicV1PoliciesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/refunds/': {
@@ -539,6 +560,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1BooksIndexRoute: ApiPublicV1BooksIndexRoute,
   ApiPublicV1CustomersIndexRoute: ApiPublicV1CustomersIndexRoute,
   ApiPublicV1OrdersIndexRoute: ApiPublicV1OrdersIndexRoute,
+  ApiPublicV1PoliciesIndexRoute: ApiPublicV1PoliciesIndexRoute,
   ApiPublicV1RefundsIndexRoute: ApiPublicV1RefundsIndexRoute,
   ApiPublicV1ReturnsIndexRoute: ApiPublicV1ReturnsIndexRoute,
   ApiPublicV1TransactionsIndexRoute: ApiPublicV1TransactionsIndexRoute,
