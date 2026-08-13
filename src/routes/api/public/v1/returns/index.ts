@@ -98,8 +98,15 @@ export const Route = createFileRoute("/api/public/v1/returns/")({
 
         const requestedItems: Array<{ order_item_id: string; quantity: number }> = [];
         let expected = 0;
-        const wanted =
-          body.items ?? items.map((i) => ({ order_item_id: i["id"] as string, quantity: i["quantity"] as number }));
+        type WantedItem = {
+          order_item_id?: string | undefined;
+          isbn?: string | undefined;
+          title?: string | undefined;
+          quantity?: number | undefined;
+        };
+        const wanted: WantedItem[] =
+          body.items ??
+          items.map((i) => ({ order_item_id: i["id"] as string, quantity: i["quantity"] as number }));
 
         for (const requested of wanted) {
           const match = items.find(
