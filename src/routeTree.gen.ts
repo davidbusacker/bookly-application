@@ -35,6 +35,7 @@ import { Route as ApiPublicV1ReturnsRmaCancelRouteImport } from './routes/api/pu
 import { Route as ApiPublicV1ReturnsRmaReceiveRouteImport } from './routes/api/public/v1/returns/$rma/receive'
 import { Route as ApiPublicV1ShipmentsTrackingIndexRouteImport } from './routes/api/public/v1/shipments/$tracking/index'
 import { Route as ApiPublicV1ShipmentsTrackingEventsRouteImport } from './routes/api/public/v1/shipments/$tracking/events'
+import { Route as ApiPublicV1SupportActionsAddressChangeRouteImport } from './routes/api/public/v1/support/actions/address-change'
 import { Route as ApiPublicV1SupportActionsPasswordResetRouteImport } from './routes/api/public/v1/support/actions/password-reset'
 import { Route as ApiPublicV1SupportTicketsIndexRouteImport } from './routes/api/public/v1/support/tickets/index'
 import { Route as ApiPublicV1SupportTicketsIdRouteImport } from './routes/api/public/v1/support/tickets/$id'
@@ -185,6 +186,12 @@ const ApiPublicV1ShipmentsTrackingEventsRoute =
     path: '/api/public/v1/shipments/$tracking/events',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicV1SupportActionsAddressChangeRoute =
+  ApiPublicV1SupportActionsAddressChangeRouteImport.update({
+    id: '/api/public/v1/support/actions/address-change',
+    path: '/api/public/v1/support/actions/address-change',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1SupportActionsPasswordResetRoute =
   ApiPublicV1SupportActionsPasswordResetRouteImport.update({
     id: '/api/public/v1/support/actions/password-reset',
@@ -233,6 +240,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/returns/$rma/cancel': typeof ApiPublicV1ReturnsRmaCancelRoute
   '/api/public/v1/returns/$rma/receive': typeof ApiPublicV1ReturnsRmaReceiveRoute
   '/api/public/v1/shipments/$tracking/events': typeof ApiPublicV1ShipmentsTrackingEventsRoute
+  '/api/public/v1/support/actions/address-change': typeof ApiPublicV1SupportActionsAddressChangeRoute
   '/api/public/v1/support/actions/password-reset': typeof ApiPublicV1SupportActionsPasswordResetRoute
   '/api/public/v1/support/tickets/$id': typeof ApiPublicV1SupportTicketsIdRoute
   '/api/public/v1/customers/$id/': typeof ApiPublicV1CustomersIdIndexRoute
@@ -265,6 +273,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/returns/$rma/cancel': typeof ApiPublicV1ReturnsRmaCancelRoute
   '/api/public/v1/returns/$rma/receive': typeof ApiPublicV1ReturnsRmaReceiveRoute
   '/api/public/v1/shipments/$tracking/events': typeof ApiPublicV1ShipmentsTrackingEventsRoute
+  '/api/public/v1/support/actions/address-change': typeof ApiPublicV1SupportActionsAddressChangeRoute
   '/api/public/v1/support/actions/password-reset': typeof ApiPublicV1SupportActionsPasswordResetRoute
   '/api/public/v1/support/tickets/$id': typeof ApiPublicV1SupportTicketsIdRoute
   '/api/public/v1/customers/$id': typeof ApiPublicV1CustomersIdIndexRoute
@@ -298,6 +307,7 @@ export interface FileRoutesById {
   '/api/public/v1/returns/$rma/cancel': typeof ApiPublicV1ReturnsRmaCancelRoute
   '/api/public/v1/returns/$rma/receive': typeof ApiPublicV1ReturnsRmaReceiveRoute
   '/api/public/v1/shipments/$tracking/events': typeof ApiPublicV1ShipmentsTrackingEventsRoute
+  '/api/public/v1/support/actions/address-change': typeof ApiPublicV1SupportActionsAddressChangeRoute
   '/api/public/v1/support/actions/password-reset': typeof ApiPublicV1SupportActionsPasswordResetRoute
   '/api/public/v1/support/tickets/$id': typeof ApiPublicV1SupportTicketsIdRoute
   '/api/public/v1/customers/$id/': typeof ApiPublicV1CustomersIdIndexRoute
@@ -332,6 +342,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/returns/$rma/cancel'
     | '/api/public/v1/returns/$rma/receive'
     | '/api/public/v1/shipments/$tracking/events'
+    | '/api/public/v1/support/actions/address-change'
     | '/api/public/v1/support/actions/password-reset'
     | '/api/public/v1/support/tickets/$id'
     | '/api/public/v1/customers/$id/'
@@ -364,6 +375,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/returns/$rma/cancel'
     | '/api/public/v1/returns/$rma/receive'
     | '/api/public/v1/shipments/$tracking/events'
+    | '/api/public/v1/support/actions/address-change'
     | '/api/public/v1/support/actions/password-reset'
     | '/api/public/v1/support/tickets/$id'
     | '/api/public/v1/customers/$id'
@@ -396,6 +408,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/returns/$rma/cancel'
     | '/api/public/v1/returns/$rma/receive'
     | '/api/public/v1/shipments/$tracking/events'
+    | '/api/public/v1/support/actions/address-change'
     | '/api/public/v1/support/actions/password-reset'
     | '/api/public/v1/support/tickets/$id'
     | '/api/public/v1/customers/$id/'
@@ -429,6 +442,7 @@ export interface RootRouteChildren {
   ApiPublicV1ReturnsRmaCancelRoute: typeof ApiPublicV1ReturnsRmaCancelRoute
   ApiPublicV1ReturnsRmaReceiveRoute: typeof ApiPublicV1ReturnsRmaReceiveRoute
   ApiPublicV1ShipmentsTrackingEventsRoute: typeof ApiPublicV1ShipmentsTrackingEventsRoute
+  ApiPublicV1SupportActionsAddressChangeRoute: typeof ApiPublicV1SupportActionsAddressChangeRoute
   ApiPublicV1SupportActionsPasswordResetRoute: typeof ApiPublicV1SupportActionsPasswordResetRoute
   ApiPublicV1SupportTicketsIdRoute: typeof ApiPublicV1SupportTicketsIdRoute
   ApiPublicV1CustomersIdIndexRoute: typeof ApiPublicV1CustomersIdIndexRoute
@@ -623,6 +637,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1ShipmentsTrackingEventsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/support/actions/address-change': {
+      id: '/api/public/v1/support/actions/address-change'
+      path: '/api/public/v1/support/actions/address-change'
+      fullPath: '/api/public/v1/support/actions/address-change'
+      preLoaderRoute: typeof ApiPublicV1SupportActionsAddressChangeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/support/actions/password-reset': {
       id: '/api/public/v1/support/actions/password-reset'
       path: '/api/public/v1/support/actions/password-reset'
@@ -678,6 +699,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1ReturnsRmaReceiveRoute: ApiPublicV1ReturnsRmaReceiveRoute,
   ApiPublicV1ShipmentsTrackingEventsRoute:
     ApiPublicV1ShipmentsTrackingEventsRoute,
+  ApiPublicV1SupportActionsAddressChangeRoute:
+    ApiPublicV1SupportActionsAddressChangeRoute,
   ApiPublicV1SupportActionsPasswordResetRoute:
     ApiPublicV1SupportActionsPasswordResetRoute,
   ApiPublicV1SupportTicketsIdRoute: ApiPublicV1SupportTicketsIdRoute,
