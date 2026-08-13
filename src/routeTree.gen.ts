@@ -19,6 +19,7 @@ import { Route as ApiPublicV1OrdersIdItemsRouteImport } from './routes/api/publi
 import { Route as ApiPublicV1OrdersIdReshipRouteImport } from './routes/api/public/v1/orders/$id/reship'
 import { Route as ApiPublicV1OrdersIdShipmentsRouteImport } from './routes/api/public/v1/orders/$id/shipments'
 import { Route as ApiPublicV1ShipmentsTrackingIndexRouteImport } from './routes/api/public/v1/shipments/$tracking/index'
+import { Route as ApiPublicV1ShipmentsTrackingEventsRouteImport } from './routes/api/public/v1/shipments/$tracking/events'
 import { Route as ApiPublicV1OrdersIdReturnsEligibilityRouteImport } from './routes/api/public/v1/orders/$id/returns/eligibility'
 
 const IndexRoute = IndexRouteImport.update({
@@ -77,6 +78,12 @@ const ApiPublicV1ShipmentsTrackingIndexRoute =
     path: '/api/public/v1/shipments/$tracking/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicV1ShipmentsTrackingEventsRoute =
+  ApiPublicV1ShipmentsTrackingEventsRouteImport.update({
+    id: '/api/public/v1/shipments/$tracking/events',
+    path: '/api/public/v1/shipments/$tracking/events',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1OrdersIdReturnsEligibilityRoute =
   ApiPublicV1OrdersIdReturnsEligibilityRouteImport.update({
     id: '/api/public/v1/orders/$id/returns/eligibility',
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
   '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
   '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
+  '/api/public/v1/shipments/$tracking/events': typeof ApiPublicV1ShipmentsTrackingEventsRoute
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/shipments/$tracking/': typeof ApiPublicV1ShipmentsTrackingIndexRoute
   '/api/public/v1/orders/$id/returns/eligibility': typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
@@ -106,6 +114,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
   '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
   '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
+  '/api/public/v1/shipments/$tracking/events': typeof ApiPublicV1ShipmentsTrackingEventsRoute
   '/api/public/v1/orders/$id': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/shipments/$tracking': typeof ApiPublicV1ShipmentsTrackingIndexRoute
   '/api/public/v1/orders/$id/returns/eligibility': typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
@@ -120,6 +129,7 @@ export interface FileRoutesById {
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
   '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
   '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
+  '/api/public/v1/shipments/$tracking/events': typeof ApiPublicV1ShipmentsTrackingEventsRoute
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/shipments/$tracking/': typeof ApiPublicV1ShipmentsTrackingIndexRoute
   '/api/public/v1/orders/$id/returns/eligibility': typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/orders/$id/items'
     | '/api/public/v1/orders/$id/reship'
     | '/api/public/v1/orders/$id/shipments'
+    | '/api/public/v1/shipments/$tracking/events'
     | '/api/public/v1/orders/$id/'
     | '/api/public/v1/shipments/$tracking/'
     | '/api/public/v1/orders/$id/returns/eligibility'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/orders/$id/items'
     | '/api/public/v1/orders/$id/reship'
     | '/api/public/v1/orders/$id/shipments'
+    | '/api/public/v1/shipments/$tracking/events'
     | '/api/public/v1/orders/$id'
     | '/api/public/v1/shipments/$tracking'
     | '/api/public/v1/orders/$id/returns/eligibility'
@@ -161,6 +173,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/orders/$id/items'
     | '/api/public/v1/orders/$id/reship'
     | '/api/public/v1/orders/$id/shipments'
+    | '/api/public/v1/shipments/$tracking/events'
     | '/api/public/v1/orders/$id/'
     | '/api/public/v1/shipments/$tracking/'
     | '/api/public/v1/orders/$id/returns/eligibility'
@@ -175,6 +188,7 @@ export interface RootRouteChildren {
   ApiPublicV1OrdersIdItemsRoute: typeof ApiPublicV1OrdersIdItemsRoute
   ApiPublicV1OrdersIdReshipRoute: typeof ApiPublicV1OrdersIdReshipRoute
   ApiPublicV1OrdersIdShipmentsRoute: typeof ApiPublicV1OrdersIdShipmentsRoute
+  ApiPublicV1ShipmentsTrackingEventsRoute: typeof ApiPublicV1ShipmentsTrackingEventsRoute
   ApiPublicV1OrdersIdIndexRoute: typeof ApiPublicV1OrdersIdIndexRoute
   ApiPublicV1ShipmentsTrackingIndexRoute: typeof ApiPublicV1ShipmentsTrackingIndexRoute
   ApiPublicV1OrdersIdReturnsEligibilityRoute: typeof ApiPublicV1OrdersIdReturnsEligibilityRoute
@@ -252,6 +266,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1ShipmentsTrackingIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/shipments/$tracking/events': {
+      id: '/api/public/v1/shipments/$tracking/events'
+      path: '/api/public/v1/shipments/$tracking/events'
+      fullPath: '/api/public/v1/shipments/$tracking/events'
+      preLoaderRoute: typeof ApiPublicV1ShipmentsTrackingEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/orders/$id/returns/eligibility': {
       id: '/api/public/v1/orders/$id/returns/eligibility'
       path: '/api/public/v1/orders/$id/returns/eligibility'
@@ -271,6 +292,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1OrdersIdItemsRoute: ApiPublicV1OrdersIdItemsRoute,
   ApiPublicV1OrdersIdReshipRoute: ApiPublicV1OrdersIdReshipRoute,
   ApiPublicV1OrdersIdShipmentsRoute: ApiPublicV1OrdersIdShipmentsRoute,
+  ApiPublicV1ShipmentsTrackingEventsRoute:
+    ApiPublicV1ShipmentsTrackingEventsRoute,
   ApiPublicV1OrdersIdIndexRoute: ApiPublicV1OrdersIdIndexRoute,
   ApiPublicV1ShipmentsTrackingIndexRoute:
     ApiPublicV1ShipmentsTrackingIndexRoute,
