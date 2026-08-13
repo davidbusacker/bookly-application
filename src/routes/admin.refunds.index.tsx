@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { apiGet, money, when, type Refund } from "@/lib/bookly/api-client";
@@ -36,8 +36,8 @@ function RefundsPage() {
         ) : (
           <Table head={["", "Refund", "Order", "Method", "Reason", "Created", "Status", "Amount"]}>
             {rows.map((r) => (
-              <>
-                <tr key={r.id} className="hover:bg-accent/40">
+              <Fragment key={r.id}>
+                <tr className="hover:bg-accent/40">
                   <td className="px-3 py-2.5">
                     <button
                       type="button"
@@ -72,7 +72,7 @@ function RefundsPage() {
                   <td className="px-5 py-2.5 text-right tabular-nums">{money(r.amount_cents, r.currency)}</td>
                 </tr>
                 {open === r.id ? (
-                  <tr key={`${r.id}-history`} className="bg-muted/30">
+                  <tr className="bg-muted/30">
                     <td colSpan={8} className="px-6 py-4">
                       <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                         Decision history
@@ -88,7 +88,7 @@ function RefundsPage() {
                     </td>
                   </tr>
                 ) : null}
-              </>
+              </Fragment>
             ))}
           </Table>
         )}
