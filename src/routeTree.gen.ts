@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
+import { Route as ApiPublicV1MetaRouteImport } from './routes/api/public/v1/meta'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const ApiPublicV1HealthRoute = ApiPublicV1HealthRouteImport.update({
   path: '/api/public/v1/health',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1MetaRoute = ApiPublicV1MetaRouteImport.update({
+  id: '/api/public/v1/meta',
+  path: '/api/public/v1/meta',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
+  '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
+  '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
+  '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/public/v1/health'
+  fullPaths: '/' | '/api/public/v1/health' | '/api/public/v1/meta'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/public/v1/health'
-  id: '__root__' | '/' | '/api/public/v1/health'
+  to: '/' | '/api/public/v1/health' | '/api/public/v1/meta'
+  id: '__root__' | '/' | '/api/public/v1/health' | '/api/public/v1/meta'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
+  ApiPublicV1MetaRoute: typeof ApiPublicV1MetaRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1HealthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/meta': {
+      id: '/api/public/v1/meta'
+      path: '/api/public/v1/meta'
+      fullPath: '/api/public/v1/meta'
+      preLoaderRoute: typeof ApiPublicV1MetaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
+  ApiPublicV1MetaRoute: ApiPublicV1MetaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
