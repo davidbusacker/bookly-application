@@ -107,6 +107,8 @@ export const Route = createFileRoute("/api/public/v1/returns/")({
           .select("id,rma_number")
           .single();
         dbErr(error);
+        if (!created) throw conflict("Return could not be created");
+
 
         const { error: e2 } = await db.from("return_items").insert(
           body.items.map((i) => ({
