@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueries } from "@tanstack/react-query";
-import { apiGet, money, when, type Customer, type Order, type Ticket } from "@/lib/bookly/api-client";
+import { apiGet, money, when, type Customer, type Order } from "@/lib/bookly/api-client";
 import { Card, Empty, ErrorNote, Field, Loading, StatusBadge, Table } from "@/components/console/ui";
 
 export const Route = createFileRoute("/admin/customers/$id")({
@@ -13,7 +13,7 @@ function CustomerDetail() {
     queries: [
       { queryKey: ["customer", id], queryFn: () => apiGet<Customer>(`/api/public/v1/customers/${id}`), refetchInterval: 10_000 },
       { queryKey: ["customer", id, "orders"], queryFn: () => apiGet<Order[]>(`/api/public/v1/customers/${id}/orders?limit=50`), refetchInterval: 10_000 },
-      { queryKey: ["customer", id, "tickets"], queryFn: () => apiGet<Ticket[]>(`/api/public/v1/support/tickets?customer_id=${id}&limit=20`), refetchInterval: 10_000 },
+      
     ],
   });
 
