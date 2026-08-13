@@ -21,6 +21,9 @@ const CreateBody = z.object({
   order_id: z.string().uuid().optional(),
 });
 
+const TICKET_SELECT =
+  "*, customer:customers(id,full_name,email), order:orders(id,order_number,status), events:ticket_events(*)";
+
 export const Route = createFileRoute("/api/public/v1/support/tickets/")({
   server: {
     handlers: {
@@ -29,13 +32,14 @@ export const Route = createFileRoute("/api/public/v1/support/tickets/")({
         const sp = searchParams(request);
         const { limit, offset } = pagination(request);
         const db = booklyDb();
-        let query = db
-          .from("support_tickets")
-          .select("*, customer:customers(id,name,email), order:orders(id,order_number)", { count: "exact" });
+        let query = db.from("support_tickets").select(TICKET_SELECT, { count: "exact" });
         const status = sp.get("status");
         if (status) query = query.in("status", status.split(","));
         const email = sp.get("email");
-        if (email) query = query.eq("customer_email", email);
+        if (email) {
+          const { data: c } = await db.from("customers").select("id").eq("email", email).maybeSingle();
+          query = query.eq("customer_id", c?.id ?? "00000000-0000-0000-0000-000000000000");
+        }
 
         const { data, error, count } = await query
           .order("created_at", { ascending: false })
@@ -58,19 +62,25 @@ export const Route = createFileRoute("/api/public/v1/support/tickets/")({
           .insert({
             ticket_number: `TCK-${Math.floor(10000 + Math.random() * 89999)}`,
             customer_id: customer?.id ?? null,
-            customer_email: body.customer_email,
             order_id: body.order_id ?? null,
             subject: body.subject,
-            body: body.body ?? null,
             category: body.category,
             priority: body.priority,
             status: "open",
             channel: "api",
           })
-          .select("*")
+          .select("id")
           .single();
         dbErr(error);
-        return ok(data, {}, 201);
+
+        if (data && body.body) {
+          await db
+            .from("ticket_events")
+            .insert({ ticket_id: data.id, type: "message", author: "customer", body: body.body });
+        }
+
+        const { data: full } = await db.from("support_tickets").select(TICKET_SELECT).eq("id", data!.id).single();
+        return ok(full, { customer_email: body.customer_email }, 201);
       }),
     },
   },
