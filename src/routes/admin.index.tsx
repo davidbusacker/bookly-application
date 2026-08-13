@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueries } from "@tanstack/react-query";
-import { apiGet, money, when, type Order, type ReturnRow, type Ticket, type Refund } from "@/lib/bookly/api-client";
+import { apiGet, money, when, type Order, type ReturnRow, type Refund } from "@/lib/bookly/api-client";
 import { Card, Empty, ErrorNote, Loading, Stat, StatusBadge, Table } from "@/components/console/ui";
 
 export const Route = createFileRoute("/admin/")({
@@ -16,12 +16,11 @@ function Overview() {
       { queryKey: ["orders", "open"], queryFn: () => apiGet<Order[]>("/api/public/v1/orders?status=pending,processing,shipped&limit=1"), refetchInterval: REFRESH },
       { queryKey: ["returns", "recent"], queryFn: () => apiGet<ReturnRow[]>("/api/public/v1/returns?limit=6"), refetchInterval: REFRESH },
       { queryKey: ["refunds", "recent"], queryFn: () => apiGet<Refund[]>("/api/public/v1/refunds?limit=6"), refetchInterval: REFRESH },
-      { queryKey: ["tickets", "open"], queryFn: () => apiGet<Ticket[]>("/api/public/v1/support/tickets?status=open&limit=6"), refetchInterval: REFRESH },
       { queryKey: ["customers", "count"], queryFn: () => apiGet<unknown[]>("/api/public/v1/customers?limit=1"), refetchInterval: REFRESH },
     ],
   });
 
-  const [orders, openOrders, returns, refunds, tickets, customers] = results;
+  const [orders, openOrders, returns, refunds, customers] = results;
   const isLoading = results.some((r) => r.isLoading);
   const error = results.find((r) => r.error)?.error;
 
@@ -114,26 +113,6 @@ function Overview() {
         </Card>
       </div>
 
-      <Card
-        title="Open support tickets"
-        action={<Link to="/admin/tickets" className="text-xs font-medium underline underline-offset-4">View all</Link>}
-      >
-        {(tickets.data?.data.length ?? 0) === 0 ? (
-          <Empty>No open tickets.</Empty>
-        ) : (
-          <Table head={["Ticket", "Subject", "Customer", "Priority", "Opened"]}>
-            {tickets.data!.data.map((t) => (
-              <tr key={t.id} className="hover:bg-accent/40">
-                <td className="px-5 py-2.5 font-mono text-xs font-semibold">{t.ticket_number}</td>
-                <td className="px-5 py-2.5">{t.subject}</td>
-                <td className="px-5 py-2.5 text-muted-foreground">{t.customer?.full_name ?? "—"}</td>
-                <td className="px-5 py-2.5"><StatusBadge value={t.priority} /></td>
-                <td className="whitespace-nowrap px-5 py-2.5 text-muted-foreground">{when(t.created_at)}</td>
-              </tr>
-            ))}
-          </Table>
-        )}
-      </Card>
     </div>
   );
 }
