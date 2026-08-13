@@ -10,11 +10,11 @@ export const Route = createFileRoute("/api/public/v1/faqs/")({
         const sp = searchParams(request);
         const db = booklyDb();
         let query = db.from("faqs").select("*");
-        const topic = sp.get("topic");
-        if (topic) query = query.eq("topic", topic);
+        const category = sp.get("category") ?? sp.get("topic");
+        if (category) query = query.eq("category", category);
         const q = sp.get("q");
         if (q) query = query.or(`question.ilike.%${q}%,answer.ilike.%${q}%`);
-        const { data, error } = await query.order("topic", { ascending: true });
+        const { data, error } = await query.order("category", { ascending: true });
         dbErr(error);
         return ok(data ?? [], { count: data?.length ?? 0 });
       }),
