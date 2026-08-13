@@ -19,6 +19,7 @@ import { Route as ApiPublicV1RefundsIdRouteImport } from './routes/api/public/v1
 import { Route as ApiPublicV1ReturnsIndexRouteImport } from './routes/api/public/v1/returns/index'
 import { Route as ApiPublicV1TransactionsIndexRouteImport } from './routes/api/public/v1/transactions/index'
 import { Route as ApiPublicV1CustomersIdIndexRouteImport } from './routes/api/public/v1/customers/$id/index'
+import { Route as ApiPublicV1CustomersIdOrdersRouteImport } from './routes/api/public/v1/customers/$id/orders'
 import { Route as ApiPublicV1OrdersIdIndexRouteImport } from './routes/api/public/v1/orders/$id/index'
 import { Route as ApiPublicV1OrdersIdCancelRouteImport } from './routes/api/public/v1/orders/$id/cancel'
 import { Route as ApiPublicV1OrdersIdItemsRouteImport } from './routes/api/public/v1/orders/$id/items'
@@ -82,6 +83,12 @@ const ApiPublicV1CustomersIdIndexRoute =
   ApiPublicV1CustomersIdIndexRouteImport.update({
     id: '/api/public/v1/customers/$id/',
     path: '/api/public/v1/customers/$id/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1CustomersIdOrdersRoute =
+  ApiPublicV1CustomersIdOrdersRouteImport.update({
+    id: '/api/public/v1/customers/$id/orders',
+    path: '/api/public/v1/customers/$id/orders',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicV1OrdersIdIndexRoute =
@@ -161,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/refunds/': typeof ApiPublicV1RefundsIndexRoute
   '/api/public/v1/returns/': typeof ApiPublicV1ReturnsIndexRoute
   '/api/public/v1/transactions/': typeof ApiPublicV1TransactionsIndexRoute
+  '/api/public/v1/customers/$id/orders': typeof ApiPublicV1CustomersIdOrdersRoute
   '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
   '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
@@ -184,6 +192,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/refunds': typeof ApiPublicV1RefundsIndexRoute
   '/api/public/v1/returns': typeof ApiPublicV1ReturnsIndexRoute
   '/api/public/v1/transactions': typeof ApiPublicV1TransactionsIndexRoute
+  '/api/public/v1/customers/$id/orders': typeof ApiPublicV1CustomersIdOrdersRoute
   '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
   '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
@@ -208,6 +217,7 @@ export interface FileRoutesById {
   '/api/public/v1/refunds/': typeof ApiPublicV1RefundsIndexRoute
   '/api/public/v1/returns/': typeof ApiPublicV1ReturnsIndexRoute
   '/api/public/v1/transactions/': typeof ApiPublicV1TransactionsIndexRoute
+  '/api/public/v1/customers/$id/orders': typeof ApiPublicV1CustomersIdOrdersRoute
   '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
   '/api/public/v1/orders/$id/reship': typeof ApiPublicV1OrdersIdReshipRoute
@@ -233,6 +243,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/refunds/'
     | '/api/public/v1/returns/'
     | '/api/public/v1/transactions/'
+    | '/api/public/v1/customers/$id/orders'
     | '/api/public/v1/orders/$id/cancel'
     | '/api/public/v1/orders/$id/items'
     | '/api/public/v1/orders/$id/reship'
@@ -256,6 +267,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/refunds'
     | '/api/public/v1/returns'
     | '/api/public/v1/transactions'
+    | '/api/public/v1/customers/$id/orders'
     | '/api/public/v1/orders/$id/cancel'
     | '/api/public/v1/orders/$id/items'
     | '/api/public/v1/orders/$id/reship'
@@ -279,6 +291,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/refunds/'
     | '/api/public/v1/returns/'
     | '/api/public/v1/transactions/'
+    | '/api/public/v1/customers/$id/orders'
     | '/api/public/v1/orders/$id/cancel'
     | '/api/public/v1/orders/$id/items'
     | '/api/public/v1/orders/$id/reship'
@@ -303,6 +316,7 @@ export interface RootRouteChildren {
   ApiPublicV1RefundsIndexRoute: typeof ApiPublicV1RefundsIndexRoute
   ApiPublicV1ReturnsIndexRoute: typeof ApiPublicV1ReturnsIndexRoute
   ApiPublicV1TransactionsIndexRoute: typeof ApiPublicV1TransactionsIndexRoute
+  ApiPublicV1CustomersIdOrdersRoute: typeof ApiPublicV1CustomersIdOrdersRoute
   ApiPublicV1OrdersIdCancelRoute: typeof ApiPublicV1OrdersIdCancelRoute
   ApiPublicV1OrdersIdItemsRoute: typeof ApiPublicV1OrdersIdItemsRoute
   ApiPublicV1OrdersIdReshipRoute: typeof ApiPublicV1OrdersIdReshipRoute
@@ -387,6 +401,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/v1/customers/$id'
       fullPath: '/api/public/v1/customers/$id/'
       preLoaderRoute: typeof ApiPublicV1CustomersIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/customers/$id/orders': {
+      id: '/api/public/v1/customers/$id/orders'
+      path: '/api/public/v1/customers/$id/orders'
+      fullPath: '/api/public/v1/customers/$id/orders'
+      preLoaderRoute: typeof ApiPublicV1CustomersIdOrdersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/orders/$id/': {
@@ -479,6 +500,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1RefundsIndexRoute: ApiPublicV1RefundsIndexRoute,
   ApiPublicV1ReturnsIndexRoute: ApiPublicV1ReturnsIndexRoute,
   ApiPublicV1TransactionsIndexRoute: ApiPublicV1TransactionsIndexRoute,
+  ApiPublicV1CustomersIdOrdersRoute: ApiPublicV1CustomersIdOrdersRoute,
   ApiPublicV1OrdersIdCancelRoute: ApiPublicV1OrdersIdCancelRoute,
   ApiPublicV1OrdersIdItemsRoute: ApiPublicV1OrdersIdItemsRoute,
   ApiPublicV1OrdersIdReshipRoute: ApiPublicV1OrdersIdReshipRoute,
