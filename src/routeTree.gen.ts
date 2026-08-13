@@ -15,6 +15,7 @@ import { Route as ApiPublicV1MetaRouteImport } from './routes/api/public/v1/meta
 import { Route as ApiPublicV1OrdersIndexRouteImport } from './routes/api/public/v1/orders/index'
 import { Route as ApiPublicV1OrdersIdIndexRouteImport } from './routes/api/public/v1/orders/$id/index'
 import { Route as ApiPublicV1OrdersIdItemsRouteImport } from './routes/api/public/v1/orders/$id/items'
+import { Route as ApiPublicV1OrdersIdShipmentsRouteImport } from './routes/api/public/v1/orders/$id/shipments'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -48,6 +49,12 @@ const ApiPublicV1OrdersIdItemsRoute =
     path: '/api/public/v1/orders/$id/items',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicV1OrdersIdShipmentsRoute =
+  ApiPublicV1OrdersIdShipmentsRouteImport.update({
+    id: '/api/public/v1/orders/$id/shipments',
+    path: '/api/public/v1/orders/$id/shipments',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -55,6 +62,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/orders/': typeof ApiPublicV1OrdersIndexRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
+  '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -63,6 +71,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/orders': typeof ApiPublicV1OrdersIndexRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
+  '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
   '/api/public/v1/orders/$id': typeof ApiPublicV1OrdersIdIndexRoute
 }
 export interface FileRoutesById {
@@ -72,6 +81,7 @@ export interface FileRoutesById {
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/orders/': typeof ApiPublicV1OrdersIndexRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
+  '/api/public/v1/orders/$id/shipments': typeof ApiPublicV1OrdersIdShipmentsRoute
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -82,6 +92,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/meta'
     | '/api/public/v1/orders/'
     | '/api/public/v1/orders/$id/items'
+    | '/api/public/v1/orders/$id/shipments'
     | '/api/public/v1/orders/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -90,6 +101,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/meta'
     | '/api/public/v1/orders'
     | '/api/public/v1/orders/$id/items'
+    | '/api/public/v1/orders/$id/shipments'
     | '/api/public/v1/orders/$id'
   id:
     | '__root__'
@@ -98,6 +110,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/meta'
     | '/api/public/v1/orders/'
     | '/api/public/v1/orders/$id/items'
+    | '/api/public/v1/orders/$id/shipments'
     | '/api/public/v1/orders/$id/'
   fileRoutesById: FileRoutesById
 }
@@ -107,6 +120,7 @@ export interface RootRouteChildren {
   ApiPublicV1MetaRoute: typeof ApiPublicV1MetaRoute
   ApiPublicV1OrdersIndexRoute: typeof ApiPublicV1OrdersIndexRoute
   ApiPublicV1OrdersIdItemsRoute: typeof ApiPublicV1OrdersIdItemsRoute
+  ApiPublicV1OrdersIdShipmentsRoute: typeof ApiPublicV1OrdersIdShipmentsRoute
   ApiPublicV1OrdersIdIndexRoute: typeof ApiPublicV1OrdersIdIndexRoute
 }
 
@@ -154,6 +168,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1OrdersIdItemsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/orders/$id/shipments': {
+      id: '/api/public/v1/orders/$id/shipments'
+      path: '/api/public/v1/orders/$id/shipments'
+      fullPath: '/api/public/v1/orders/$id/shipments'
+      preLoaderRoute: typeof ApiPublicV1OrdersIdShipmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -163,6 +184,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1MetaRoute: ApiPublicV1MetaRoute,
   ApiPublicV1OrdersIndexRoute: ApiPublicV1OrdersIndexRoute,
   ApiPublicV1OrdersIdItemsRoute: ApiPublicV1OrdersIdItemsRoute,
+  ApiPublicV1OrdersIdShipmentsRoute: ApiPublicV1OrdersIdShipmentsRoute,
   ApiPublicV1OrdersIdIndexRoute: ApiPublicV1OrdersIdIndexRoute,
 }
 export const routeTree = rootRouteImport
