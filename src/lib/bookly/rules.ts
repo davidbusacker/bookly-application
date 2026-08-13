@@ -45,6 +45,16 @@ export const RETURN_REASONS = [
 ] as const;
 
 export const REFUND_METHODS = ["original_payment", "store_credit"] as const;
+export const REFUND_STATUSES = [
+  "pending",
+  "pending_return",
+  "processing",
+  "succeeded",
+  "failed",
+  "cancelled",
+] as const;
+/** Statuses where money has actually moved. */
+export const SETTLED_REFUND_STATUSES = ["succeeded"] as const;
 export const TICKET_STATUSES = ["open", "pending", "resolved", "escalated", "closed"] as const;
 export const TICKET_PRIORITIES = ["low", "normal", "high", "urgent"] as const;
 
