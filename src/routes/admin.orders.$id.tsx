@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { apiGet, money, when, type Order, type Refund, type ReturnRow, type Transaction } from "@/lib/bookly/api-client";
 import { Card, Empty, ErrorNote, Field, Loading, StatusBadge, Table } from "@/components/console/ui";
 
@@ -10,12 +10,18 @@ export const Route = createFileRoute("/admin/orders/$id")({
 function OrderDetail() {
   const { id } = Route.useParams();
 
-  const [orderQ, returnsQ, refundsQ, txQ] = useQueries({
+  const orderQ = useQuery({
+    queryKey: ["order", id],
+    queryFn: () => apiGet<Order>(`/api/public/v1/orders/${id}`),
+    refetchInterval: 8000,
+  });
+  const uuid = orderQ.data?.data.id;
+
+  const [returnsQ, refundsQ, txQ] = useQueries({
     queries: [
-      { queryKey: ["order", id], queryFn: () => apiGet<Order>(`/api/public/v1/orders/${id}`), refetchInterval: 8000 },
-      { queryKey: ["order", id, "returns"], queryFn: () => apiGet<ReturnRow[]>(`/api/public/v1/returns?order_id=${id}`), refetchInterval: 8000 },
-      { queryKey: ["order", id, "refunds"], queryFn: () => apiGet<Refund[]>(`/api/public/v1/refunds?order_id=${id}`), refetchInterval: 8000 },
-      { queryKey: ["order", id, "tx"], queryFn: () => apiGet<Transaction[]>(`/api/public/v1/transactions?order_id=${id}`), refetchInterval: 8000 },
+      { queryKey: ["order", uuid, "returns"], queryFn: () => apiGet<ReturnRow[]>(`/api/public/v1/returns?order_id=${uuid}`), enabled: !!uuid, refetchInterval: 8000 },
+      { queryKey: ["order", uuid, "refunds"], queryFn: () => apiGet<Refund[]>(`/api/public/v1/refunds?order_id=${uuid}`), enabled: !!uuid, refetchInterval: 8000 },
+      { queryKey: ["order", uuid, "tx"], queryFn: () => apiGet<Transaction[]>(`/api/public/v1/transactions?order_id=${uuid}`), enabled: !!uuid, refetchInterval: 8000 },
     ],
   });
 
