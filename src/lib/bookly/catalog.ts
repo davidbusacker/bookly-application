@@ -1,0 +1,577 @@
+/**
+ * Single source of truth for the Bookly public API surface.
+ * Consumed by the OpenAPI spec route, the MCP tool manifest, llms.txt and the docs UI.
+ */
+import {
+  ORDER_STATUSES,
+  REFUND_METHODS,
+  RETURN_REASONS,
+  RETURN_STATUSES,
+  RULES,
+  TICKET_PRIORITIES,
+  TICKET_STATUSES,
+} from "./rules";
+
+export type ParamDef = {
+  name: string;
+  in: "path" | "query";
+  required?: boolean;
+  type?: "string" | "integer" | "boolean";
+  enum?: readonly string[];
+  description: string;
+  example?: string | number | boolean;
+};
+
+export type FieldDef = {
+  name: string;
+  type: "string" | "integer" | "boolean" | "number" | "array" | "object";
+  required?: boolean;
+  enum?: readonly string[];
+  description: string;
+  items?: { type: "object" | "string"; fields?: FieldDef[] };
+};
+
+export type EndpointDef = {
+  id: string;
+  method: "GET" | "POST" | "PATCH";
+  path: string;
+  tag: string;
+  summary: string;
+  description: string;
+  agentUse: string;
+  params?: ParamDef[];
+  body?: FieldDef[];
+  example?: { path: string; body?: unknown };
+  errors?: string[];
+};
+
+const PAGE_PARAMS: ParamDef[] = [
+  { name: "limit", in: "query", type: "integer", description: "Page size (1-100, default 25).", example: 25 },
+  { name: "offset", in: "query", type: "integer", description: "Rows to skip (default 0).", example: 0 },
+];
+
+const ORDER_ID_PARAM: ParamDef = {
+  name: "id",
+  in: "path",
+  required: true,
+  description: "Order UUID or human order number (e.g. BK-10042). Both are accepted everywhere.",
+  example: "BK-10042",
+};
+
+export const ENDPOINTS: EndpointDef[] = [
+  {
+    id: "health",
+    method: "GET",
+    path: "/api/public/v1/health",
+    tag: "System",
+    summary: "Service health",
+    description: "Liveness probe plus database connectivity check and API version.",
+    agentUse: "Call once at startup to confirm the API and dataset are reachable.",
+    example: { path: "/api/public/v1/health" },
+  },
+  {
+    id: "meta",
+    method: "GET",
+    path: "/api/public/v1/meta",
+    tag: "System",
+    summary: "Discovery metadata",
+    description:
+      "Row counts, live sample identifiers (order numbers, emails, RMAs, tracking numbers), every enum value and the business-rule constants. This is the recommended bootstrap call for an agent.",
+    agentUse: "Fetch first so you can use real identifiers in later calls instead of guessing.",
+    example: { path: "/api/public/v1/meta" },
+  },
+  {
+    id: "listOrders",
+    method: "GET",
+    path: "/api/public/v1/orders",
+    tag: "Orders",
+    summary: "List / search orders",
+    description:
+      "Paginated order list with filters. Use `email` when a customer contacts support without an order number.",
+    agentUse: "Primary lookup when the customer gives an email address rather than an order number.",
+    params: [
+      { name: "email", in: "query", description: "Exact customer email.", example: "ava.brooks@example.com" },
+      {
+        name: "status",
+        in: "query",
+        enum: ORDER_STATUSES,
+        description: "Comma-separated list of order statuses.",
+        example: "shipped,delivered",
+      },
+      { name: "order_number", in: "query", description: "Exact order number, e.g. BK-10042." },
+      { name: "q", in: "query", description: "Fuzzy search across order number and customer email." },
+      { name: "placed_after", in: "query", description: "ISO date lower bound on placed_at." },
+      { name: "placed_before", in: "query", description: "ISO date upper bound on placed_at." },
+      ...PAGE_PARAMS,
+    ],
+    example: { path: "/api/public/v1/orders?limit=3&status=shipped" },
+  },
+  {
+    id: "getOrder",
+    method: "GET",
+    path: "/api/public/v1/orders/{id}",
+    tag: "Orders",
+    summary: "Get one order",
+    description: "Full order with customer, line items, shipments, returns, refunds and transactions embedded.",
+    agentUse: "The single richest call for answering 'where is my order?'.",
+    params: [ORDER_ID_PARAM],
+    example: { path: "/api/public/v1/orders/BK-10042" },
+    errors: ["404 not_found"],
+  },
+  {
+    id: "getOrderItems",
+    method: "GET",
+    path: "/api/public/v1/orders/{id}/items",
+    tag: "Orders",
+    summary: "List order line items",
+    description: "Line items with the joined book record (format matters for return eligibility).",
+    agentUse: "Use the returned order_item_id values when creating a partial return.",
+    params: [ORDER_ID_PARAM],
+    example: { path: "/api/public/v1/orders/BK-10042/items" },
+  },
+  {
+    id: "getOrderShipments",
+    method: "GET",
+    path: "/api/public/v1/orders/{id}/shipments",
+    tag: "Shipping",
+    summary: "List shipments for an order",
+    description: "All shipments for the order, each with its full tracking event history.",
+    agentUse: "Answer delivery-timing questions and detect stalled tracking.",
+    params: [ORDER_ID_PARAM],
+    example: { path: "/api/public/v1/orders/BK-10042/shipments" },
+  },
+  {
+    id: "cancelOrder",
+    method: "POST",
+    path: "/api/public/v1/orders/{id}/cancel",
+    tag: "Orders",
+    summary: "Cancel an order",
+    description: `Cancels an order and voids the authorization. Only allowed while the status is ${RULES.cancellableStatuses.join(" or ")}.`,
+    agentUse: "Use for 'cancel my order'. If it returns 409, offer a return instead.",
+    params: [ORDER_ID_PARAM],
+    body: [{ name: "reason", type: "string", description: "Free-text cancellation reason." }],
+    example: { path: "/api/public/v1/orders/BK-10042/cancel", body: { reason: "Ordered by mistake" } },
+    errors: ["409 conflict when the order already shipped"],
+  },
+  {
+    id: "reshipOrder",
+    method: "POST",
+    path: "/api/public/v1/orders/{id}/reship",
+    tag: "Shipping",
+    summary: "Create a replacement shipment",
+    description: `Generates a new shipment and tracking number. Allowed when the order is ${RULES.reshipableStatuses.join(" or ")}.`,
+    agentUse: "Use for lost-in-transit packages after confirming tracking is stalled.",
+    params: [ORDER_ID_PARAM],
+    body: [
+      { name: "carrier", type: "string", enum: ["UPS", "FedEx", "USPS", "DHL"], description: "Carrier, default UPS." },
+      {
+        name: "service_level",
+        type: "string",
+        enum: ["ground", "two_day", "overnight"],
+        description: "Service level, default two_day.",
+      },
+      { name: "reason", type: "string", description: "Why the reshipment was issued." },
+    ],
+    example: { path: "/api/public/v1/orders/BK-10042/reship", body: { reason: "Package lost in transit" } },
+  },
+  {
+    id: "returnEligibility",
+    method: "POST",
+    path: "/api/public/v1/orders/{id}/returns/eligibility",
+    tag: "Returns",
+    summary: "Check return eligibility",
+    description: `Deterministic eligibility check. Standard window is ${RULES.returnWindowDays} days from delivery; damaged or wrong-item claims get ${RULES.damagedWindowDays} days and waive the $${(RULES.returnLabelFeeCents / 100).toFixed(2)} label fee. Ebooks are non-returnable.`,
+    agentUse: "Always call this before creating a return so you can explain the outcome to the customer.",
+    params: [ORDER_ID_PARAM],
+    body: [{ name: "reason", type: "string", enum: RETURN_REASONS, description: "Intended return reason." }],
+    example: { path: "/api/public/v1/orders/BK-10042/returns/eligibility", body: { reason: "damaged" } },
+  },
+  {
+    id: "listReturns",
+    method: "GET",
+    path: "/api/public/v1/returns",
+    tag: "Returns",
+    summary: "List returns",
+    description: "Paginated returns with their items and parent order.",
+    agentUse: "Check whether a return already exists before creating a duplicate.",
+    params: [
+      { name: "status", in: "query", enum: RETURN_STATUSES, description: "Comma-separated return statuses." },
+      { name: "order_id", in: "query", description: "Filter by order UUID." },
+      { name: "customer_id", in: "query", description: "Filter by customer UUID." },
+      ...PAGE_PARAMS,
+    ],
+    example: { path: "/api/public/v1/returns?limit=3" },
+  },
+  {
+    id: "createReturn",
+    method: "POST",
+    path: "/api/public/v1/returns",
+    tag: "Returns",
+    summary: "Create a return (RMA)",
+    description:
+      "Creates an RMA with a prepaid label and computes the expected refund. Rejects with 409 when the order is not eligible unless `override_eligibility` is true.",
+    agentUse: "Call after eligibility passes; pass order_item_id values from the order items endpoint.",
+    body: [
+      { name: "order_id", type: "string", required: true, description: "Order UUID or order number." },
+      { name: "reason", type: "string", required: true, enum: RETURN_REASONS, description: "Return reason." },
+      { name: "comment", type: "string", description: "Customer's description of the problem." },
+      {
+        name: "items",
+        type: "array",
+        required: true,
+        description: "Line items to return.",
+        items: {
+          type: "object",
+          fields: [
+            { name: "order_item_id", type: "string", required: true, description: "Order item UUID." },
+            { name: "quantity", type: "integer", required: true, description: "Units returned." },
+          ],
+        },
+      },
+      {
+        name: "override_eligibility",
+        type: "boolean",
+        description: "Supervisor override that bypasses the eligibility gate.",
+      },
+    ],
+    example: {
+      path: "/api/public/v1/returns",
+      body: { order_id: "BK-10042", reason: "damaged", items: [{ order_item_id: "<uuid>", quantity: 1 }] },
+    },
+    errors: ["409 conflict when ineligible", "400 invalid_request for unknown order_item_id"],
+  },
+  {
+    id: "getReturn",
+    method: "GET",
+    path: "/api/public/v1/returns/{rma}",
+    tag: "Returns",
+    summary: "Get a return",
+    description: "Fetch a return by RMA number (RMA-12345) or UUID.",
+    agentUse: "Answer 'what is the status of my return?'.",
+    params: [{ name: "rma", in: "path", required: true, description: "RMA number or UUID.", example: "RMA-12345" }],
+    example: { path: "/api/public/v1/returns/RMA-12345" },
+  },
+  {
+    id: "receiveReturn",
+    method: "POST",
+    path: "/api/public/v1/returns/{rma}/receive",
+    tag: "Returns",
+    summary: "Mark a return received",
+    description: "Moves the return to `received`, optionally issuing the refund immediately.",
+    agentUse: "Warehouse-side action; set auto_refund to close the loop in one call.",
+    params: [{ name: "rma", in: "path", required: true, description: "RMA number or UUID." }],
+    body: [
+      { name: "condition", type: "string", enum: ["unopened", "opened", "damaged"], description: "Received condition." },
+      { name: "note", type: "string", description: "Inspection note." },
+      { name: "auto_refund", type: "boolean", description: "Issue the refund immediately." },
+    ],
+    example: { path: "/api/public/v1/returns/RMA-12345/receive", body: { auto_refund: true } },
+  },
+  {
+    id: "cancelReturn",
+    method: "POST",
+    path: "/api/public/v1/returns/{rma}/cancel",
+    tag: "Returns",
+    summary: "Cancel a return",
+    description: "Cancels an open RMA. Fails with 409 once the return is refunded.",
+    agentUse: "Use when the customer decides to keep the item.",
+    params: [{ name: "rma", in: "path", required: true, description: "RMA number or UUID." }],
+    example: { path: "/api/public/v1/returns/RMA-12345/cancel" },
+  },
+  {
+    id: "listRefunds",
+    method: "GET",
+    path: "/api/public/v1/refunds",
+    tag: "Refunds",
+    summary: "List refunds",
+    description: "Paginated refunds with their parent order.",
+    agentUse: "Confirm whether money already went back before promising a new refund.",
+    params: [
+      { name: "status", in: "query", description: "Comma-separated refund statuses." },
+      { name: "order_id", in: "query", description: "Filter by order UUID." },
+      ...PAGE_PARAMS,
+    ],
+    example: { path: "/api/public/v1/refunds?limit=3" },
+  },
+  {
+    id: "createRefund",
+    method: "POST",
+    path: "/api/public/v1/refunds",
+    tag: "Refunds",
+    summary: "Issue a refund",
+    description:
+      "Issues a full or partial refund, records the matching ledger transaction, credits store credit when requested and flips the order to `refunded` once fully covered. Over-refunding is rejected.",
+    agentUse: "Use for goodwill refunds and post-return settlements.",
+    body: [
+      { name: "order_id", type: "string", required: true, description: "Order UUID or order number." },
+      { name: "amount_cents", type: "integer", description: "Defaults to the full remaining refundable amount." },
+      { name: "method", type: "string", enum: REFUND_METHODS, description: "Default original_payment." },
+      { name: "return_id", type: "string", description: "Link the refund to an existing return." },
+      { name: "reason", type: "string", description: "Reason recorded on the ledger." },
+    ],
+    example: { path: "/api/public/v1/refunds", body: { order_id: "BK-10042", amount_cents: 500, reason: "Late delivery goodwill" } },
+    errors: ["400 invalid_request when amount exceeds the refundable remainder"],
+  },
+  {
+    id: "getRefund",
+    method: "GET",
+    path: "/api/public/v1/refunds/{id}",
+    tag: "Refunds",
+    summary: "Get a refund",
+    description: "Fetch a refund by refund number (RF-12345) or UUID.",
+    agentUse: "Give the customer the exact refund amount and timing.",
+    params: [{ name: "id", in: "path", required: true, description: "Refund number or UUID." }],
+    example: { path: "/api/public/v1/refunds/RF-12345" },
+  },
+  {
+    id: "listTransactions",
+    method: "GET",
+    path: "/api/public/v1/transactions",
+    tag: "Refunds",
+    summary: "List ledger transactions",
+    description: "Immutable money ledger: charges, refunds and voids.",
+    agentUse: "Reconcile what the customer was actually charged.",
+    params: [
+      { name: "order_id", in: "query", description: "Filter by order UUID." },
+      { name: "customer_id", in: "query", description: "Filter by customer UUID." },
+      { name: "type", in: "query", enum: ["charge", "refund", "void"], description: "Comma-separated types." },
+      { name: "status", in: "query", description: "Comma-separated statuses." },
+      ...PAGE_PARAMS,
+    ],
+    example: { path: "/api/public/v1/transactions?limit=3" },
+  },
+  {
+    id: "listCustomers",
+    method: "GET",
+    path: "/api/public/v1/customers",
+    tag: "Customers",
+    summary: "List / search customers",
+    description: "Search customers by email, fuzzy name/email query or loyalty tier.",
+    agentUse: "Identity resolution before touching order data.",
+    params: [
+      { name: "email", in: "query", description: "Case-insensitive exact email." },
+      { name: "q", in: "query", description: "Fuzzy name or email search." },
+      { name: "tier", in: "query", description: "Loyalty tier." },
+      ...PAGE_PARAMS,
+    ],
+    example: { path: "/api/public/v1/customers?limit=3" },
+  },
+  {
+    id: "getCustomer",
+    method: "GET",
+    path: "/api/public/v1/customers/{id}",
+    tag: "Customers",
+    summary: "Get a customer",
+    description: "Fetch by UUID or email (URL-encoded), including saved addresses and store credit.",
+    agentUse: "Check store credit balance before offering it as a refund method.",
+    params: [{ name: "id", in: "path", required: true, description: "Customer UUID or email address." }],
+    example: { path: "/api/public/v1/customers/ava.brooks@example.com" },
+  },
+  {
+    id: "getCustomerOrders",
+    method: "GET",
+    path: "/api/public/v1/customers/{id}/orders",
+    tag: "Customers",
+    summary: "List a customer's orders",
+    description: "Order history for a customer, newest first. Accepts UUID or email.",
+    agentUse: "Use when the customer says 'my last order' without a number.",
+    params: [{ name: "id", in: "path", required: true, description: "Customer UUID or email." }, ...PAGE_PARAMS],
+    example: { path: "/api/public/v1/customers/ava.brooks@example.com/orders" },
+  },
+  {
+    id: "getShipment",
+    method: "GET",
+    path: "/api/public/v1/shipments/{tracking}",
+    tag: "Shipping",
+    summary: "Track a shipment",
+    description: "Fetch a shipment by tracking number or UUID, with its events and parent order.",
+    agentUse: "Direct tracking lookup when the customer pastes a tracking number.",
+    params: [{ name: "tracking", in: "path", required: true, description: "Tracking number or shipment UUID." }],
+    example: { path: "/api/public/v1/shipments/1Z999AA10123456784" },
+  },
+  {
+    id: "getShipmentEvents",
+    method: "GET",
+    path: "/api/public/v1/shipments/{tracking}/events",
+    tag: "Shipping",
+    summary: "Tracking event history",
+    description: "Chronological scan events for a shipment.",
+    agentUse: `Detect a stalled package: no new scan for ${RULES.stalledTrackingDays}+ days means offer a reship.`,
+    params: [{ name: "tracking", in: "path", required: true, description: "Tracking number." }],
+    example: { path: "/api/public/v1/shipments/1Z999AA10123456784/events" },
+  },
+  {
+    id: "listBooks",
+    method: "GET",
+    path: "/api/public/v1/books",
+    tag: "Catalog",
+    summary: "Search the catalog",
+    description: "Search books by title, author or ISBN with category, format and stock filters.",
+    agentUse: "Recommend replacements or confirm stock before promising a reship.",
+    params: [
+      { name: "q", in: "query", description: "Search title, author or ISBN." },
+      { name: "category", in: "query", description: "Exact category." },
+      { name: "format", in: "query", enum: ["hardcover", "paperback", "ebook", "audiobook"], description: "Format." },
+      { name: "in_stock", in: "query", type: "boolean", description: "Only items with stock > 0." },
+      ...PAGE_PARAMS,
+    ],
+    example: { path: "/api/public/v1/books?q=the&limit=3" },
+  },
+  {
+    id: "getBook",
+    method: "GET",
+    path: "/api/public/v1/books/{id}",
+    tag: "Catalog",
+    summary: "Get a book",
+    description: "Fetch a book by UUID or ISBN-13.",
+    agentUse: "Confirm format — ebooks cannot be returned.",
+    params: [{ name: "id", in: "path", required: true, description: "Book UUID or ISBN." }],
+    example: { path: "/api/public/v1/books/9780000000017" },
+  },
+  {
+    id: "listPolicies",
+    method: "GET",
+    path: "/api/public/v1/policies",
+    tag: "Knowledge",
+    summary: "List policies",
+    description: "Shipping, returns, refunds, privacy and account policies in full text.",
+    agentUse: "Ground policy answers in this text instead of improvising.",
+    params: [
+      { name: "category", in: "query", description: "Policy category." },
+      { name: "q", in: "query", description: "Full-text-ish search across title and body." },
+    ],
+    example: { path: "/api/public/v1/policies" },
+  },
+  {
+    id: "getPolicy",
+    method: "GET",
+    path: "/api/public/v1/policies/{slug}",
+    tag: "Knowledge",
+    summary: "Get one policy",
+    description: "Fetch a single policy document by slug, e.g. `returns`.",
+    agentUse: "Quote the exact clause back to the customer.",
+    params: [{ name: "slug", in: "path", required: true, description: "Policy slug.", example: "returns" }],
+    example: { path: "/api/public/v1/policies/returns" },
+  },
+  {
+    id: "listFaqs",
+    method: "GET",
+    path: "/api/public/v1/faqs",
+    tag: "Knowledge",
+    summary: "Search FAQs",
+    description: "Curated question/answer pairs for common support topics.",
+    agentUse: "First stop for general questions that need no account data.",
+    params: [
+      { name: "topic", in: "query", description: "FAQ topic." },
+      { name: "q", in: "query", description: "Search question and answer text." },
+    ],
+    example: { path: "/api/public/v1/faqs?q=shipping" },
+  },
+  {
+    id: "listTickets",
+    method: "GET",
+    path: "/api/public/v1/support/tickets",
+    tag: "Support",
+    summary: "List support tickets",
+    description: "Paginated support tickets with customer and order context.",
+    agentUse: "Check for an existing open ticket before creating another.",
+    params: [
+      { name: "status", in: "query", enum: TICKET_STATUSES, description: "Comma-separated statuses." },
+      { name: "email", in: "query", description: "Filter by customer email." },
+      ...PAGE_PARAMS,
+    ],
+    example: { path: "/api/public/v1/support/tickets?limit=3" },
+  },
+  {
+    id: "createTicket",
+    method: "POST",
+    path: "/api/public/v1/support/tickets",
+    tag: "Support",
+    summary: "Create a support ticket",
+    description: "Opens a ticket, linking the customer by email and optionally an order.",
+    agentUse: "Escalation path when you cannot resolve the request with the other endpoints.",
+    body: [
+      { name: "customer_email", type: "string", required: true, description: "Customer email." },
+      { name: "subject", type: "string", required: true, description: "Short summary." },
+      { name: "body", type: "string", description: "Full description / conversation transcript." },
+      {
+        name: "category",
+        type: "string",
+        enum: ["order_status", "return", "refund", "shipping", "account", "other"],
+        description: "Ticket category.",
+      },
+      { name: "priority", type: "string", enum: TICKET_PRIORITIES, description: "Priority, default normal." },
+      { name: "order_id", type: "string", description: "Related order UUID." },
+    ],
+    example: {
+      path: "/api/public/v1/support/tickets",
+      body: { customer_email: "ava.brooks@example.com", subject: "Package never arrived", category: "shipping" },
+    },
+  },
+  {
+    id: "updateTicket",
+    method: "PATCH",
+    path: "/api/public/v1/support/tickets/{id}",
+    tag: "Support",
+    summary: "Update a ticket",
+    description: "Change status, priority or record a resolution. Accepts TCK number or UUID.",
+    agentUse: "Close the ticket once the customer confirms the issue is resolved.",
+    params: [{ name: "id", in: "path", required: true, description: "Ticket number or UUID." }],
+    body: [
+      { name: "status", type: "string", enum: ["open", "pending", "resolved", "closed"], description: "New status." },
+      { name: "priority", type: "string", enum: TICKET_PRIORITIES, description: "New priority." },
+      { name: "resolution", type: "string", description: "Resolution summary." },
+    ],
+    example: { path: "/api/public/v1/support/tickets/TCK-12345", body: { status: "resolved" } },
+  },
+  {
+    id: "passwordReset",
+    method: "POST",
+    path: "/api/public/v1/support/actions/password-reset",
+    tag: "Support",
+    summary: "Send a password reset link",
+    description:
+      "Simulates sending a reset email. Always returns success so account existence is never leaked.",
+    agentUse: "Standard answer for 'I can't log in'.",
+    body: [{ name: "email", type: "string", required: true, description: "Account email." }],
+    example: { path: "/api/public/v1/support/actions/password-reset", body: { email: "ava.brooks@example.com" } },
+  },
+  {
+    id: "addressChange",
+    method: "POST",
+    path: "/api/public/v1/support/actions/address-change",
+    tag: "Support",
+    summary: "Change a shipping address",
+    description: "Updates the shipping address while the order is still pending or processing.",
+    agentUse: "Use before the order ships; afterwards offer a return or intercept instead.",
+    body: [
+      { name: "order_id", type: "string", required: true, description: "Order UUID or number." },
+      { name: "line1", type: "string", required: true, description: "Street address." },
+      { name: "line2", type: "string", description: "Apt / suite." },
+      { name: "city", type: "string", required: true, description: "City." },
+      { name: "region", type: "string", required: true, description: "State or region." },
+      { name: "postal_code", type: "string", required: true, description: "Postal code." },
+      { name: "country", type: "string", description: "ISO-2 country code, default US." },
+    ],
+    example: {
+      path: "/api/public/v1/support/actions/address-change",
+      body: { order_id: "BK-10042", line1: "77 Foxglove Ln", city: "Austin", region: "TX", postal_code: "78702" },
+    },
+    errors: ["409 conflict once the order has shipped"],
+  },
+];
+
+export const TAGS = [
+  { name: "System", description: "Health and discovery." },
+  { name: "Orders", description: "Order lookup, cancellation and line items." },
+  { name: "Shipping", description: "Shipments, tracking events and reshipments." },
+  { name: "Returns", description: "Eligibility, RMA creation and lifecycle." },
+  { name: "Refunds", description: "Refunds, store credit and the money ledger." },
+  { name: "Customers", description: "Customer identity and order history." },
+  { name: "Catalog", description: "Book catalog search." },
+  { name: "Knowledge", description: "Policies and FAQs for grounded answers." },
+  { name: "Support", description: "Tickets and simulated support actions." },
+];
+
+export const endpointsByTag = () =>
+  TAGS.map((t) => ({ ...t, endpoints: ENDPOINTS.filter((e) => e.tag === t.name) }));
