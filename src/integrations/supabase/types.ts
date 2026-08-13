@@ -731,7 +731,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      seed_bookly_demo: { Args: never; Returns: Json }
     }
     Enums: {
       [_ in never]: never
