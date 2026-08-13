@@ -7,10 +7,10 @@ export const Route = createFileRoute("/admin")({
       {
         name: "description",
         content:
-          "Bookly's internal store console: live view of orders, shipments, returns, refunds, transactions, customers and support tickets backed by the public Bookly API.",
+          "Bookly's internal store console: live view of orders, shipments, returns, refunds, transactions and customers backed by the public Bookly API.",
       },
       { property: "og:title", content: "Bookly Store Console" },
-      { property: "og:description", content: "Live back-office view of every order, return, refund and ticket in Bookly." },
+      { property: "og:description", content: "Live back-office view of every order, return and refund in Bookly." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -25,7 +25,7 @@ const NAV = [
   { to: "/admin/refunds", label: "Refunds" },
   { to: "/admin/transactions", label: "Transactions" },
   { to: "/admin/customers", label: "Customers" },
-  { to: "/admin/tickets", label: "Support" },
+  { to: "/admin/settings", label: "Admin" },
 ] as const;
 
 function ConsoleLayout() {

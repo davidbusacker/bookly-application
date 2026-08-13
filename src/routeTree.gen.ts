@@ -15,7 +15,7 @@ import { Route as DocsRouteImport } from './routes/docs'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminReturnsRouteImport } from './routes/admin.returns'
-import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
 import { Route as AdminCustomersIndexRouteImport } from './routes/admin.customers.index'
 import { Route as AdminCustomersIdRouteImport } from './routes/admin.customers.$id'
@@ -27,6 +27,7 @@ import { Route as ApiPublicOpenapiDotjsonRouteImport } from './routes/api/public
 import { Route as ApiPublicToolsDotjsonRouteImport } from './routes/api/public/tools[.]json'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as ApiPublicV1MetaRouteImport } from './routes/api/public/v1/meta'
+import { Route as ApiPublicV1AdminResetDemoRouteImport } from './routes/api/public/v1/admin/reset-demo'
 import { Route as ApiPublicV1BooksIndexRouteImport } from './routes/api/public/v1/books/index'
 import { Route as ApiPublicV1BooksIdRouteImport } from './routes/api/public/v1/books/$id'
 import { Route as ApiPublicV1CustomersIndexRouteImport } from './routes/api/public/v1/customers/index'
@@ -86,9 +87,9 @@ const AdminReturnsRoute = AdminReturnsRouteImport.update({
   path: '/returns',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminTicketsRoute = AdminTicketsRouteImport.update({
-  id: '/tickets',
-  path: '/tickets',
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
@@ -146,6 +147,12 @@ const ApiPublicV1MetaRoute = ApiPublicV1MetaRouteImport.update({
   path: '/api/public/v1/meta',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicV1AdminResetDemoRoute =
+  ApiPublicV1AdminResetDemoRouteImport.update({
+    id: '/api/public/v1/admin/reset-demo',
+    path: '/api/public/v1/admin/reset-demo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1BooksIndexRoute = ApiPublicV1BooksIndexRouteImport.update({
   id: '/api/public/v1/books/',
   path: '/api/public/v1/books/',
@@ -313,7 +320,7 @@ export interface FileRoutesByFullPath {
   '/docs': typeof DocsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/admin/returns': typeof AdminReturnsRoute
-  '/admin/tickets': typeof AdminTicketsRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
@@ -326,6 +333,7 @@ export interface FileRoutesByFullPath {
   '/admin/refunds/': typeof AdminRefundsIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
+  '/api/public/v1/admin/reset-demo': typeof ApiPublicV1AdminResetDemoRoute
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
   '/api/public/v1/policies/$slug': typeof ApiPublicV1PoliciesSlugRoute
   '/api/public/v1/refunds/$id': typeof ApiPublicV1RefundsIdRoute
@@ -360,7 +368,7 @@ export interface FileRoutesByTo {
   '/docs': typeof DocsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/admin/returns': typeof AdminReturnsRoute
-  '/admin/tickets': typeof AdminTicketsRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin': typeof AdminIndexRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
@@ -373,6 +381,7 @@ export interface FileRoutesByTo {
   '/admin/refunds': typeof AdminRefundsIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
+  '/api/public/v1/admin/reset-demo': typeof ApiPublicV1AdminResetDemoRoute
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
   '/api/public/v1/policies/$slug': typeof ApiPublicV1PoliciesSlugRoute
   '/api/public/v1/refunds/$id': typeof ApiPublicV1RefundsIdRoute
@@ -409,7 +418,7 @@ export interface FileRoutesById {
   '/docs': typeof DocsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/admin/returns': typeof AdminReturnsRoute
-  '/admin/tickets': typeof AdminTicketsRoute
+  '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
@@ -422,6 +431,7 @@ export interface FileRoutesById {
   '/admin/refunds/': typeof AdminRefundsIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
+  '/api/public/v1/admin/reset-demo': typeof ApiPublicV1AdminResetDemoRoute
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
   '/api/public/v1/policies/$slug': typeof ApiPublicV1PoliciesSlugRoute
   '/api/public/v1/refunds/$id': typeof ApiPublicV1RefundsIdRoute
@@ -459,7 +469,7 @@ export interface FileRouteTypes {
     | '/docs'
     | '/llms.txt'
     | '/admin/returns'
-    | '/admin/tickets'
+    | '/admin/settings'
     | '/admin/transactions'
     | '/admin/'
     | '/admin/customers/$id'
@@ -472,6 +482,7 @@ export interface FileRouteTypes {
     | '/admin/refunds/'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
+    | '/api/public/v1/admin/reset-demo'
     | '/api/public/v1/books/$id'
     | '/api/public/v1/policies/$slug'
     | '/api/public/v1/refunds/$id'
@@ -506,7 +517,7 @@ export interface FileRouteTypes {
     | '/docs'
     | '/llms.txt'
     | '/admin/returns'
-    | '/admin/tickets'
+    | '/admin/settings'
     | '/admin/transactions'
     | '/admin'
     | '/admin/customers/$id'
@@ -519,6 +530,7 @@ export interface FileRouteTypes {
     | '/admin/refunds'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
+    | '/api/public/v1/admin/reset-demo'
     | '/api/public/v1/books/$id'
     | '/api/public/v1/policies/$slug'
     | '/api/public/v1/refunds/$id'
@@ -554,7 +566,7 @@ export interface FileRouteTypes {
     | '/docs'
     | '/llms.txt'
     | '/admin/returns'
-    | '/admin/tickets'
+    | '/admin/settings'
     | '/admin/transactions'
     | '/admin/'
     | '/admin/customers/$id'
@@ -567,6 +579,7 @@ export interface FileRouteTypes {
     | '/admin/refunds/'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
+    | '/api/public/v1/admin/reset-demo'
     | '/api/public/v1/books/$id'
     | '/api/public/v1/policies/$slug'
     | '/api/public/v1/refunds/$id'
@@ -606,6 +619,7 @@ export interface RootRouteChildren {
   ApiPublicToolsDotjsonRoute: typeof ApiPublicToolsDotjsonRoute
   ApiPublicV1HealthRoute: typeof ApiPublicV1HealthRoute
   ApiPublicV1MetaRoute: typeof ApiPublicV1MetaRoute
+  ApiPublicV1AdminResetDemoRoute: typeof ApiPublicV1AdminResetDemoRoute
   ApiPublicV1BooksIdRoute: typeof ApiPublicV1BooksIdRoute
   ApiPublicV1PoliciesSlugRoute: typeof ApiPublicV1PoliciesSlugRoute
   ApiPublicV1RefundsIdRoute: typeof ApiPublicV1RefundsIdRoute
@@ -680,11 +694,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReturnsRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/tickets': {
-      id: '/admin/tickets'
-      path: '/tickets'
-      fullPath: '/admin/tickets'
-      preLoaderRoute: typeof AdminTicketsRouteImport
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/transactions': {
@@ -762,6 +776,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/v1/meta'
       fullPath: '/api/public/v1/meta'
       preLoaderRoute: typeof ApiPublicV1MetaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/admin/reset-demo': {
+      id: '/api/public/v1/admin/reset-demo'
+      path: '/api/public/v1/admin/reset-demo'
+      fullPath: '/api/public/v1/admin/reset-demo'
+      preLoaderRoute: typeof ApiPublicV1AdminResetDemoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/books/': {
@@ -965,7 +986,7 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminReturnsRoute: typeof AdminReturnsRoute
-  AdminTicketsRoute: typeof AdminTicketsRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
   AdminTransactionsRoute: typeof AdminTransactionsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCustomersIdRoute: typeof AdminCustomersIdRoute
@@ -978,7 +999,7 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminReturnsRoute: AdminReturnsRoute,
-  AdminTicketsRoute: AdminTicketsRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
   AdminTransactionsRoute: AdminTransactionsRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminCustomersIdRoute: AdminCustomersIdRoute,
@@ -1000,6 +1021,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicToolsDotjsonRoute: ApiPublicToolsDotjsonRoute,
   ApiPublicV1HealthRoute: ApiPublicV1HealthRoute,
   ApiPublicV1MetaRoute: ApiPublicV1MetaRoute,
+  ApiPublicV1AdminResetDemoRoute: ApiPublicV1AdminResetDemoRoute,
   ApiPublicV1BooksIdRoute: ApiPublicV1BooksIdRoute,
   ApiPublicV1PoliciesSlugRoute: ApiPublicV1PoliciesSlugRoute,
   ApiPublicV1RefundsIdRoute: ApiPublicV1RefundsIdRoute,
