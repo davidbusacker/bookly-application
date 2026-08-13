@@ -86,7 +86,7 @@ export function fail(err: unknown): Response {
 }
 
 /** Wraps a handler so every failure returns the standard error envelope. */
-export function handler<T extends { request: Request }>(
+export function handler<T extends { request: Request; params?: unknown }>(
   fn: (ctx: T) => Promise<Response>,
 ): (ctx: T) => Promise<Response> {
   return async (ctx: T) => {
