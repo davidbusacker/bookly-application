@@ -41,6 +41,17 @@ function TraceDetail() {
           <Field label="Model">{t.model ?? "—"}</Field>
           <Field label="Channel">{t.channel ?? "—"}</Field>
           <Field label="Intent">{t.intent ?? "—"}</Field>
+          <Field label="Confidence">
+            <details className="group">
+              <summary className="cursor-pointer text-xs font-medium text-muted-foreground underline-offset-4 hover:underline">
+                Show confidence
+              </summary>
+              <div className="mt-1.5 space-y-1">
+                <ConfidenceRow label="Intent" value={t.intent_confidence} />
+                <ConfidenceRow label="Resolution" value={t.resolution_confidence} />
+              </div>
+            </details>
+          </Field>
           <Field label="Customer">
             {t.customer ? (
               <Link to="/admin/customers/$id" params={{ id: t.customer.id }} className="underline underline-offset-4">
