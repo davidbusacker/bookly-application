@@ -174,6 +174,8 @@ export function TraceTranscript({ messages }: { messages: TraceMessage[] }) {
                   </details>
                 ) : null}
 
+                <ConfidenceStrip message={m} />
+
                 {m.metadata && Object.keys(m.metadata).length > 0 ? (
                   <p className="mt-1.5 font-mono text-[11px] text-muted-foreground">
                     {Object.entries(m.metadata)
