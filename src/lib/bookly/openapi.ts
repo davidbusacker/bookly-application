@@ -1,6 +1,7 @@
 import { ENDPOINTS, TAGS, type EndpointDef, type FieldDef } from "./catalog";
 import { API_VERSION } from "./http";
 import { RULES } from "./rules";
+import { TRACE_LOGGING_GUIDE } from "./traces";
 
 type JsonSchema = Record<string, unknown>;
 
@@ -106,6 +107,8 @@ export function buildOpenApi(origin: string): JsonSchema {
         `- Orders can be cancelled while ${RULES.cancellableStatuses.join(" or ")}; ebooks are never returnable.`,
         "",
         "Start with `GET /api/public/v1/meta` to discover live identifiers.",
+        "",
+        TRACE_LOGGING_GUIDE,
       ].join("\n"),
       contact: { name: "Bookly API", url: `${origin}/docs` },
       license: { name: "MIT" },
@@ -170,8 +173,17 @@ export function buildToolManifest(origin: string) {
     name: "bookly-support",
     title: "Bookly Support",
     version: API_VERSION,
-    instructions:
+    instructions: [
       "Tools for the Bookly bookstore support agent. Resolve the customer first (email or order number), check policy/eligibility before promising anything, and escalate with create_ticket when a request cannot be resolved.",
+      "Before you answer, search prior context with list_agent_traces and list_tickets so you never contradict an earlier decision.",
+      "",
+      TRACE_LOGGING_GUIDE,
+    ].join("\n"),
+    agent_trace_logging: {
+      endpoint: `${origin}/api/public/v1/agent-traces`,
+      required: true,
+      instructions: TRACE_LOGGING_GUIDE,
+    },
     base_url: origin,
     openapi_url: `${origin}/api/public/openapi.json`,
     tools: ENDPOINTS.map((e) => ({

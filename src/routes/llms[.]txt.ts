@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ENDPOINTS, endpointsByTag } from "@/lib/bookly/catalog";
 import { CORS_HEADERS } from "@/lib/bookly/http";
 import { RULES } from "@/lib/bookly/rules";
+import { TRACE_LOGGING_GUIDE } from "@/lib/bookly/traces";
 
 function llmsTxt(origin: string): string {
   const lines: string[] = [
@@ -38,6 +39,9 @@ function llmsTxt(origin: string): string {
     "5. Act: create the return, issue the refund, cancel, reship, or change the address.",
     "6. Ground policy answers in /api/public/v1/policies and /api/public/v1/faqs.",
     "7. Escalate with POST /api/public/v1/support/tickets when you cannot resolve it.",
+    "8. Log the conversation with POST /api/public/v1/agent-traces before you finish.",
+    "",
+    TRACE_LOGGING_GUIDE,
     "",
     "## Endpoints",
   ];
