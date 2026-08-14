@@ -103,6 +103,8 @@ export const TRACE_LOGGING_GUIDE = [
   "- `subject`: one short line describing the request (e.g. \"Refund for damaged copy on BK-10005\").",
   "- `summary`: 1-3 sentences of what you did and why, including the reasoning behind any money movement.",
   "- `customer_email` (and `order_id` / `ticket_id` when known) so the trace is queryable by customer and order.",
+  "- `intent` plus `intent_confidence` (0-1): what you believed the customer wanted and how sure you were.",
+  "- `resolution_confidence` (0-1): how confident you are that the outcome actually resolved the request. Log BOTH confidences on every trace.",
   "- `outcome`: one of resolved | refund_issued | return_created | escalated | deflected | unresolved.",
   "- `messages[]`: every turn, in order.",
   "",
