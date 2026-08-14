@@ -517,15 +517,27 @@ export const ENDPOINTS: EndpointDef[] = [
     method: "GET",
     path: "/api/public/v1/support/tickets",
     tag: "Support",
-    summary: "List support tickets",
-    description: "Paginated support tickets with customer and order context.",
-    agentUse: "Check for an existing open ticket before creating another.",
+    summary: "Search past support tickets",
+    description:
+      "Paginated, filterable ticket history with customer, order and full event history embedded — the record of every previous support interaction.",
+    agentUse:
+      "Search this before acting: check for an existing open ticket and read what was already promised to the customer.",
     params: [
       { name: "status", in: "query", enum: TICKET_STATUSES, description: "Comma-separated statuses." },
       { name: "email", in: "query", description: "Filter by customer email." },
+      { name: "customer_id", in: "query", description: "Filter by customer UUID." },
+      { name: "order_id", in: "query", description: "Filter by order UUID." },
+      {
+        name: "category",
+        in: "query",
+        enum: ["order_status", "return", "refund", "shipping", "account", "other"],
+        description: "Comma-separated categories.",
+      },
+      { name: "q", in: "query", description: "Free-text search over subject and ticket number." },
       ...PAGE_PARAMS,
     ],
     example: { path: "/api/public/v1/support/tickets?limit=3" },
+
   },
   {
     id: "createTicket",
