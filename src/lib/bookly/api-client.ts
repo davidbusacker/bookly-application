@@ -202,3 +202,45 @@ export type Ticket = {
   order?: { id: string; order_number: string } | null;
   events?: Array<{ id: string; body: string; type?: string; author?: string; created_at?: string; occurred_at?: string }>;
 };
+
+export type TraceMessage = {
+  id: string;
+  seq: number;
+  role: string;
+  speaker?: string | null;
+  content?: string | null;
+  occurred_at?: string | null;
+  duration_ms?: number | null;
+  tool_name?: string | null;
+  tool_input?: unknown;
+  tool_output?: unknown;
+  metadata?: Record<string, unknown> | null;
+};
+
+export type AgentTrace = {
+  id: string;
+  trace_number: string;
+  subject: string;
+  summary?: string | null;
+  agent_name?: string | null;
+  agent_version?: string | null;
+  model?: string | null;
+  channel?: string | null;
+  intent?: string | null;
+  outcome?: string | null;
+  status: string;
+  sentiment?: string | null;
+  escalated?: boolean;
+  tags?: string[] | null;
+  message_count?: number | null;
+  tool_calls?: number | null;
+  duration_ms?: number | null;
+  started_at?: string | null;
+  ended_at?: string | null;
+  transcript_text?: string | null;
+  metadata?: Record<string, unknown> | null;
+  customer?: CustomerRef | null;
+  order?: { id: string; order_number: string; status?: string; total_cents?: number } | null;
+  ticket?: { id: string; ticket_number: string; status?: string } | null;
+  messages?: TraceMessage[];
+};

@@ -23,11 +23,14 @@ import { Route as AdminOrdersIndexRouteImport } from './routes/admin.orders.inde
 import { Route as AdminOrdersIdRouteImport } from './routes/admin.orders.$id'
 import { Route as AdminRefundsIndexRouteImport } from './routes/admin.refunds.index'
 import { Route as AdminRefundsIdRouteImport } from './routes/admin.refunds.$id'
+import { Route as AdminTracesIndexRouteImport } from './routes/admin.traces.index'
+import { Route as AdminTracesIdRouteImport } from './routes/admin.traces.$id'
 import { Route as ApiPublicOpenapiDotjsonRouteImport } from './routes/api/public/openapi[.]json'
 import { Route as ApiPublicToolsDotjsonRouteImport } from './routes/api/public/tools[.]json'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as ApiPublicV1MetaRouteImport } from './routes/api/public/v1/meta'
 import { Route as ApiPublicV1AdminResetDemoRouteImport } from './routes/api/public/v1/admin/reset-demo'
+import { Route as ApiPublicV1AgentTracesIndexRouteImport } from './routes/api/public/v1/agent-traces/index'
 import { Route as ApiPublicV1BooksIndexRouteImport } from './routes/api/public/v1/books/index'
 import { Route as ApiPublicV1BooksIdRouteImport } from './routes/api/public/v1/books/$id'
 import { Route as ApiPublicV1CustomersIndexRouteImport } from './routes/api/public/v1/customers/index'
@@ -39,6 +42,8 @@ import { Route as ApiPublicV1RefundsIndexRouteImport } from './routes/api/public
 import { Route as ApiPublicV1RefundsIdRouteImport } from './routes/api/public/v1/refunds/$id'
 import { Route as ApiPublicV1ReturnsIndexRouteImport } from './routes/api/public/v1/returns/index'
 import { Route as ApiPublicV1TransactionsIndexRouteImport } from './routes/api/public/v1/transactions/index'
+import { Route as ApiPublicV1AgentTracesIdIndexRouteImport } from './routes/api/public/v1/agent-traces/$id/index'
+import { Route as ApiPublicV1AgentTracesIdMessagesRouteImport } from './routes/api/public/v1/agent-traces/$id/messages'
 import { Route as ApiPublicV1CustomersIdIndexRouteImport } from './routes/api/public/v1/customers/$id/index'
 import { Route as ApiPublicV1CustomersIdOrdersRouteImport } from './routes/api/public/v1/customers/$id/orders'
 import { Route as ApiPublicV1OrdersIdIndexRouteImport } from './routes/api/public/v1/orders/$id/index'
@@ -127,6 +132,16 @@ const AdminRefundsIdRoute = AdminRefundsIdRouteImport.update({
   path: '/refunds/$id',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminTracesIndexRoute = AdminTracesIndexRouteImport.update({
+  id: '/traces/',
+  path: '/traces/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTracesIdRoute = AdminTracesIdRouteImport.update({
+  id: '/traces/$id',
+  path: '/traces/$id',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ApiPublicOpenapiDotjsonRoute = ApiPublicOpenapiDotjsonRouteImport.update({
   id: '/api/public/openapi.json',
   path: '/api/public/openapi.json',
@@ -151,6 +166,12 @@ const ApiPublicV1AdminResetDemoRoute =
   ApiPublicV1AdminResetDemoRouteImport.update({
     id: '/api/public/v1/admin/reset-demo',
     path: '/api/public/v1/admin/reset-demo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1AgentTracesIndexRoute =
+  ApiPublicV1AgentTracesIndexRouteImport.update({
+    id: '/api/public/v1/agent-traces/',
+    path: '/api/public/v1/agent-traces/',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicV1BooksIndexRoute = ApiPublicV1BooksIndexRouteImport.update({
@@ -209,6 +230,18 @@ const ApiPublicV1TransactionsIndexRoute =
   ApiPublicV1TransactionsIndexRouteImport.update({
     id: '/api/public/v1/transactions/',
     path: '/api/public/v1/transactions/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1AgentTracesIdIndexRoute =
+  ApiPublicV1AgentTracesIdIndexRouteImport.update({
+    id: '/api/public/v1/agent-traces/$id/',
+    path: '/api/public/v1/agent-traces/$id/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1AgentTracesIdMessagesRoute =
+  ApiPublicV1AgentTracesIdMessagesRouteImport.update({
+    id: '/api/public/v1/agent-traces/$id/messages',
+    path: '/api/public/v1/agent-traces/$id/messages',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicV1CustomersIdIndexRoute =
@@ -326,17 +359,20 @@ export interface FileRoutesByFullPath {
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/refunds/$id': typeof AdminRefundsIdRoute
+  '/admin/traces/$id': typeof AdminTracesIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/admin/customers/': typeof AdminCustomersIndexRoute
   '/admin/orders/': typeof AdminOrdersIndexRoute
   '/admin/refunds/': typeof AdminRefundsIndexRoute
+  '/admin/traces/': typeof AdminTracesIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/admin/reset-demo': typeof ApiPublicV1AdminResetDemoRoute
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
   '/api/public/v1/policies/$slug': typeof ApiPublicV1PoliciesSlugRoute
   '/api/public/v1/refunds/$id': typeof ApiPublicV1RefundsIdRoute
+  '/api/public/v1/agent-traces/': typeof ApiPublicV1AgentTracesIndexRoute
   '/api/public/v1/books/': typeof ApiPublicV1BooksIndexRoute
   '/api/public/v1/customers/': typeof ApiPublicV1CustomersIndexRoute
   '/api/public/v1/faqs/': typeof ApiPublicV1FaqsIndexRoute
@@ -345,6 +381,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/refunds/': typeof ApiPublicV1RefundsIndexRoute
   '/api/public/v1/returns/': typeof ApiPublicV1ReturnsIndexRoute
   '/api/public/v1/transactions/': typeof ApiPublicV1TransactionsIndexRoute
+  '/api/public/v1/agent-traces/$id/messages': typeof ApiPublicV1AgentTracesIdMessagesRoute
   '/api/public/v1/customers/$id/orders': typeof ApiPublicV1CustomersIdOrdersRoute
   '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
@@ -356,6 +393,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/support/actions/address-change': typeof ApiPublicV1SupportActionsAddressChangeRoute
   '/api/public/v1/support/actions/password-reset': typeof ApiPublicV1SupportActionsPasswordResetRoute
   '/api/public/v1/support/tickets/$id': typeof ApiPublicV1SupportTicketsIdRoute
+  '/api/public/v1/agent-traces/$id/': typeof ApiPublicV1AgentTracesIdIndexRoute
   '/api/public/v1/customers/$id/': typeof ApiPublicV1CustomersIdIndexRoute
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/returns/$rma/': typeof ApiPublicV1ReturnsRmaIndexRoute
@@ -374,17 +412,20 @@ export interface FileRoutesByTo {
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/refunds/$id': typeof AdminRefundsIdRoute
+  '/admin/traces/$id': typeof AdminTracesIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/admin/customers': typeof AdminCustomersIndexRoute
   '/admin/orders': typeof AdminOrdersIndexRoute
   '/admin/refunds': typeof AdminRefundsIndexRoute
+  '/admin/traces': typeof AdminTracesIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/admin/reset-demo': typeof ApiPublicV1AdminResetDemoRoute
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
   '/api/public/v1/policies/$slug': typeof ApiPublicV1PoliciesSlugRoute
   '/api/public/v1/refunds/$id': typeof ApiPublicV1RefundsIdRoute
+  '/api/public/v1/agent-traces': typeof ApiPublicV1AgentTracesIndexRoute
   '/api/public/v1/books': typeof ApiPublicV1BooksIndexRoute
   '/api/public/v1/customers': typeof ApiPublicV1CustomersIndexRoute
   '/api/public/v1/faqs': typeof ApiPublicV1FaqsIndexRoute
@@ -393,6 +434,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/refunds': typeof ApiPublicV1RefundsIndexRoute
   '/api/public/v1/returns': typeof ApiPublicV1ReturnsIndexRoute
   '/api/public/v1/transactions': typeof ApiPublicV1TransactionsIndexRoute
+  '/api/public/v1/agent-traces/$id/messages': typeof ApiPublicV1AgentTracesIdMessagesRoute
   '/api/public/v1/customers/$id/orders': typeof ApiPublicV1CustomersIdOrdersRoute
   '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
@@ -404,6 +446,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/support/actions/address-change': typeof ApiPublicV1SupportActionsAddressChangeRoute
   '/api/public/v1/support/actions/password-reset': typeof ApiPublicV1SupportActionsPasswordResetRoute
   '/api/public/v1/support/tickets/$id': typeof ApiPublicV1SupportTicketsIdRoute
+  '/api/public/v1/agent-traces/$id': typeof ApiPublicV1AgentTracesIdIndexRoute
   '/api/public/v1/customers/$id': typeof ApiPublicV1CustomersIdIndexRoute
   '/api/public/v1/orders/$id': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/returns/$rma': typeof ApiPublicV1ReturnsRmaIndexRoute
@@ -424,17 +467,20 @@ export interface FileRoutesById {
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/refunds/$id': typeof AdminRefundsIdRoute
+  '/admin/traces/$id': typeof AdminTracesIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/admin/customers/': typeof AdminCustomersIndexRoute
   '/admin/orders/': typeof AdminOrdersIndexRoute
   '/admin/refunds/': typeof AdminRefundsIndexRoute
+  '/admin/traces/': typeof AdminTracesIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/admin/reset-demo': typeof ApiPublicV1AdminResetDemoRoute
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
   '/api/public/v1/policies/$slug': typeof ApiPublicV1PoliciesSlugRoute
   '/api/public/v1/refunds/$id': typeof ApiPublicV1RefundsIdRoute
+  '/api/public/v1/agent-traces/': typeof ApiPublicV1AgentTracesIndexRoute
   '/api/public/v1/books/': typeof ApiPublicV1BooksIndexRoute
   '/api/public/v1/customers/': typeof ApiPublicV1CustomersIndexRoute
   '/api/public/v1/faqs/': typeof ApiPublicV1FaqsIndexRoute
@@ -443,6 +489,7 @@ export interface FileRoutesById {
   '/api/public/v1/refunds/': typeof ApiPublicV1RefundsIndexRoute
   '/api/public/v1/returns/': typeof ApiPublicV1ReturnsIndexRoute
   '/api/public/v1/transactions/': typeof ApiPublicV1TransactionsIndexRoute
+  '/api/public/v1/agent-traces/$id/messages': typeof ApiPublicV1AgentTracesIdMessagesRoute
   '/api/public/v1/customers/$id/orders': typeof ApiPublicV1CustomersIdOrdersRoute
   '/api/public/v1/orders/$id/cancel': typeof ApiPublicV1OrdersIdCancelRoute
   '/api/public/v1/orders/$id/items': typeof ApiPublicV1OrdersIdItemsRoute
@@ -454,6 +501,7 @@ export interface FileRoutesById {
   '/api/public/v1/support/actions/address-change': typeof ApiPublicV1SupportActionsAddressChangeRoute
   '/api/public/v1/support/actions/password-reset': typeof ApiPublicV1SupportActionsPasswordResetRoute
   '/api/public/v1/support/tickets/$id': typeof ApiPublicV1SupportTicketsIdRoute
+  '/api/public/v1/agent-traces/$id/': typeof ApiPublicV1AgentTracesIdIndexRoute
   '/api/public/v1/customers/$id/': typeof ApiPublicV1CustomersIdIndexRoute
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/returns/$rma/': typeof ApiPublicV1ReturnsRmaIndexRoute
@@ -475,17 +523,20 @@ export interface FileRouteTypes {
     | '/admin/customers/$id'
     | '/admin/orders/$id'
     | '/admin/refunds/$id'
+    | '/admin/traces/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/admin/customers/'
     | '/admin/orders/'
     | '/admin/refunds/'
+    | '/admin/traces/'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/admin/reset-demo'
     | '/api/public/v1/books/$id'
     | '/api/public/v1/policies/$slug'
     | '/api/public/v1/refunds/$id'
+    | '/api/public/v1/agent-traces/'
     | '/api/public/v1/books/'
     | '/api/public/v1/customers/'
     | '/api/public/v1/faqs/'
@@ -494,6 +545,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/refunds/'
     | '/api/public/v1/returns/'
     | '/api/public/v1/transactions/'
+    | '/api/public/v1/agent-traces/$id/messages'
     | '/api/public/v1/customers/$id/orders'
     | '/api/public/v1/orders/$id/cancel'
     | '/api/public/v1/orders/$id/items'
@@ -505,6 +557,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/support/actions/address-change'
     | '/api/public/v1/support/actions/password-reset'
     | '/api/public/v1/support/tickets/$id'
+    | '/api/public/v1/agent-traces/$id/'
     | '/api/public/v1/customers/$id/'
     | '/api/public/v1/orders/$id/'
     | '/api/public/v1/returns/$rma/'
@@ -523,17 +576,20 @@ export interface FileRouteTypes {
     | '/admin/customers/$id'
     | '/admin/orders/$id'
     | '/admin/refunds/$id'
+    | '/admin/traces/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/admin/customers'
     | '/admin/orders'
     | '/admin/refunds'
+    | '/admin/traces'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/admin/reset-demo'
     | '/api/public/v1/books/$id'
     | '/api/public/v1/policies/$slug'
     | '/api/public/v1/refunds/$id'
+    | '/api/public/v1/agent-traces'
     | '/api/public/v1/books'
     | '/api/public/v1/customers'
     | '/api/public/v1/faqs'
@@ -542,6 +598,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/refunds'
     | '/api/public/v1/returns'
     | '/api/public/v1/transactions'
+    | '/api/public/v1/agent-traces/$id/messages'
     | '/api/public/v1/customers/$id/orders'
     | '/api/public/v1/orders/$id/cancel'
     | '/api/public/v1/orders/$id/items'
@@ -553,6 +610,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/support/actions/address-change'
     | '/api/public/v1/support/actions/password-reset'
     | '/api/public/v1/support/tickets/$id'
+    | '/api/public/v1/agent-traces/$id'
     | '/api/public/v1/customers/$id'
     | '/api/public/v1/orders/$id'
     | '/api/public/v1/returns/$rma'
@@ -572,17 +630,20 @@ export interface FileRouteTypes {
     | '/admin/customers/$id'
     | '/admin/orders/$id'
     | '/admin/refunds/$id'
+    | '/admin/traces/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/admin/customers/'
     | '/admin/orders/'
     | '/admin/refunds/'
+    | '/admin/traces/'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/admin/reset-demo'
     | '/api/public/v1/books/$id'
     | '/api/public/v1/policies/$slug'
     | '/api/public/v1/refunds/$id'
+    | '/api/public/v1/agent-traces/'
     | '/api/public/v1/books/'
     | '/api/public/v1/customers/'
     | '/api/public/v1/faqs/'
@@ -591,6 +652,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/refunds/'
     | '/api/public/v1/returns/'
     | '/api/public/v1/transactions/'
+    | '/api/public/v1/agent-traces/$id/messages'
     | '/api/public/v1/customers/$id/orders'
     | '/api/public/v1/orders/$id/cancel'
     | '/api/public/v1/orders/$id/items'
@@ -602,6 +664,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/support/actions/address-change'
     | '/api/public/v1/support/actions/password-reset'
     | '/api/public/v1/support/tickets/$id'
+    | '/api/public/v1/agent-traces/$id/'
     | '/api/public/v1/customers/$id/'
     | '/api/public/v1/orders/$id/'
     | '/api/public/v1/returns/$rma/'
@@ -623,6 +686,7 @@ export interface RootRouteChildren {
   ApiPublicV1BooksIdRoute: typeof ApiPublicV1BooksIdRoute
   ApiPublicV1PoliciesSlugRoute: typeof ApiPublicV1PoliciesSlugRoute
   ApiPublicV1RefundsIdRoute: typeof ApiPublicV1RefundsIdRoute
+  ApiPublicV1AgentTracesIndexRoute: typeof ApiPublicV1AgentTracesIndexRoute
   ApiPublicV1BooksIndexRoute: typeof ApiPublicV1BooksIndexRoute
   ApiPublicV1CustomersIndexRoute: typeof ApiPublicV1CustomersIndexRoute
   ApiPublicV1FaqsIndexRoute: typeof ApiPublicV1FaqsIndexRoute
@@ -631,6 +695,7 @@ export interface RootRouteChildren {
   ApiPublicV1RefundsIndexRoute: typeof ApiPublicV1RefundsIndexRoute
   ApiPublicV1ReturnsIndexRoute: typeof ApiPublicV1ReturnsIndexRoute
   ApiPublicV1TransactionsIndexRoute: typeof ApiPublicV1TransactionsIndexRoute
+  ApiPublicV1AgentTracesIdMessagesRoute: typeof ApiPublicV1AgentTracesIdMessagesRoute
   ApiPublicV1CustomersIdOrdersRoute: typeof ApiPublicV1CustomersIdOrdersRoute
   ApiPublicV1OrdersIdCancelRoute: typeof ApiPublicV1OrdersIdCancelRoute
   ApiPublicV1OrdersIdItemsRoute: typeof ApiPublicV1OrdersIdItemsRoute
@@ -642,6 +707,7 @@ export interface RootRouteChildren {
   ApiPublicV1SupportActionsAddressChangeRoute: typeof ApiPublicV1SupportActionsAddressChangeRoute
   ApiPublicV1SupportActionsPasswordResetRoute: typeof ApiPublicV1SupportActionsPasswordResetRoute
   ApiPublicV1SupportTicketsIdRoute: typeof ApiPublicV1SupportTicketsIdRoute
+  ApiPublicV1AgentTracesIdIndexRoute: typeof ApiPublicV1AgentTracesIdIndexRoute
   ApiPublicV1CustomersIdIndexRoute: typeof ApiPublicV1CustomersIdIndexRoute
   ApiPublicV1OrdersIdIndexRoute: typeof ApiPublicV1OrdersIdIndexRoute
   ApiPublicV1ReturnsRmaIndexRoute: typeof ApiPublicV1ReturnsRmaIndexRoute
@@ -750,6 +816,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRefundsIdRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/traces/': {
+      id: '/admin/traces/'
+      path: '/traces'
+      fullPath: '/admin/traces/'
+      preLoaderRoute: typeof AdminTracesIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/traces/$id': {
+      id: '/admin/traces/$id'
+      path: '/traces/$id'
+      fullPath: '/admin/traces/$id'
+      preLoaderRoute: typeof AdminTracesIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/api/public/openapi.json': {
       id: '/api/public/openapi.json'
       path: '/api/public/openapi.json'
@@ -783,6 +863,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/v1/admin/reset-demo'
       fullPath: '/api/public/v1/admin/reset-demo'
       preLoaderRoute: typeof ApiPublicV1AdminResetDemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/agent-traces/': {
+      id: '/api/public/v1/agent-traces/'
+      path: '/api/public/v1/agent-traces'
+      fullPath: '/api/public/v1/agent-traces/'
+      preLoaderRoute: typeof ApiPublicV1AgentTracesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/books/': {
@@ -860,6 +947,20 @@ declare module '@tanstack/react-router' {
       path: '/api/public/v1/transactions'
       fullPath: '/api/public/v1/transactions/'
       preLoaderRoute: typeof ApiPublicV1TransactionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/agent-traces/$id/': {
+      id: '/api/public/v1/agent-traces/$id/'
+      path: '/api/public/v1/agent-traces/$id'
+      fullPath: '/api/public/v1/agent-traces/$id/'
+      preLoaderRoute: typeof ApiPublicV1AgentTracesIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/agent-traces/$id/messages': {
+      id: '/api/public/v1/agent-traces/$id/messages'
+      path: '/api/public/v1/agent-traces/$id/messages'
+      fullPath: '/api/public/v1/agent-traces/$id/messages'
+      preLoaderRoute: typeof ApiPublicV1AgentTracesIdMessagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/customers/$id/': {
@@ -992,9 +1093,11 @@ interface AdminRouteChildren {
   AdminCustomersIdRoute: typeof AdminCustomersIdRoute
   AdminOrdersIdRoute: typeof AdminOrdersIdRoute
   AdminRefundsIdRoute: typeof AdminRefundsIdRoute
+  AdminTracesIdRoute: typeof AdminTracesIdRoute
   AdminCustomersIndexRoute: typeof AdminCustomersIndexRoute
   AdminOrdersIndexRoute: typeof AdminOrdersIndexRoute
   AdminRefundsIndexRoute: typeof AdminRefundsIndexRoute
+  AdminTracesIndexRoute: typeof AdminTracesIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -1005,9 +1108,11 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCustomersIdRoute: AdminCustomersIdRoute,
   AdminOrdersIdRoute: AdminOrdersIdRoute,
   AdminRefundsIdRoute: AdminRefundsIdRoute,
+  AdminTracesIdRoute: AdminTracesIdRoute,
   AdminCustomersIndexRoute: AdminCustomersIndexRoute,
   AdminOrdersIndexRoute: AdminOrdersIndexRoute,
   AdminRefundsIndexRoute: AdminRefundsIndexRoute,
+  AdminTracesIndexRoute: AdminTracesIndexRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
@@ -1025,6 +1130,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1BooksIdRoute: ApiPublicV1BooksIdRoute,
   ApiPublicV1PoliciesSlugRoute: ApiPublicV1PoliciesSlugRoute,
   ApiPublicV1RefundsIdRoute: ApiPublicV1RefundsIdRoute,
+  ApiPublicV1AgentTracesIndexRoute: ApiPublicV1AgentTracesIndexRoute,
   ApiPublicV1BooksIndexRoute: ApiPublicV1BooksIndexRoute,
   ApiPublicV1CustomersIndexRoute: ApiPublicV1CustomersIndexRoute,
   ApiPublicV1FaqsIndexRoute: ApiPublicV1FaqsIndexRoute,
@@ -1033,6 +1139,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1RefundsIndexRoute: ApiPublicV1RefundsIndexRoute,
   ApiPublicV1ReturnsIndexRoute: ApiPublicV1ReturnsIndexRoute,
   ApiPublicV1TransactionsIndexRoute: ApiPublicV1TransactionsIndexRoute,
+  ApiPublicV1AgentTracesIdMessagesRoute: ApiPublicV1AgentTracesIdMessagesRoute,
   ApiPublicV1CustomersIdOrdersRoute: ApiPublicV1CustomersIdOrdersRoute,
   ApiPublicV1OrdersIdCancelRoute: ApiPublicV1OrdersIdCancelRoute,
   ApiPublicV1OrdersIdItemsRoute: ApiPublicV1OrdersIdItemsRoute,
@@ -1047,6 +1154,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1SupportActionsPasswordResetRoute:
     ApiPublicV1SupportActionsPasswordResetRoute,
   ApiPublicV1SupportTicketsIdRoute: ApiPublicV1SupportTicketsIdRoute,
+  ApiPublicV1AgentTracesIdIndexRoute: ApiPublicV1AgentTracesIdIndexRoute,
   ApiPublicV1CustomersIdIndexRoute: ApiPublicV1CustomersIdIndexRoute,
   ApiPublicV1OrdersIdIndexRoute: ApiPublicV1OrdersIdIndexRoute,
   ApiPublicV1ReturnsRmaIndexRoute: ApiPublicV1ReturnsRmaIndexRoute,
