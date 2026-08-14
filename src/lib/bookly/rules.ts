@@ -8,6 +8,10 @@ export const RULES = {
   groundShippingCents: 499,
   stalledTrackingDays: 7,
   passwordResetTtlMinutes: 60,
+  /** Sales tax applied to new orders, in basis points (8.25%). */
+  taxRateBps: 825,
+  expeditedShippingCents: 1299,
+  overnightShippingCents: 2499,
   nonReturnableFormats: ["ebook"],
   cancellableStatuses: ["processing", "backordered"],
   returnableStatuses: ["delivered", "shipped"],
