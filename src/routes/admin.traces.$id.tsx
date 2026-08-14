@@ -90,7 +90,7 @@ function TraceDetail() {
   );
 }
 
-function ConfidenceRow({ label, value }: { label: string; value?: number | null }) {
+function ConfidenceRow({ label, value }: { label: string; value?: number | null | undefined }) {
   const pct = typeof value === "number" ? Math.round(value * 100) : null;
   return (
     <div className="flex items-center gap-2">
