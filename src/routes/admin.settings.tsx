@@ -56,8 +56,9 @@ function AdminSettings() {
         <div className="space-y-4 px-5 py-5 text-sm">
           <p className="text-muted-foreground">
             Regenerates the full demo dataset: books, customers, orders, shipments, returns, refunds, refund history
-            and transactions are wiped and re-seeded. All agent traces are purged except the two example traces kept
-            for demos. The demo customer{" "}
+            and transactions are wiped and re-seeded. All agent traces are purged except the example in-stock check
+            trace kept for demos. The demo customer{" "}
+
             <span className="font-mono text-xs">david.busacker@example.com</span> is recreated with four orders from the
             last year. Run this between agent demos to start clean.
           </p>
