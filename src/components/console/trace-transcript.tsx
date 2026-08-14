@@ -99,8 +99,8 @@ export function TraceTranscript({ messages }: { messages: TraceMessage[] }) {
               ) : null}
             </article>
             {!isLast ? (
-              <div className="my-1 flex h-5 items-center justify-center text-muted-foreground/60">
-                <ChevronDown size={14} strokeWidth={2} />
+              <div className="my-1 flex h-6 items-center justify-center text-foreground/80">
+                <ChevronDown size={18} strokeWidth={3} />
               </div>
             ) : null}
           </div>
