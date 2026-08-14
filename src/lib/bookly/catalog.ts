@@ -108,6 +108,82 @@ export const ENDPOINTS: EndpointDef[] = [
     example: { path: "/api/public/v1/orders?limit=3&status=shipped" },
   },
   {
+    id: "placeOrder",
+    method: "POST",
+    path: "/api/public/v1/orders",
+    tag: "Orders",
+    summary: "Place a new order",
+    description: `Creates an order for an existing customer (or a brand-new one) and charges it. Books are matched by book_id, isbn or partial title; prices come from the catalog, so never send prices. Shipping: ground is free over $${(RULES.freeShippingThresholdCents / 100).toFixed(2)} otherwise $${(RULES.groundShippingCents / 100).toFixed(2)}, expedited $${(RULES.expeditedShippingCents / 100).toFixed(2)}, overnight $${(RULES.overnightShippingCents / 100).toFixed(2)}. Tax is ${(RULES.taxRateBps / 100).toFixed(2)}% of the discounted subtotal. Stock is decremented, a charge transaction is written, and the response includes the full order plus a pricing breakdown.`,
+    agentUse:
+      "Use when a caller wants to buy or re-order a title. Load GET /api/public/v1/inventory first to confirm the exact ISBN and stock, then place the order. If a title is short on stock you get 409 conflict — read back the shortfall and retry with allow_backorder: true only after the customer agrees.",
+    body: [
+      {
+        name: "customer",
+        type: "string",
+        required: true,
+        description: "Customer UUID or email address.",
+      },
+      { name: "customer_name", type: "string", description: "Full name, only used when creating a new customer." },
+      {
+        name: "create_customer_if_missing",
+        type: "boolean",
+        description: "Create the customer when the email is unknown. Requires an email in `customer`.",
+      },
+      {
+        name: "items",
+        type: "array",
+        required: true,
+        description: "1-20 lines to purchase.",
+        items: {
+          type: "object",
+          fields: [
+            { name: "isbn", type: "string", description: "Preferred way to identify the book." },
+            { name: "book_id", type: "string", description: "Book UUID." },
+            { name: "title", type: "string", description: "Partial title match, used when no ISBN is known." },
+            { name: "quantity", type: "integer", description: "Units to buy (default 1, max 20)." },
+          ],
+        },
+      },
+      {
+        name: "shipping_speed",
+        type: "string",
+        enum: ["ground", "expedited", "overnight"],
+        description: "Shipping service level, default ground.",
+      },
+      {
+        name: "shipping_address",
+        type: "object",
+        description:
+          "Optional override: line1, line2, city, state, postal_code, country. Defaults to the customer's address on file.",
+      },
+      { name: "payment_method", type: "string", description: "Payment descriptor, default visa_4242." },
+      { name: "discount_cents", type: "integer", description: "Goodwill discount in cents." },
+      {
+        name: "use_store_credit",
+        type: "boolean",
+        description: "Apply the customer's available store credit to this order.",
+      },
+      {
+        name: "allow_backorder",
+        type: "boolean",
+        description: "Place the order as `backordered` instead of failing when stock is short.",
+      },
+      { name: "notes", type: "string", description: "Internal note recorded on the order." },
+    ],
+    example: {
+      path: "/api/public/v1/orders",
+      body: {
+        customer: "david.busacker@example.com",
+        items: [{ isbn: "9781234500017", quantity: 1 }],
+        shipping_speed: "expedited",
+      },
+    },
+    errors: [
+      "400 invalid_request when the customer or a book cannot be matched",
+      "409 conflict when stock is insufficient and allow_backorder is false",
+    ],
+  },
+  {
     id: "getOrder",
     method: "GET",
     path: "/api/public/v1/orders/{id}",
