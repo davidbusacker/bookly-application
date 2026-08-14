@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 import type { TraceMessage } from "@/lib/bookly/api-client";
 
 const ROLE_STYLE: Record<string, string> = {
@@ -54,48 +55,55 @@ export function TraceTranscript({ messages }: { messages: TraceMessage[] }) {
         </button>
       </div>
 
-      {ordered.map((m) => {
+      {ordered.map((m, idx) => {
         const who = m.speaker || DEFAULT_SPEAKER[m.role] || m.role;
         const isTool = m.role === "tool";
+        const isLast = idx === ordered.length - 1;
         return (
-          <article
-            key={m.id}
-            className={`rounded-md border border-border border-l-4 bg-background px-4 py-3 ${ROLE_STYLE[m.role] ?? "border-l-border"}`}
-          >
-            <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-              <span className="font-mono text-[11px] text-muted-foreground">[{stamp(m.occurred_at)}]</span>
-              <strong className="text-sm font-semibold">{who}</strong>
-              <span className="rounded-full border border-border px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
-                {m.role}
-              </span>
-              {isTool && m.tool_name ? <code className="text-xs font-medium">{m.tool_name}</code> : null}
-              {typeof m.duration_ms === "number" ? (
-                <span className="text-[11px] text-muted-foreground">{m.duration_ms} ms</span>
+          <div key={m.id} className="flex flex-col items-center">
+            <article
+              className={`w-full rounded-md border border-border border-l-4 bg-background px-4 py-3 ${ROLE_STYLE[m.role] ?? "border-l-border"}`}
+            >
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <span className="font-mono text-[11px] text-muted-foreground">[{stamp(m.occurred_at)}]</span>
+                <strong className="text-sm font-semibold">{who}</strong>
+                <span className="rounded-full border border-border px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
+                  {m.role}
+                </span>
+                {isTool && m.tool_name ? <code className="text-xs font-medium">{m.tool_name}</code> : null}
+                {typeof m.duration_ms === "number" ? (
+                  <span className="text-[11px] text-muted-foreground">{m.duration_ms} ms</span>
+                ) : null}
+              </div>
+
+              {m.content ? (
+                <p className="mt-1.5 whitespace-pre-wrap text-sm leading-relaxed">{m.content}</p>
               ) : null}
-            </div>
 
-            {m.content ? (
-              <p className="mt-1.5 whitespace-pre-wrap text-sm leading-relaxed">{m.content}</p>
-            ) : null}
+              {isTool ? (
+                <details open={openTools} className="mt-1.5">
+                  <summary className="cursor-pointer text-xs font-medium text-muted-foreground underline-offset-4 hover:underline">
+                    Tool call payload
+                  </summary>
+                  <ToolBlock label="Input" value={m.tool_input} />
+                  <ToolBlock label="Output" value={m.tool_output} />
+                </details>
+              ) : null}
 
-            {isTool ? (
-              <details open={openTools} className="mt-1.5">
-                <summary className="cursor-pointer text-xs font-medium text-muted-foreground underline-offset-4 hover:underline">
-                  Tool call payload
-                </summary>
-                <ToolBlock label="Input" value={m.tool_input} />
-                <ToolBlock label="Output" value={m.tool_output} />
-              </details>
+              {m.metadata && Object.keys(m.metadata).length > 0 ? (
+                <p className="mt-1.5 font-mono text-[11px] text-muted-foreground">
+                  {Object.entries(m.metadata)
+                    .map(([k, v]) => `${k}: ${typeof v === "object" ? JSON.stringify(v) : String(v)}`)
+                    .join(" · ")}
+                </p>
+              ) : null}
+            </article>
+            {!isLast ? (
+              <div className="my-1 flex h-5 items-center justify-center text-muted-foreground/60">
+                <ChevronDown size={14} strokeWidth={2} />
+              </div>
             ) : null}
-
-            {m.metadata && Object.keys(m.metadata).length > 0 ? (
-              <p className="mt-1.5 font-mono text-[11px] text-muted-foreground">
-                {Object.entries(m.metadata)
-                  .map(([k, v]) => `${k}: ${typeof v === "object" ? JSON.stringify(v) : String(v)}`)
-                  .join(" · ")}
-              </p>
-            ) : null}
-          </article>
+          </div>
         );
       })}
     </div>
