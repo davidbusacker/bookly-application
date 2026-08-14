@@ -57,7 +57,7 @@ function ConfidencePie({
   tone: "primary" | "emerald";
 }) {
   const pct = Math.max(0, Math.min(100, Math.round(value * 100)));
-  const r = 9;
+  const r = 6;
   const c = 2 * Math.PI * r;
   const stroke = tone === "primary" ? "text-primary" : "text-emerald-500";
   return (
