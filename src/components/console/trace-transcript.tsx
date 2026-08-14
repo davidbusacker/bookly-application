@@ -63,13 +63,13 @@ function ConfidencePie({
   return (
     <div className="flex items-center gap-1.5" title={`${label}: ${pct}%`}>
       <svg viewBox="0 0 24 24" className={`h-6 w-6 -rotate-90 ${stroke}`} aria-hidden="true">
-        <circle cx="12" cy="12" r={r} fill="none" strokeWidth="6" className="text-muted" stroke="currentColor" opacity={0.25} />
+        <circle cx="12" cy="12" r={r} fill="none" strokeWidth="12" className="text-muted" stroke="currentColor" opacity={0.25} />
         <circle
           cx="12"
           cy="12"
           r={r}
           fill="none"
-          strokeWidth="6"
+          strokeWidth="12"
           stroke="currentColor"
           strokeDasharray={`${(pct / 100) * c} ${c}`}
         />
