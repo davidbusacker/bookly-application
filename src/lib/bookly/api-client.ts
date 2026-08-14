@@ -214,6 +214,8 @@ export type TraceMessage = {
   tool_name?: string | null;
   tool_input?: unknown;
   tool_output?: unknown;
+  intent_confidence?: number | null;
+  resolution_confidence?: number | null;
   metadata?: Record<string, unknown> | null;
 };
 

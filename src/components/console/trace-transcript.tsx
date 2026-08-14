@@ -47,6 +47,53 @@ const stamp = (iso?: string | null) =>
     ? new Date(iso).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
     : "—";
 
+function ConfidencePie({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: number;
+  tone: "primary" | "emerald";
+}) {
+  const pct = Math.max(0, Math.min(100, Math.round(value * 100)));
+  const r = 6;
+  const c = 2 * Math.PI * r;
+  const stroke = tone === "primary" ? "text-primary" : "text-emerald-500";
+  return (
+    <div className="flex items-center gap-1.5" title={`${label}: ${pct}%`}>
+      <svg viewBox="0 0 24 24" className={`h-6 w-6 -rotate-90 ${stroke}`} aria-hidden="true">
+        <circle cx="12" cy="12" r={r} fill="none" strokeWidth="12" className="text-muted" stroke="currentColor" opacity={0.25} />
+        <circle
+          cx="12"
+          cy="12"
+          r={r}
+          fill="none"
+          strokeWidth="12"
+          stroke="currentColor"
+          strokeDasharray={`${(pct / 100) * c} ${c}`}
+        />
+      </svg>
+      <span className="text-[10px] leading-tight text-muted-foreground">
+        {label}
+        <span className="ml-1 font-mono font-semibold text-foreground">{pct}%</span>
+      </span>
+    </div>
+  );
+}
+
+function ConfidenceStrip({ message }: { message: TraceMessage }) {
+  const intent = typeof message.intent_confidence === "number" ? message.intent_confidence : null;
+  const resolution = typeof message.resolution_confidence === "number" ? message.resolution_confidence : null;
+  if (intent === null && resolution === null) return null;
+  return (
+    <div className="mt-2 flex flex-wrap items-center gap-4 border-t border-border pt-2">
+      {intent !== null ? <ConfidencePie label="Intent" value={intent} tone="primary" /> : null}
+      {resolution !== null ? <ConfidencePie label="Resolution" value={resolution} tone="emerald" /> : null}
+    </div>
+  );
+}
+
 function ToolBlock({ label, value }: { label: string; value: unknown }) {
   if (value === undefined || value === null) return null;
   return (
@@ -126,6 +173,8 @@ export function TraceTranscript({ messages }: { messages: TraceMessage[] }) {
                     <ToolBlock label="Output" value={m.tool_output} />
                   </details>
                 ) : null}
+
+                <ConfidenceStrip message={m} />
 
                 {m.metadata && Object.keys(m.metadata).length > 0 ? (
                   <p className="mt-1.5 font-mono text-[11px] text-muted-foreground">

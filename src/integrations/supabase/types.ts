@@ -20,8 +20,10 @@ export type Database = {
           created_at: string
           duration_ms: number | null
           id: string
+          intent_confidence: number | null
           metadata: Json
           occurred_at: string
+          resolution_confidence: number | null
           role: string
           seq: number
           speaker: string | null
@@ -35,8 +37,10 @@ export type Database = {
           created_at?: string
           duration_ms?: number | null
           id?: string
+          intent_confidence?: number | null
           metadata?: Json
           occurred_at?: string
+          resolution_confidence?: number | null
           role?: string
           seq?: number
           speaker?: string | null
@@ -50,8 +54,10 @@ export type Database = {
           created_at?: string
           duration_ms?: number | null
           id?: string
+          intent_confidence?: number | null
           metadata?: Json
           occurred_at?: string
+          resolution_confidence?: number | null
           role?: string
           seq?: number
           speaker?: string | null
