@@ -23,8 +23,8 @@ function TraceDetail() {
   return (
     <div className="space-y-6">
       <div>
-        <Link to="/admin/traces" className="text-xs font-medium underline underline-offset-4">
-          ← All agent traces
+        <Link to="/admin/settings" className="text-xs font-medium underline underline-offset-4">
+          ← Admin
         </Link>
         <h1 className="mt-2 text-2xl font-bold tracking-tight">{t.subject}</h1>
         <p className="mt-1 font-mono text-sm text-muted-foreground">{t.trace_number}</p>

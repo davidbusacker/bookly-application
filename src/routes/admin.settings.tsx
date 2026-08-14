@@ -1,8 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { apiSend } from "@/lib/bookly/api-client";
 import { Card, ErrorNote } from "@/components/console/ui";
+import { AgentTracesTile } from "@/components/console/agent-traces-tile";
 
 export const Route = createFileRoute("/admin/settings")({
   head: () => ({
@@ -49,19 +50,7 @@ function AdminSettings() {
 
       {reset.error ? <ErrorNote error={reset.error} /> : null}
 
-      <Card title="Agent traces">
-        <div className="space-y-3 px-5 py-5 text-sm">
-          <p className="text-muted-foreground">
-            Review CX-agent conversation transcripts and tool-call metadata logged by the external agent.
-          </p>
-          <Link
-            to="/admin/traces"
-            className="inline-flex rounded-md bg-secondary px-3 py-1.5 text-sm font-medium text-secondary-foreground hover:bg-secondary/80"
-          >
-            View agent traces
-          </Link>
-        </div>
-      </Card>
+      <AgentTracesTile />
 
       <Card title="Reset demo data">
         <div className="space-y-4 px-5 py-5 text-sm">
