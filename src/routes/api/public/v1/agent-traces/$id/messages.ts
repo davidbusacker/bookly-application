@@ -11,7 +11,6 @@ const MessageBody = z.object({
   occurred_at: z.string().optional(),
   duration_ms: z.number().int().nonnegative().optional(),
   tool_name: z.string().max(120).optional(),
-  tool_name: z.string().max(120).optional(),
   tool_input: z.unknown().optional(),
   tool_output: z.unknown().optional(),
   intent_confidence: z.number().min(0).max(1).optional(),
