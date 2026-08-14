@@ -25,9 +25,7 @@ const NAV = [
   { to: "/admin/refunds", label: "Refunds" },
   { to: "/admin/transactions", label: "Transactions" },
   { to: "/admin/customers", label: "Customers" },
-  { to: "/admin/traces", label: "Agent traces" },
   { to: "/admin/settings", label: "Admin" },
-
 ] as const;
 
 function ConsoleLayout() {
