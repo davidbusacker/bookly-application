@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { apiSend } from "@/lib/bookly/api-client";
@@ -114,6 +114,20 @@ function AdminSettings() {
             <a className="underline underline-offset-4" href="/llms.txt">llms.txt</a>
           </li>
         </ul>
+      </Card>
+
+      <Card title="Agent traces">
+        <div className="space-y-3 px-5 py-5 text-sm">
+          <p className="text-muted-foreground">
+            Review CX-agent conversation transcripts and tool-call metadata logged by the external agent.
+          </p>
+          <Link
+            to="/admin/traces"
+            className="inline-flex rounded-md bg-secondary px-3 py-1.5 text-sm font-medium text-secondary-foreground hover:bg-secondary/80"
+          >
+            View agent traces
+          </Link>
+        </div>
       </Card>
     </div>
   );
