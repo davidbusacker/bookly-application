@@ -89,3 +89,16 @@ function TraceDetail() {
     </div>
   );
 }
+
+function ConfidenceRow({ label, value }: { label: string; value?: number | null }) {
+  const pct = typeof value === "number" ? Math.round(value * 100) : null;
+  return (
+    <div className="flex items-center gap-2">
+      <span className="w-20 text-xs text-muted-foreground">{label}</span>
+      <div className="h-1.5 w-20 overflow-hidden rounded-full bg-muted">
+        <div className="h-full rounded-full bg-primary" style={{ width: `${pct ?? 0}%` }} />
+      </div>
+      <span className="font-mono text-xs">{pct === null ? "—" : `${pct}%`}</span>
+    </div>
+  );
+}
