@@ -83,11 +83,13 @@ export type Database = {
           escalated: boolean
           id: string
           intent: string | null
+          intent_confidence: number | null
           message_count: number
           metadata: Json
           model: string | null
           order_id: string | null
           outcome: string
+          resolution_confidence: number | null
           sentiment: string | null
           started_at: string
           status: string
@@ -111,11 +113,13 @@ export type Database = {
           escalated?: boolean
           id?: string
           intent?: string | null
+          intent_confidence?: number | null
           message_count?: number
           metadata?: Json
           model?: string | null
           order_id?: string | null
           outcome?: string
+          resolution_confidence?: number | null
           sentiment?: string | null
           started_at?: string
           status?: string
@@ -139,11 +143,13 @@ export type Database = {
           escalated?: boolean
           id?: string
           intent?: string | null
+          intent_confidence?: number | null
           message_count?: number
           metadata?: Json
           model?: string | null
           order_id?: string | null
           outcome?: string
+          resolution_confidence?: number | null
           sentiment?: string | null
           started_at?: string
           status?: string
@@ -945,6 +951,7 @@ export type Database = {
     Functions: {
       reset_bookly_demo: { Args: never; Returns: Json }
       seed_bookly_demo: { Args: never; Returns: Json }
+      seed_bookly_inventory: { Args: never; Returns: Json }
     }
     Enums: {
       [_ in never]: never
