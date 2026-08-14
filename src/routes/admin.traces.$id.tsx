@@ -41,6 +41,17 @@ function TraceDetail() {
           <Field label="Model">{t.model ?? "—"}</Field>
           <Field label="Channel">{t.channel ?? "—"}</Field>
           <Field label="Intent">{t.intent ?? "—"}</Field>
+          <Field label="Confidence">
+            <details className="group">
+              <summary className="cursor-pointer text-xs font-medium text-muted-foreground underline-offset-4 hover:underline">
+                Show confidence
+              </summary>
+              <div className="mt-1.5 space-y-1">
+                <ConfidenceRow label="Intent" value={t.intent_confidence} />
+                <ConfidenceRow label="Resolution" value={t.resolution_confidence} />
+              </div>
+            </details>
+          </Field>
           <Field label="Customer">
             {t.customer ? (
               <Link to="/admin/customers/$id" params={{ id: t.customer.id }} className="underline underline-offset-4">
@@ -75,6 +86,19 @@ function TraceDetail() {
       <Card title="Transcript">
         <TraceTranscript messages={t.messages ?? []} />
       </Card>
+    </div>
+  );
+}
+
+function ConfidenceRow({ label, value }: { label: string; value?: number | null | undefined }) {
+  const pct = typeof value === "number" ? Math.round(value * 100) : null;
+  return (
+    <div className="flex items-center gap-2">
+      <span className="w-20 text-xs text-muted-foreground">{label}</span>
+      <div className="h-1.5 w-20 overflow-hidden rounded-full bg-muted">
+        <div className="h-full rounded-full bg-primary" style={{ width: `${pct ?? 0}%` }} />
+      </div>
+      <span className="font-mono text-xs">{pct === null ? "—" : `${pct}%`}</span>
     </div>
   );
 }

@@ -32,6 +32,7 @@ function llmsTxt(origin: string): string {
     `- Free shipping over $${(RULES.freeShippingThresholdCents / 100).toFixed(2)}, otherwise $${(RULES.groundShippingCents / 100).toFixed(2)} ground.`,
     "",
     "## Recommended agent flow",
+    "1. GET /api/public/v1/inventory — pull the entire 50-title book catalog (10 authors, live stock) into context in one call; no per-book or per-author search needed.",
     "1. GET /api/public/v1/meta — discover live sample IDs and enums.",
     "2. Identify the customer: GET /api/public/v1/customers?email=... or GET /api/public/v1/orders?email=...",
     "3. Read the order: GET /api/public/v1/orders/{id}",

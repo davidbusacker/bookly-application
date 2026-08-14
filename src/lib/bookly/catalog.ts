@@ -446,6 +446,18 @@ export const ENDPOINTS: EndpointDef[] = [
     example: { path: "/api/public/v1/shipments/1Z999AA10123456784/events" },
   },
   {
+    id: "getInventory",
+    method: "GET",
+    path: "/api/public/v1/inventory",
+    tag: "Catalog",
+    summary: "Full inventory snapshot",
+    description:
+      "Returns the entire book catalog in one call — every title with author, format, category, price and current stock — plus per-author rollups and totals in `meta`. No search or pagination.",
+    agentUse:
+      "Call this once at the start of a conversation to load the whole catalog into context; then answer stock, author and price questions without further lookups.",
+    example: { path: "/api/public/v1/inventory" },
+  },
+  {
     id: "listBooks",
     method: "GET",
     path: "/api/public/v1/books",
@@ -649,6 +661,8 @@ export const ENDPOINTS: EndpointDef[] = [
       { name: "model", type: "string", description: "Model that ran the conversation." },
       { name: "channel", type: "string", enum: ["chat", "email", "voice", "sms", "api"], description: "Contact channel." },
       { name: "intent", type: "string", description: "Detected intent, e.g. order_status, refund_request." },
+      { name: "intent_confidence", type: "number", description: "0-1 confidence in the detected intent. Required on every trace." },
+      { name: "resolution_confidence", type: "number", description: "0-1 confidence that the outcome actually resolved the request. Required on every trace." },
       {
         name: "outcome",
         type: "string",
@@ -704,6 +718,8 @@ export const ENDPOINTS: EndpointDef[] = [
         customer_email: "david.busacker@example.com",
         order_id: "BK-10005",
         intent: "refund_request",
+        intent_confidence: 0.93,
+        resolution_confidence: 0.88,
         outcome: "refund_issued",
         channel: "chat",
         sentiment: "positive",
