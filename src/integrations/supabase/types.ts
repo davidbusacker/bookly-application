@@ -14,6 +14,171 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_trace_messages: {
+        Row: {
+          content: string
+          created_at: string
+          duration_ms: number | null
+          id: string
+          metadata: Json
+          occurred_at: string
+          role: string
+          seq: number
+          speaker: string | null
+          tool_input: Json | null
+          tool_name: string | null
+          tool_output: Json | null
+          trace_id: string
+        }
+        Insert: {
+          content?: string
+          created_at?: string
+          duration_ms?: number | null
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          role?: string
+          seq?: number
+          speaker?: string | null
+          tool_input?: Json | null
+          tool_name?: string | null
+          tool_output?: Json | null
+          trace_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          duration_ms?: number | null
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          role?: string
+          seq?: number
+          speaker?: string | null
+          tool_input?: Json | null
+          tool_name?: string | null
+          tool_output?: Json | null
+          trace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_trace_messages_trace_id_fkey"
+            columns: ["trace_id"]
+            isOneToOne: false
+            referencedRelation: "agent_traces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agent_traces: {
+        Row: {
+          agent_name: string
+          agent_version: string | null
+          channel: string
+          created_at: string
+          customer_email: string | null
+          customer_id: string | null
+          duration_ms: number | null
+          ended_at: string | null
+          escalated: boolean
+          id: string
+          intent: string | null
+          message_count: number
+          metadata: Json
+          model: string | null
+          order_id: string | null
+          outcome: string
+          sentiment: string | null
+          started_at: string
+          status: string
+          subject: string
+          summary: string | null
+          tags: string[]
+          ticket_id: string | null
+          tool_calls: number
+          trace_number: string
+          transcript_text: string | null
+        }
+        Insert: {
+          agent_name?: string
+          agent_version?: string | null
+          channel?: string
+          created_at?: string
+          customer_email?: string | null
+          customer_id?: string | null
+          duration_ms?: number | null
+          ended_at?: string | null
+          escalated?: boolean
+          id?: string
+          intent?: string | null
+          message_count?: number
+          metadata?: Json
+          model?: string | null
+          order_id?: string | null
+          outcome?: string
+          sentiment?: string | null
+          started_at?: string
+          status?: string
+          subject?: string
+          summary?: string | null
+          tags?: string[]
+          ticket_id?: string | null
+          tool_calls?: number
+          trace_number: string
+          transcript_text?: string | null
+        }
+        Update: {
+          agent_name?: string
+          agent_version?: string | null
+          channel?: string
+          created_at?: string
+          customer_email?: string | null
+          customer_id?: string | null
+          duration_ms?: number | null
+          ended_at?: string | null
+          escalated?: boolean
+          id?: string
+          intent?: string | null
+          message_count?: number
+          metadata?: Json
+          model?: string | null
+          order_id?: string | null
+          outcome?: string
+          sentiment?: string | null
+          started_at?: string
+          status?: string
+          subject?: string
+          summary?: string | null
+          tags?: string[]
+          ticket_id?: string | null
+          tool_calls?: number
+          trace_number?: string
+          transcript_text?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_traces_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_traces_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_traces_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       books: {
         Row: {
           author: string
