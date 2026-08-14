@@ -6,6 +6,9 @@ import { TRACE_OUTCOMES, TRACE_SELECT, TRACE_STATUSES } from "@/lib/bookly/trace
 
 const PatchBody = z.object({
   summary: z.string().max(4000).optional(),
+  intent: z.string().max(120).optional(),
+  intent_confidence: z.number().min(0).max(1).optional(),
+  resolution_confidence: z.number().min(0).max(1).optional(),
   outcome: z.enum(TRACE_OUTCOMES).optional(),
   status: z.enum(TRACE_STATUSES).optional(),
   sentiment: z.enum(["positive", "neutral", "negative"]).optional(),
@@ -45,7 +48,7 @@ export const Route = createFileRoute("/api/public/v1/agent-traces/$id/")({
         const db = booklyDb();
         const id = await resolveTraceId(db, (params as { id: string }).id);
         const patch: Record<string, unknown> = {};
-        for (const k of ["summary", "outcome", "status", "sentiment", "escalated", "tags", "ended_at", "metadata"] as const) {
+        for (const k of ["summary", "intent", "intent_confidence", "resolution_confidence", "outcome", "status", "sentiment", "escalated", "tags", "ended_at", "metadata"] as const) {
           const v = body[k];
           if (v !== undefined) patch[k] = v;
         }

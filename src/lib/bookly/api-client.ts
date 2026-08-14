@@ -227,6 +227,8 @@ export type AgentTrace = {
   model?: string | null;
   channel?: string | null;
   intent?: string | null;
+  intent_confidence?: number | null;
+  resolution_confidence?: number | null;
   outcome?: string | null;
   status: string;
   sentiment?: string | null;
