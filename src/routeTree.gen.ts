@@ -28,6 +28,7 @@ import { Route as ApiPublicToolsDotjsonRouteImport } from './routes/api/public/t
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as ApiPublicV1MetaRouteImport } from './routes/api/public/v1/meta'
 import { Route as ApiPublicV1AdminResetDemoRouteImport } from './routes/api/public/v1/admin/reset-demo'
+import { Route as ApiPublicV1AgentTracesIndexRouteImport } from './routes/api/public/v1/agent-traces/index'
 import { Route as ApiPublicV1BooksIndexRouteImport } from './routes/api/public/v1/books/index'
 import { Route as ApiPublicV1BooksIdRouteImport } from './routes/api/public/v1/books/$id'
 import { Route as ApiPublicV1CustomersIndexRouteImport } from './routes/api/public/v1/customers/index'
@@ -151,6 +152,12 @@ const ApiPublicV1AdminResetDemoRoute =
   ApiPublicV1AdminResetDemoRouteImport.update({
     id: '/api/public/v1/admin/reset-demo',
     path: '/api/public/v1/admin/reset-demo',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicV1AgentTracesIndexRoute =
+  ApiPublicV1AgentTracesIndexRouteImport.update({
+    id: '/api/public/v1/agent-traces/',
+    path: '/api/public/v1/agent-traces/',
     getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicV1BooksIndexRoute = ApiPublicV1BooksIndexRouteImport.update({
@@ -337,6 +344,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
   '/api/public/v1/policies/$slug': typeof ApiPublicV1PoliciesSlugRoute
   '/api/public/v1/refunds/$id': typeof ApiPublicV1RefundsIdRoute
+  '/api/public/v1/agent-traces/': typeof ApiPublicV1AgentTracesIndexRoute
   '/api/public/v1/books/': typeof ApiPublicV1BooksIndexRoute
   '/api/public/v1/customers/': typeof ApiPublicV1CustomersIndexRoute
   '/api/public/v1/faqs/': typeof ApiPublicV1FaqsIndexRoute
@@ -385,6 +393,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
   '/api/public/v1/policies/$slug': typeof ApiPublicV1PoliciesSlugRoute
   '/api/public/v1/refunds/$id': typeof ApiPublicV1RefundsIdRoute
+  '/api/public/v1/agent-traces': typeof ApiPublicV1AgentTracesIndexRoute
   '/api/public/v1/books': typeof ApiPublicV1BooksIndexRoute
   '/api/public/v1/customers': typeof ApiPublicV1CustomersIndexRoute
   '/api/public/v1/faqs': typeof ApiPublicV1FaqsIndexRoute
@@ -435,6 +444,7 @@ export interface FileRoutesById {
   '/api/public/v1/books/$id': typeof ApiPublicV1BooksIdRoute
   '/api/public/v1/policies/$slug': typeof ApiPublicV1PoliciesSlugRoute
   '/api/public/v1/refunds/$id': typeof ApiPublicV1RefundsIdRoute
+  '/api/public/v1/agent-traces/': typeof ApiPublicV1AgentTracesIndexRoute
   '/api/public/v1/books/': typeof ApiPublicV1BooksIndexRoute
   '/api/public/v1/customers/': typeof ApiPublicV1CustomersIndexRoute
   '/api/public/v1/faqs/': typeof ApiPublicV1FaqsIndexRoute
@@ -486,6 +496,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/books/$id'
     | '/api/public/v1/policies/$slug'
     | '/api/public/v1/refunds/$id'
+    | '/api/public/v1/agent-traces/'
     | '/api/public/v1/books/'
     | '/api/public/v1/customers/'
     | '/api/public/v1/faqs/'
@@ -534,6 +545,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/books/$id'
     | '/api/public/v1/policies/$slug'
     | '/api/public/v1/refunds/$id'
+    | '/api/public/v1/agent-traces'
     | '/api/public/v1/books'
     | '/api/public/v1/customers'
     | '/api/public/v1/faqs'
@@ -583,6 +595,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/books/$id'
     | '/api/public/v1/policies/$slug'
     | '/api/public/v1/refunds/$id'
+    | '/api/public/v1/agent-traces/'
     | '/api/public/v1/books/'
     | '/api/public/v1/customers/'
     | '/api/public/v1/faqs/'
@@ -623,6 +636,7 @@ export interface RootRouteChildren {
   ApiPublicV1BooksIdRoute: typeof ApiPublicV1BooksIdRoute
   ApiPublicV1PoliciesSlugRoute: typeof ApiPublicV1PoliciesSlugRoute
   ApiPublicV1RefundsIdRoute: typeof ApiPublicV1RefundsIdRoute
+  ApiPublicV1AgentTracesIndexRoute: typeof ApiPublicV1AgentTracesIndexRoute
   ApiPublicV1BooksIndexRoute: typeof ApiPublicV1BooksIndexRoute
   ApiPublicV1CustomersIndexRoute: typeof ApiPublicV1CustomersIndexRoute
   ApiPublicV1FaqsIndexRoute: typeof ApiPublicV1FaqsIndexRoute
@@ -783,6 +797,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/v1/admin/reset-demo'
       fullPath: '/api/public/v1/admin/reset-demo'
       preLoaderRoute: typeof ApiPublicV1AdminResetDemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/v1/agent-traces/': {
+      id: '/api/public/v1/agent-traces/'
+      path: '/api/public/v1/agent-traces'
+      fullPath: '/api/public/v1/agent-traces/'
+      preLoaderRoute: typeof ApiPublicV1AgentTracesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/v1/books/': {
@@ -1025,6 +1046,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1BooksIdRoute: ApiPublicV1BooksIdRoute,
   ApiPublicV1PoliciesSlugRoute: ApiPublicV1PoliciesSlugRoute,
   ApiPublicV1RefundsIdRoute: ApiPublicV1RefundsIdRoute,
+  ApiPublicV1AgentTracesIndexRoute: ApiPublicV1AgentTracesIndexRoute,
   ApiPublicV1BooksIndexRoute: ApiPublicV1BooksIndexRoute,
   ApiPublicV1CustomersIndexRoute: ApiPublicV1CustomersIndexRoute,
   ApiPublicV1FaqsIndexRoute: ApiPublicV1FaqsIndexRoute,
