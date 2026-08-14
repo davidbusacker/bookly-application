@@ -75,6 +75,21 @@ function Docs() {
           </ul>
         </section>
 
+        <section id="agent-trace-logging" className="mt-6 rounded-lg border border-border bg-card p-6">
+          <h2 className="text-lg font-semibold">Agent trace logging (required)</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            After every conversation the CX agent must POST a trace to{" "}
+            <code>/api/public/v1/agent-traces</code>. Staff read these in the console under{" "}
+            <a href="/admin/traces" className="underline underline-offset-4">Agent traces</a>. The same
+            instructions are served in <code>/api/public/tools.json</code>, <code>/llms.txt</code> and the
+            OpenAPI description.
+          </p>
+          <pre className="mt-4 max-h-96 overflow-auto rounded-md bg-muted p-4 text-xs leading-relaxed whitespace-pre-wrap">
+            {TRACE_LOGGING_GUIDE}
+          </pre>
+        </section>
+
+
         {endpointsByTag().map((group) => (
           <section key={group.name} className="mt-10">
             <h2 className="text-xl font-semibold">{group.name}</h2>
