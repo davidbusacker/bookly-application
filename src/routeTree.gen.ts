@@ -40,6 +40,7 @@ import { Route as ApiPublicV1RefundsIndexRouteImport } from './routes/api/public
 import { Route as ApiPublicV1RefundsIdRouteImport } from './routes/api/public/v1/refunds/$id'
 import { Route as ApiPublicV1ReturnsIndexRouteImport } from './routes/api/public/v1/returns/index'
 import { Route as ApiPublicV1TransactionsIndexRouteImport } from './routes/api/public/v1/transactions/index'
+import { Route as ApiPublicV1AgentTracesIdIndexRouteImport } from './routes/api/public/v1/agent-traces/$id/index'
 import { Route as ApiPublicV1CustomersIdIndexRouteImport } from './routes/api/public/v1/customers/$id/index'
 import { Route as ApiPublicV1CustomersIdOrdersRouteImport } from './routes/api/public/v1/customers/$id/orders'
 import { Route as ApiPublicV1OrdersIdIndexRouteImport } from './routes/api/public/v1/orders/$id/index'
@@ -218,6 +219,12 @@ const ApiPublicV1TransactionsIndexRoute =
     path: '/api/public/v1/transactions/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicV1AgentTracesIdIndexRoute =
+  ApiPublicV1AgentTracesIdIndexRouteImport.update({
+    id: '/api/public/v1/agent-traces/$id/',
+    path: '/api/public/v1/agent-traces/$id/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicV1CustomersIdIndexRoute =
   ApiPublicV1CustomersIdIndexRouteImport.update({
     id: '/api/public/v1/customers/$id/',
@@ -364,6 +371,7 @@ export interface FileRoutesByFullPath {
   '/api/public/v1/support/actions/address-change': typeof ApiPublicV1SupportActionsAddressChangeRoute
   '/api/public/v1/support/actions/password-reset': typeof ApiPublicV1SupportActionsPasswordResetRoute
   '/api/public/v1/support/tickets/$id': typeof ApiPublicV1SupportTicketsIdRoute
+  '/api/public/v1/agent-traces/$id/': typeof ApiPublicV1AgentTracesIdIndexRoute
   '/api/public/v1/customers/$id/': typeof ApiPublicV1CustomersIdIndexRoute
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/returns/$rma/': typeof ApiPublicV1ReturnsRmaIndexRoute
@@ -413,6 +421,7 @@ export interface FileRoutesByTo {
   '/api/public/v1/support/actions/address-change': typeof ApiPublicV1SupportActionsAddressChangeRoute
   '/api/public/v1/support/actions/password-reset': typeof ApiPublicV1SupportActionsPasswordResetRoute
   '/api/public/v1/support/tickets/$id': typeof ApiPublicV1SupportTicketsIdRoute
+  '/api/public/v1/agent-traces/$id': typeof ApiPublicV1AgentTracesIdIndexRoute
   '/api/public/v1/customers/$id': typeof ApiPublicV1CustomersIdIndexRoute
   '/api/public/v1/orders/$id': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/returns/$rma': typeof ApiPublicV1ReturnsRmaIndexRoute
@@ -464,6 +473,7 @@ export interface FileRoutesById {
   '/api/public/v1/support/actions/address-change': typeof ApiPublicV1SupportActionsAddressChangeRoute
   '/api/public/v1/support/actions/password-reset': typeof ApiPublicV1SupportActionsPasswordResetRoute
   '/api/public/v1/support/tickets/$id': typeof ApiPublicV1SupportTicketsIdRoute
+  '/api/public/v1/agent-traces/$id/': typeof ApiPublicV1AgentTracesIdIndexRoute
   '/api/public/v1/customers/$id/': typeof ApiPublicV1CustomersIdIndexRoute
   '/api/public/v1/orders/$id/': typeof ApiPublicV1OrdersIdIndexRoute
   '/api/public/v1/returns/$rma/': typeof ApiPublicV1ReturnsRmaIndexRoute
@@ -516,6 +526,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/support/actions/address-change'
     | '/api/public/v1/support/actions/password-reset'
     | '/api/public/v1/support/tickets/$id'
+    | '/api/public/v1/agent-traces/$id/'
     | '/api/public/v1/customers/$id/'
     | '/api/public/v1/orders/$id/'
     | '/api/public/v1/returns/$rma/'
@@ -565,6 +576,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/support/actions/address-change'
     | '/api/public/v1/support/actions/password-reset'
     | '/api/public/v1/support/tickets/$id'
+    | '/api/public/v1/agent-traces/$id'
     | '/api/public/v1/customers/$id'
     | '/api/public/v1/orders/$id'
     | '/api/public/v1/returns/$rma'
@@ -615,6 +627,7 @@ export interface FileRouteTypes {
     | '/api/public/v1/support/actions/address-change'
     | '/api/public/v1/support/actions/password-reset'
     | '/api/public/v1/support/tickets/$id'
+    | '/api/public/v1/agent-traces/$id/'
     | '/api/public/v1/customers/$id/'
     | '/api/public/v1/orders/$id/'
     | '/api/public/v1/returns/$rma/'
@@ -656,6 +669,7 @@ export interface RootRouteChildren {
   ApiPublicV1SupportActionsAddressChangeRoute: typeof ApiPublicV1SupportActionsAddressChangeRoute
   ApiPublicV1SupportActionsPasswordResetRoute: typeof ApiPublicV1SupportActionsPasswordResetRoute
   ApiPublicV1SupportTicketsIdRoute: typeof ApiPublicV1SupportTicketsIdRoute
+  ApiPublicV1AgentTracesIdIndexRoute: typeof ApiPublicV1AgentTracesIdIndexRoute
   ApiPublicV1CustomersIdIndexRoute: typeof ApiPublicV1CustomersIdIndexRoute
   ApiPublicV1OrdersIdIndexRoute: typeof ApiPublicV1OrdersIdIndexRoute
   ApiPublicV1ReturnsRmaIndexRoute: typeof ApiPublicV1ReturnsRmaIndexRoute
@@ -883,6 +897,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicV1TransactionsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/v1/agent-traces/$id/': {
+      id: '/api/public/v1/agent-traces/$id/'
+      path: '/api/public/v1/agent-traces/$id'
+      fullPath: '/api/public/v1/agent-traces/$id/'
+      preLoaderRoute: typeof ApiPublicV1AgentTracesIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/v1/customers/$id/': {
       id: '/api/public/v1/customers/$id/'
       path: '/api/public/v1/customers/$id'
@@ -1069,6 +1090,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicV1SupportActionsPasswordResetRoute:
     ApiPublicV1SupportActionsPasswordResetRoute,
   ApiPublicV1SupportTicketsIdRoute: ApiPublicV1SupportTicketsIdRoute,
+  ApiPublicV1AgentTracesIdIndexRoute: ApiPublicV1AgentTracesIdIndexRoute,
   ApiPublicV1CustomersIdIndexRoute: ApiPublicV1CustomersIdIndexRoute,
   ApiPublicV1OrdersIdIndexRoute: ApiPublicV1OrdersIdIndexRoute,
   ApiPublicV1ReturnsRmaIndexRoute: ApiPublicV1ReturnsRmaIndexRoute,
