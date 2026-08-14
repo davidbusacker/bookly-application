@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 import type { TraceMessage } from "@/lib/bookly/api-client";
 
 const ROLE_STYLE: Record<string, string> = {
