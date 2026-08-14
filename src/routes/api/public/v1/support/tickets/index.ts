@@ -45,6 +45,14 @@ export const Route = createFileRoute("/api/public/v1/support/tickets/")({
         if (customerId) query = query.eq("customer_id", customerId);
         const orderId = sp.get("order_id");
         if (orderId) query = query.eq("order_id", orderId);
+        const category = sp.get("category");
+        if (category) query = query.in("category", category.split(","));
+        const q = sp.get("q");
+        if (q) {
+          const term = q.replace(/[%,()]/g, " ");
+          query = query.or(`subject.ilike.%${term}%,ticket_number.ilike.%${term}%`);
+        }
+
 
         const { data, error, count } = await query
           .order("created_at", { ascending: false })
