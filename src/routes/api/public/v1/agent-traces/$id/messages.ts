@@ -11,8 +11,11 @@ const MessageBody = z.object({
   occurred_at: z.string().optional(),
   duration_ms: z.number().int().nonnegative().optional(),
   tool_name: z.string().max(120).optional(),
+  tool_name: z.string().max(120).optional(),
   tool_input: z.unknown().optional(),
   tool_output: z.unknown().optional(),
+  intent_confidence: z.number().min(0).max(1).optional(),
+  resolution_confidence: z.number().min(0).max(1).optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
@@ -58,6 +61,8 @@ export const Route = createFileRoute("/api/public/v1/agent-traces/$id/messages")
           tool_name: m.tool_name ?? null,
           tool_input: m.tool_input ?? null,
           tool_output: m.tool_output ?? null,
+          intent_confidence: m.intent_confidence ?? null,
+          resolution_confidence: m.resolution_confidence ?? null,
           metadata: m.metadata ?? {},
         }));
         const { error } = await db.from("agent_trace_messages").insert(rows);

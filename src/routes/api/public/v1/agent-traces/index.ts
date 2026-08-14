@@ -30,6 +30,8 @@ const MessageBody = z.object({
   tool_name: z.string().max(120).optional(),
   tool_input: z.unknown().optional(),
   tool_output: z.unknown().optional(),
+  intent_confidence: z.number().min(0).max(1).optional(),
+  resolution_confidence: z.number().min(0).max(1).optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
 });
 
