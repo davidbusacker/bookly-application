@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, User, Bot, Wrench, Shield, StickyNote } from "lucide-react";
 import type { TraceMessage } from "@/lib/bookly/api-client";
 
 const ROLE_STYLE: Record<string, string> = {
@@ -10,12 +10,36 @@ const ROLE_STYLE: Record<string, string> = {
   note: "border-l-emerald-500/60",
 };
 
+const ROLE_ICON_COLOR: Record<string, string> = {
+  customer: "text-sky-500",
+  agent: "text-primary",
+  tool: "text-amber-500",
+  system: "text-muted-foreground",
+  note: "text-emerald-500",
+};
+
+const ROLE_ICON_BG: Record<string, string> = {
+  customer: "bg-sky-500/10",
+  agent: "bg-primary/10",
+  tool: "bg-amber-500/10",
+  system: "bg-muted",
+  note: "bg-emerald-500/10",
+};
+
 const DEFAULT_SPEAKER: Record<string, string> = {
   customer: "Customer",
   agent: "Agent",
   tool: "Agent",
   system: "System",
   note: "Internal note",
+};
+
+const ROLE_ICON: Record<string, React.ComponentType<{ className?: string; size?: number }>> = {
+  customer: User,
+  agent: Bot,
+  tool: Wrench,
+  system: Shield,
+  note: StickyNote,
 };
 
 const stamp = (iso?: string | null) =>
