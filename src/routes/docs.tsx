@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { endpointsByTag, ENDPOINTS } from "@/lib/bookly/catalog";
 import { RULES } from "@/lib/bookly/rules";
+import { TRACE_LOGGING_GUIDE } from "@/lib/bookly/traces";
 
 export const Route = createFileRoute("/docs")({
   head: () => ({
