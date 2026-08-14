@@ -220,6 +220,8 @@ export const Route = createFileRoute("/api/public/v1/agent-traces/")({
             tool_name: m.tool_name ?? null,
             tool_input: m.tool_input ?? null,
             tool_output: m.tool_output ?? null,
+            intent_confidence: m.intent_confidence ?? body.intent_confidence ?? null,
+            resolution_confidence: m.resolution_confidence ?? body.resolution_confidence ?? null,
             metadata: m.metadata ?? {},
           }));
           const { error: msgErr } = await db.from("agent_trace_messages").insert(rows);
