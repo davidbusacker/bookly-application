@@ -1,4 +1,4 @@
-import { defineTool, ToolError } from "@lovable.dev/mcp-js";
+import { defineMcp, defineTool, ToolError } from "@lovable.dev/mcp-js";
 import { z } from "zod";
 import { ENDPOINTS, type EndpointDef, type FieldDef, type ParamDef } from "@/lib/bookly/catalog";
 import { apiBaseUrl } from "./base-url";
@@ -120,4 +120,6 @@ function buildTool(e: EndpointDef) {
   });
 }
 
-export const booklyTools = ENDPOINTS.map(buildTool);
+type McpTools = NonNullable<Parameters<typeof defineMcp>[0]["tools"]>;
+
+export const booklyTools = ENDPOINTS.map(buildTool) as unknown as McpTools;
