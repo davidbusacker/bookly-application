@@ -1,0 +1,1858 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.2",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "bookly-order-bot",
+      "version": "1.0.0",
+      "title": "Bookly Order Bot"
+    },
+    "tools": [
+      {
+        "name": "health",
+        "title": "Service health",
+        "description": "Liveness probe plus database connectivity check and API version. Call once at startup to confirm the API and dataset are reachable.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "meta",
+        "title": "Discovery metadata",
+        "description": "Row counts, live sample identifiers (order numbers, emails, RMAs, tracking numbers), every enum value and the business-rule constants. This is the recommended bootstrap call for an agent. Fetch first so you can use real identifiers in later calls instead of guessing.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_orders",
+        "title": "List / search orders",
+        "description": "Paginated order list with filters. Use `email` when a customer contacts support without an order number. Primary lookup when the customer gives an email address rather than an order number.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Query parameter. Exact customer email."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "processing",
+                "shipped",
+                "delivered",
+                "cancelled",
+                "returned",
+                "refunded",
+                "backordered",
+                "lost_in_transit"
+              ],
+              "description": "Query parameter. Comma-separated list of order statuses."
+            },
+            "order_number": {
+              "type": "string",
+              "description": "Query parameter. Exact order number, e.g. BK-10042."
+            },
+            "q": {
+              "type": "string",
+              "description": "Query parameter. Fuzzy search across order number and customer email."
+            },
+            "placed_after": {
+              "type": "string",
+              "description": "Query parameter. ISO date lower bound on placed_at."
+            },
+            "placed_before": {
+              "type": "string",
+              "description": "Query parameter. ISO date upper bound on placed_at."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Query parameter. Page size (1-100, default 25)."
+            },
+            "offset": {
+              "type": "number",
+              "description": "Query parameter. Rows to skip (default 0)."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "place_order",
+        "title": "Place a new order",
+        "description": "Creates an order for an existing customer (or a brand-new one) and charges it. Books are matched by book_id, isbn or partial title; prices come from the catalog, so never send prices. Shipping: ground is free over $35.00 otherwise $4.99, expedited $12.99, overnight $24.99. Tax is 8.25% of the discounted subtotal. Stock is decremented, a charge transaction is written, and the response includes the full order plus a pricing breakdown. Use when a caller wants to buy or re-order a title. Load GET /api/public/v1/inventory first to confirm the exact ISBN and stock, then place the order. If a title is short on stock you get 409 conflict — read back the shortfall and retry with allow_backorder: true only after the customer agrees.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "customer": {
+              "type": "string",
+              "description": "Customer UUID or email address."
+            },
+            "customer_name": {
+              "type": "string",
+              "description": "Full name, only used when creating a new customer."
+            },
+            "create_customer_if_missing": {
+              "type": "boolean",
+              "description": "Create the customer when the email is unknown. Requires an email in `customer`."
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "isbn": {
+                    "type": "string",
+                    "description": "Preferred way to identify the book."
+                  },
+                  "book_id": {
+                    "type": "string",
+                    "description": "Book UUID."
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Partial title match, used when no ISBN is known."
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "description": "Units to buy (default 1, max 20)."
+                  }
+                }
+              },
+              "description": "1-20 lines to purchase."
+            },
+            "shipping_speed": {
+              "type": "string",
+              "enum": [
+                "ground",
+                "expedited",
+                "overnight"
+              ],
+              "description": "Shipping service level, default ground."
+            },
+            "shipping_address": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {},
+              "description": "Optional override: line1, line2, city, state, postal_code, country. Defaults to the customer's address on file."
+            },
+            "payment_method": {
+              "type": "string",
+              "description": "Payment descriptor, default visa_4242."
+            },
+            "discount_cents": {
+              "type": "number",
+              "description": "Goodwill discount in cents."
+            },
+            "use_store_credit": {
+              "type": "boolean",
+              "description": "Apply the customer's available store credit to this order."
+            },
+            "allow_backorder": {
+              "type": "boolean",
+              "description": "Place the order as `backordered` instead of failing when stock is short."
+            },
+            "notes": {
+              "type": "string",
+              "description": "Internal note recorded on the order."
+            }
+          },
+          "required": [
+            "customer",
+            "items"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_order",
+        "title": "Get one order",
+        "description": "Full order with customer, line items, shipments, returns, refunds and transactions embedded. The single richest call for answering 'where is my order?'.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Order UUID or human order number (e.g. BK-10042). Both are accepted everywhere."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_order_items",
+        "title": "List order line items",
+        "description": "Line items with the joined book record (format matters for return eligibility). Use the returned order_item_id values when creating a partial return.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Order UUID or human order number (e.g. BK-10042). Both are accepted everywhere."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_order_shipments",
+        "title": "List shipments for an order",
+        "description": "All shipments for the order, each with its full tracking event history. Answer delivery-timing questions and detect stalled tracking.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Order UUID or human order number (e.g. BK-10042). Both are accepted everywhere."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "cancel_order",
+        "title": "Cancel an order",
+        "description": "Cancels an order and voids the authorization. Only allowed while the status is processing or backordered. Use for 'cancel my order'. If it returns 409, offer a return instead.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Order UUID or human order number (e.g. BK-10042). Both are accepted everywhere."
+            },
+            "reason": {
+              "type": "string",
+              "description": "Free-text cancellation reason."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "reship_order",
+        "title": "Create a replacement shipment",
+        "description": "Generates a new shipment and tracking number. Allowed when the order is lost_in_transit or shipped. Use for lost-in-transit packages after confirming tracking is stalled.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Order UUID or human order number (e.g. BK-10042). Both are accepted everywhere."
+            },
+            "carrier": {
+              "type": "string",
+              "enum": [
+                "UPS",
+                "FedEx",
+                "USPS",
+                "DHL"
+              ],
+              "description": "Carrier, default UPS."
+            },
+            "service_level": {
+              "type": "string",
+              "enum": [
+                "ground",
+                "two_day",
+                "overnight"
+              ],
+              "description": "Service level, default two_day."
+            },
+            "reason": {
+              "type": "string",
+              "description": "Why the reshipment was issued."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "return_eligibility",
+        "title": "Check return eligibility",
+        "description": "Deterministic eligibility check. Standard window is 30 days from delivery; damaged or wrong-item claims get 90 days and waive the $4.99 label fee. Ebooks are non-returnable. Always call this before creating a return so you can explain the outcome to the customer.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Order UUID or human order number (e.g. BK-10042). Both are accepted everywhere."
+            },
+            "reason": {
+              "type": "string",
+              "enum": [
+                "damaged",
+                "wrong_item",
+                "not_as_described",
+                "no_longer_needed",
+                "arrived_late",
+                "other"
+              ],
+              "description": "Intended return reason."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_returns",
+        "title": "List returns",
+        "description": "Paginated returns with their items and parent order. Check whether a return already exists before creating a duplicate.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "requested",
+                "label_sent",
+                "in_transit",
+                "received",
+                "refunded",
+                "rejected",
+                "cancelled"
+              ],
+              "description": "Query parameter. Comma-separated return statuses."
+            },
+            "order_id": {
+              "type": "string",
+              "description": "Query parameter. Filter by order UUID."
+            },
+            "customer_id": {
+              "type": "string",
+              "description": "Query parameter. Filter by customer UUID."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Query parameter. Page size (1-100, default 25)."
+            },
+            "offset": {
+              "type": "number",
+              "description": "Query parameter. Rows to skip (default 0)."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_return",
+        "title": "Create a return (RMA)",
+        "description": "Creates an RMA with a prepaid label and computes the expected refund. Rejects with 409 when the order is not eligible unless `override_eligibility` is true. Call after eligibility passes. `items` is optional — omit it to return every line on the order, or match lines by order_item_id, isbn or title. Set initiate_refund to open the refund in the same call.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "string",
+              "description": "Order UUID or order number."
+            },
+            "reason": {
+              "type": "string",
+              "enum": [
+                "damaged",
+                "wrong_item",
+                "not_as_described",
+                "no_longer_needed",
+                "arrived_late",
+                "other"
+              ],
+              "description": "Return reason."
+            },
+            "comment": {
+              "type": "string",
+              "description": "Customer's description of the problem."
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "order_item_id": {
+                    "type": "string",
+                    "description": "Order item UUID."
+                  },
+                  "isbn": {
+                    "type": "string",
+                    "description": "Match the line by ISBN instead of UUID."
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Match the line by (partial) book title."
+                  },
+                  "quantity": {
+                    "type": "number",
+                    "description": "Units returned; defaults to the full line quantity."
+                  }
+                }
+              },
+              "description": "Line items to return. Omit to return every item on the order."
+            },
+            "initiate_refund": {
+              "type": "string",
+              "enum": [
+                "none",
+                "pending_return",
+                "immediate"
+              ],
+              "description": "Open a refund with the RMA: `pending_return` parks the money until the book is received, `immediate` settles it now (loyalty / goodwill)."
+            },
+            "actor": {
+              "type": "string",
+              "description": "Who is acting, recorded on the refund timeline."
+            },
+            "override_eligibility": {
+              "type": "boolean",
+              "description": "Supervisor override that bypasses the eligibility gate."
+            }
+          },
+          "required": [
+            "order_id",
+            "reason"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_return",
+        "title": "Get a return",
+        "description": "Fetch a return by RMA number (RMA-12345) or UUID. Answer 'what is the status of my return?'.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "rma": {
+              "type": "string",
+              "description": "Path segment. RMA number or UUID."
+            }
+          },
+          "required": [
+            "rma"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "receive_return",
+        "title": "Mark a return received",
+        "description": "Moves the return to `received`, optionally issuing the refund immediately. Warehouse-side action; set auto_refund to close the loop in one call.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "rma": {
+              "type": "string",
+              "description": "Path segment. RMA number or UUID."
+            },
+            "condition": {
+              "type": "string",
+              "enum": [
+                "unopened",
+                "opened",
+                "damaged"
+              ],
+              "description": "Received condition."
+            },
+            "note": {
+              "type": "string",
+              "description": "Inspection note."
+            },
+            "auto_refund": {
+              "type": "boolean",
+              "description": "Issue the refund immediately."
+            }
+          },
+          "required": [
+            "rma"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "cancel_return",
+        "title": "Cancel a return",
+        "description": "Cancels an open RMA. Fails with 409 once the return is refunded. Use when the customer decides to keep the item.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "rma": {
+              "type": "string",
+              "description": "Path segment. RMA number or UUID."
+            }
+          },
+          "required": [
+            "rma"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_refunds",
+        "title": "List refunds",
+        "description": "Paginated refunds with their parent order. Confirm whether money already went back before promising a new refund.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "pending_return",
+                "processing",
+                "succeeded",
+                "failed",
+                "cancelled"
+              ],
+              "description": "Query parameter. Comma-separated refund statuses."
+            },
+            "order_id": {
+              "type": "string",
+              "description": "Query parameter. Filter by order UUID or order number."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Query parameter. Page size (1-100, default 25)."
+            },
+            "offset": {
+              "type": "number",
+              "description": "Query parameter. Rows to skip (default 0)."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_refund",
+        "title": "Issue a refund",
+        "description": "Issues a full or partial refund, records the matching ledger transaction, credits store credit when requested and flips the order to `refunded` once fully covered. Over-refunding is rejected. Use for goodwill refunds and post-return settlements.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "string",
+              "description": "Order UUID or order number."
+            },
+            "amount_cents": {
+              "type": "number",
+              "description": "Defaults to the full remaining refundable amount."
+            },
+            "method": {
+              "type": "string",
+              "enum": [
+                "original_payment",
+                "store_credit"
+              ],
+              "description": "Default original_payment."
+            },
+            "return_id": {
+              "type": "string",
+              "description": "Link the refund to an existing return."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "pending_return",
+                "processing",
+                "succeeded",
+                "failed",
+                "cancelled"
+              ],
+              "description": "Initial status. Default `succeeded` (money moves now). Use `pending_return` to promise a refund once the book is received."
+            },
+            "reason": {
+              "type": "string",
+              "description": "Reason recorded on the ledger."
+            },
+            "note": {
+              "type": "string",
+              "description": "Free-text note stored on the refund timeline."
+            },
+            "actor": {
+              "type": "string",
+              "description": "Who is acting (e.g. support_agent, ai_agent)."
+            }
+          },
+          "required": [
+            "order_id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_refund",
+        "title": "Get a refund",
+        "description": "Fetch a refund by refund number (RF-12345) or UUID. Give the customer the exact refund amount and timing.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Refund number or UUID."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "update_refund",
+        "title": "Update a refund status",
+        "description": "Moves a refund to any status. Settling (`succeeded`) writes the ledger transaction, applies store credit and flips the order to refunded once fully covered; cancelling or failing a settled refund writes a reversal. Every change appends to the refund timeline (`events`). Use to release a `pending_return` refund early for a loyal customer, or to cancel a refund the customer no longer wants.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Refund number or UUID."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "pending_return",
+                "processing",
+                "succeeded",
+                "failed",
+                "cancelled"
+              ],
+              "description": "Target status."
+            },
+            "amount_cents": {
+              "type": "number",
+              "description": "Adjust the amount (only before it settles)."
+            },
+            "method": {
+              "type": "string",
+              "enum": [
+                "original_payment",
+                "store_credit"
+              ],
+              "description": "Switch payout method."
+            },
+            "reason": {
+              "type": "string",
+              "description": "Updated reason."
+            },
+            "note": {
+              "type": "string",
+              "description": "Why the decision was made — shown on the timeline."
+            },
+            "actor": {
+              "type": "string",
+              "description": "Who is acting."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_transactions",
+        "title": "List ledger transactions",
+        "description": "Immutable money ledger: charges, refunds and voids. Reconcile what the customer was actually charged.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "string",
+              "description": "Query parameter. Filter by order UUID."
+            },
+            "customer_id": {
+              "type": "string",
+              "description": "Query parameter. Filter by customer UUID."
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "charge",
+                "refund",
+                "void"
+              ],
+              "description": "Query parameter. Comma-separated types."
+            },
+            "status": {
+              "type": "string",
+              "description": "Query parameter. Comma-separated statuses."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Query parameter. Page size (1-100, default 25)."
+            },
+            "offset": {
+              "type": "number",
+              "description": "Query parameter. Rows to skip (default 0)."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_customers",
+        "title": "List / search customers",
+        "description": "Search customers by email, fuzzy name/email query or loyalty tier. Identity resolution before touching order data.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Query parameter. Case-insensitive exact email."
+            },
+            "q": {
+              "type": "string",
+              "description": "Query parameter. Fuzzy name or email search."
+            },
+            "tier": {
+              "type": "string",
+              "description": "Query parameter. Loyalty tier."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Query parameter. Page size (1-100, default 25)."
+            },
+            "offset": {
+              "type": "number",
+              "description": "Query parameter. Rows to skip (default 0)."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_customer",
+        "title": "Get a customer",
+        "description": "Fetch by UUID or email (URL-encoded), including saved addresses and store credit. Check store credit balance before offering it as a refund method.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Customer UUID or email address."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_customer_orders",
+        "title": "List a customer's orders",
+        "description": "Order history for a customer, newest first. Accepts UUID or email. Use when the customer says 'my last order' without a number.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Customer UUID or email."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Query parameter. Page size (1-100, default 25)."
+            },
+            "offset": {
+              "type": "number",
+              "description": "Query parameter. Rows to skip (default 0)."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_shipment",
+        "title": "Track a shipment",
+        "description": "Fetch a shipment by tracking number or UUID, with its events and parent order. Direct tracking lookup when the customer pastes a tracking number.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "tracking": {
+              "type": "string",
+              "description": "Path segment. Tracking number or shipment UUID."
+            }
+          },
+          "required": [
+            "tracking"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_shipment_events",
+        "title": "Tracking event history",
+        "description": "Chronological scan events for a shipment. Detect a stalled package: no new scan for 7+ days means offer a reship.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "tracking": {
+              "type": "string",
+              "description": "Path segment. Tracking number."
+            }
+          },
+          "required": [
+            "tracking"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_inventory",
+        "title": "Full inventory snapshot",
+        "description": "Returns the entire book catalog in one call — every title with author, format, category, price and current stock — plus per-author rollups and totals in `meta`. No search or pagination. Call this once at the start of a conversation to load the whole catalog into context; then answer stock, author and price questions without further lookups.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_books",
+        "title": "Search the catalog",
+        "description": "Search books by title, author or ISBN with category, format and stock filters. Recommend replacements or confirm stock before promising a reship.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "q": {
+              "type": "string",
+              "description": "Query parameter. Search title, author or ISBN."
+            },
+            "category": {
+              "type": "string",
+              "description": "Query parameter. Exact category."
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "hardcover",
+                "paperback",
+                "ebook",
+                "audiobook"
+              ],
+              "description": "Query parameter. Format."
+            },
+            "in_stock": {
+              "type": "boolean",
+              "description": "Query parameter. Only items with stock > 0."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Query parameter. Page size (1-100, default 25)."
+            },
+            "offset": {
+              "type": "number",
+              "description": "Query parameter. Rows to skip (default 0)."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_book",
+        "title": "Get a book",
+        "description": "Fetch a book by UUID or ISBN-13. Confirm format — ebooks cannot be returned.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Book UUID or ISBN."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_policies",
+        "title": "List policies",
+        "description": "Shipping, returns, refunds, privacy and account policies in full text. Ground policy answers in this text instead of improvising.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string",
+              "description": "Query parameter. Policy category."
+            },
+            "q": {
+              "type": "string",
+              "description": "Query parameter. Full-text-ish search across title and body."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_policy",
+        "title": "Get one policy",
+        "description": "Fetch a single policy document by slug, e.g. `returns`. Quote the exact clause back to the customer.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "description": "Path segment. Policy slug."
+            }
+          },
+          "required": [
+            "slug"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_faqs",
+        "title": "Search FAQs",
+        "description": "Curated question/answer pairs for common support topics. First stop for general questions that need no account data.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "topic": {
+              "type": "string",
+              "description": "Query parameter. FAQ topic."
+            },
+            "q": {
+              "type": "string",
+              "description": "Query parameter. Search question and answer text."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_tickets",
+        "title": "Search past support tickets",
+        "description": "Paginated, filterable ticket history with customer, order and full event history embedded — the record of every previous support interaction. Search this before acting: check for an existing open ticket and read what was already promised to the customer.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "open",
+                "pending",
+                "resolved",
+                "escalated",
+                "closed"
+              ],
+              "description": "Query parameter. Comma-separated statuses."
+            },
+            "email": {
+              "type": "string",
+              "description": "Query parameter. Filter by customer email."
+            },
+            "customer_id": {
+              "type": "string",
+              "description": "Query parameter. Filter by customer UUID."
+            },
+            "order_id": {
+              "type": "string",
+              "description": "Query parameter. Filter by order UUID."
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "order_status",
+                "return",
+                "refund",
+                "shipping",
+                "account",
+                "other"
+              ],
+              "description": "Query parameter. Comma-separated categories."
+            },
+            "q": {
+              "type": "string",
+              "description": "Query parameter. Free-text search over subject and ticket number."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Query parameter. Page size (1-100, default 25)."
+            },
+            "offset": {
+              "type": "number",
+              "description": "Query parameter. Rows to skip (default 0)."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_ticket",
+        "title": "Create a support ticket",
+        "description": "Opens a ticket, linking the customer by email and optionally an order. Escalation path when you cannot resolve the request with the other endpoints.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "customer_email": {
+              "type": "string",
+              "description": "Customer email."
+            },
+            "subject": {
+              "type": "string",
+              "description": "Short summary."
+            },
+            "body": {
+              "type": "string",
+              "description": "Full description / conversation transcript."
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "order_status",
+                "return",
+                "refund",
+                "shipping",
+                "account",
+                "other"
+              ],
+              "description": "Ticket category."
+            },
+            "priority": {
+              "type": "string",
+              "enum": [
+                "low",
+                "normal",
+                "high",
+                "urgent"
+              ],
+              "description": "Priority, default normal."
+            },
+            "order_id": {
+              "type": "string",
+              "description": "Related order UUID."
+            }
+          },
+          "required": [
+            "customer_email",
+            "subject"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "update_ticket",
+        "title": "Update a ticket",
+        "description": "Change status, priority or record a resolution. Accepts TCK number or UUID. Close the ticket once the customer confirms the issue is resolved.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Ticket number or UUID."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "open",
+                "pending",
+                "resolved",
+                "closed"
+              ],
+              "description": "New status."
+            },
+            "priority": {
+              "type": "string",
+              "enum": [
+                "low",
+                "normal",
+                "high",
+                "urgent"
+              ],
+              "description": "New priority."
+            },
+            "resolution": {
+              "type": "string",
+              "description": "Resolution summary."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "password_reset",
+        "title": "Send a password reset link",
+        "description": "Simulates sending a reset email. Always returns success so account existence is never leaked. Standard answer for 'I can't log in'.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Account email."
+            }
+          },
+          "required": [
+            "email"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "address_change",
+        "title": "Change a shipping address",
+        "description": "Updates the shipping address while the order is still pending or processing. Use before the order ships; afterwards offer a return or intercept instead.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "order_id": {
+              "type": "string",
+              "description": "Order UUID or number."
+            },
+            "line1": {
+              "type": "string",
+              "description": "Street address."
+            },
+            "line2": {
+              "type": "string",
+              "description": "Apt / suite."
+            },
+            "city": {
+              "type": "string",
+              "description": "City."
+            },
+            "region": {
+              "type": "string",
+              "description": "State or region."
+            },
+            "postal_code": {
+              "type": "string",
+              "description": "Postal code."
+            },
+            "country": {
+              "type": "string",
+              "description": "ISO-2 country code, default US."
+            }
+          },
+          "required": [
+            "order_id",
+            "line1",
+            "city",
+            "region",
+            "postal_code"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_ticket",
+        "title": "Get one support ticket",
+        "description": "Full ticket with customer, order and the complete event history (messages, notes, resolutions). Read the ticket history before replying so you do not repeat or contradict a previous agent.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Ticket number (TCK-#####) or UUID."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "log_agent_trace",
+        "title": "Log a completed agent conversation",
+        "description": "Records one CX-agent conversation (every turn plus every tool call) so Bookly staff can audit what the agent did. Call this at the end of every conversation. Formatting contract: each message carries `role`, an optional bold `speaker`, an ISO-8601 `occurred_at` timestamp, markdown `content`, and — for tool turns — `tool_name`, `tool_input` and `tool_output`. Anything structured goes in `metadata`. Mandatory after every customer interaction. Include a plain-language `summary` explaining the reasoning behind any refund, return or escalation.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "subject": {
+              "type": "string",
+              "description": "One-line description of the request."
+            },
+            "summary": {
+              "type": "string",
+              "description": "1-3 sentences on what you did and why."
+            },
+            "customer_email": {
+              "type": "string",
+              "description": "Customer email — makes the trace queryable by customer."
+            },
+            "order_id": {
+              "type": "string",
+              "description": "Related order UUID or BK-##### number."
+            },
+            "ticket_id": {
+              "type": "string",
+              "description": "Related ticket UUID or TCK-##### number."
+            },
+            "agent_name": {
+              "type": "string",
+              "description": "Display name of the agent, default 'Bookly CX Agent'."
+            },
+            "agent_version": {
+              "type": "string",
+              "description": "Your build/version string."
+            },
+            "model": {
+              "type": "string",
+              "description": "Model that ran the conversation."
+            },
+            "channel": {
+              "type": "string",
+              "enum": [
+                "chat",
+                "email",
+                "voice",
+                "sms",
+                "api"
+              ],
+              "description": "Contact channel."
+            },
+            "intent": {
+              "type": "string",
+              "description": "Detected intent, e.g. order_status, refund_request."
+            },
+            "intent_confidence": {
+              "type": "number",
+              "description": "0-1 confidence in the detected intent. Required on every trace."
+            },
+            "resolution_confidence": {
+              "type": "number",
+              "description": "0-1 confidence that the outcome actually resolved the request. Required on every trace."
+            },
+            "outcome": {
+              "type": "string",
+              "enum": [
+                "resolved",
+                "refund_issued",
+                "return_created",
+                "escalated",
+                "deflected",
+                "unresolved"
+              ],
+              "description": "How the conversation ended."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "in_progress",
+                "completed",
+                "failed"
+              ],
+              "description": "Use in_progress if you will append more turns later."
+            },
+            "sentiment": {
+              "type": "string",
+              "enum": [
+                "positive",
+                "neutral",
+                "negative"
+              ],
+              "description": "Customer sentiment."
+            },
+            "escalated": {
+              "type": "boolean",
+              "description": "True when handed to a human."
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Free-form labels, e.g. loyalty, damaged."
+            },
+            "started_at": {
+              "type": "string",
+              "description": "ISO-8601 start time."
+            },
+            "ended_at": {
+              "type": "string",
+              "description": "ISO-8601 end time."
+            },
+            "metadata": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {},
+              "description": "Any extra structured context for staff."
+            },
+            "messages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "role": {
+                    "type": "string",
+                    "enum": [
+                      "customer",
+                      "agent",
+                      "tool",
+                      "system",
+                      "note"
+                    ],
+                    "description": "Turn type. Use `tool` for API calls and `note` for internal reasoning never shown to the customer."
+                  },
+                  "speaker": {
+                    "type": "string",
+                    "description": "Display name rendered in bold, e.g. 'Customer' or 'Ada (CX Agent)'."
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "Markdown message text, verbatim for customer turns."
+                  },
+                  "occurred_at": {
+                    "type": "string",
+                    "description": "ISO-8601 UTC timestamp of the turn."
+                  },
+                  "duration_ms": {
+                    "type": "number",
+                    "description": "How long the turn/tool call took."
+                  },
+                  "tool_name": {
+                    "type": "string",
+                    "description": "Tool or operation id for `tool` turns, e.g. create_refund."
+                  },
+                  "tool_input": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {},
+                    "description": "Arguments sent to the tool."
+                  },
+                  "tool_output": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {},
+                    "description": "Trimmed tool response."
+                  },
+                  "intent_confidence": {
+                    "type": "number",
+                    "description": "0-1 confidence in the understood intent AT THIS TURN. Required on every agent/tool turn; rendered as a pie chart."
+                  },
+                  "resolution_confidence": {
+                    "type": "number",
+                    "description": "0-1 confidence that this turn moves toward/achieves resolution. Required on every agent/tool turn; rendered as a pie chart."
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {},
+                    "description": "Structured extras shown next to the turn (policy id, rule that fired…)."
+                  }
+                },
+                "required": [
+                  "role",
+                  "occurred_at",
+                  "intent_confidence",
+                  "resolution_confidence"
+                ]
+              },
+              "description": "Ordered conversation turns. Log every customer message, every agent reply, every tool call and any internal reasoning notes."
+            }
+          },
+          "required": [
+            "subject",
+            "messages"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_agent_traces",
+        "title": "Search past agent conversations",
+        "description": "Paginated, searchable history of every logged CX-agent conversation, with all messages and tool calls embedded. Check this before answering: if you already promised something to this customer, honour it instead of re-deciding.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "Query parameter. Customer email."
+            },
+            "customer_id": {
+              "type": "string",
+              "description": "Query parameter. Customer UUID."
+            },
+            "order_id": {
+              "type": "string",
+              "description": "Query parameter. Order UUID or BK-##### number."
+            },
+            "ticket_id": {
+              "type": "string",
+              "description": "Query parameter. Ticket UUID."
+            },
+            "outcome": {
+              "type": "string",
+              "enum": [
+                "resolved",
+                "refund_issued",
+                "return_created",
+                "escalated",
+                "deflected",
+                "unresolved"
+              ],
+              "description": "Query parameter. Comma-separated outcomes."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "in_progress",
+                "completed",
+                "failed"
+              ],
+              "description": "Query parameter. Comma-separated statuses."
+            },
+            "channel": {
+              "type": "string",
+              "enum": [
+                "chat",
+                "email",
+                "voice",
+                "sms",
+                "api"
+              ],
+              "description": "Query parameter. Comma-separated channels."
+            },
+            "tag": {
+              "type": "string",
+              "description": "Query parameter. Single tag the trace must carry."
+            },
+            "q": {
+              "type": "string",
+              "description": "Query parameter. Free-text search over subject, summary, transcript and trace number."
+            },
+            "started_after": {
+              "type": "string",
+              "description": "Query parameter. ISO date lower bound."
+            },
+            "started_before": {
+              "type": "string",
+              "description": "Query parameter. ISO date upper bound."
+            },
+            "limit": {
+              "type": "number",
+              "description": "Query parameter. Page size (1-100, default 25)."
+            },
+            "offset": {
+              "type": "number",
+              "description": "Query parameter. Rows to skip (default 0)."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_agent_trace",
+        "title": "Get one agent conversation",
+        "description": "Full trace with customer, order, ticket and the ordered message list including tool inputs/outputs. Pull the exact wording of a previous promise before continuing a follow-up conversation.",
+        "annotations": {
+          "readOnlyHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Trace number (TRC-######) or UUID."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "append_agent_trace_messages",
+        "title": "Append turns to a trace",
+        "description": "Adds more messages to an existing trace, in order, and recomputes counts, duration and the transcript. Use for long-running conversations you logged with status in_progress.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Trace number or UUID."
+            },
+            "messages": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Same message shape as log_agent_trace."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "in_progress",
+                "completed",
+                "failed"
+              ],
+              "description": "Optional new status."
+            }
+          },
+          "required": [
+            "id",
+            "messages"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "update_agent_trace",
+        "title": "Update a trace",
+        "description": "Revise the summary, outcome, sentiment, tags or status of an already-logged conversation. Close out an in_progress trace or correct the recorded outcome.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "Path segment. Trace number or UUID."
+            },
+            "summary": {
+              "type": "string",
+              "description": "Revised summary."
+            },
+            "outcome": {
+              "type": "string",
+              "enum": [
+                "resolved",
+                "refund_issued",
+                "return_created",
+                "escalated",
+                "deflected",
+                "unresolved"
+              ],
+              "description": "Revised outcome."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "in_progress",
+                "completed",
+                "failed"
+              ],
+              "description": "Revised status."
+            },
+            "sentiment": {
+              "type": "string",
+              "enum": [
+                "positive",
+                "neutral",
+                "negative"
+              ],
+              "description": "Revised sentiment."
+            },
+            "escalated": {
+              "type": "boolean",
+              "description": "Handed to a human."
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Replacement tag list."
+            },
+            "ended_at": {
+              "type": "string",
+              "description": "ISO-8601 end time."
+            },
+            "metadata": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {},
+              "description": "Replacement metadata object."
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
