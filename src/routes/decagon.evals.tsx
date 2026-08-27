@@ -44,7 +44,20 @@ const SUITES: Suite[] = [
   { name: "Tone & brand adherence", scope: "Quality", cases: 160, score: 94.7, prev: 94.1, cadence: "Nightly", lastRun: "9h ago", status: "passing" },
 ];
 
-const TREND = [91.2, 92.0, 91.4, 93.1, 93.8, 93.2, 94.6, 94.1, 95.0, 95.6, 95.2, 95.9];
+const TREND: TrendPoint[] = [
+  { label: "R-01", value: 91.2 },
+  { label: "R-02", value: 92.0 },
+  { label: "R-03", value: 91.4 },
+  { label: "R-04", value: 93.1 },
+  { label: "R-05", value: 93.8 },
+  { label: "R-06", value: 93.2 },
+  { label: "R-07", value: 94.6 },
+  { label: "R-08", value: 94.1 },
+  { label: "R-09", value: 95.0 },
+  { label: "R-10", value: 95.6 },
+  { label: "R-11", value: 95.2 },
+  { label: "R-12", value: 95.9 },
+];
 
 const DIMENSIONS = [
   { label: "Task completion", score: 95.9 },
