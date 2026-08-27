@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, Check, FileText, Loader2, Sparkle, Wrench } from "lucide-react";
@@ -120,6 +121,163 @@ Fire only when **all** of the following hold:
 Shadow mode for 7 days → 10% of eligible sessions → 50% → 100%, with a weekly review against #return_intake_aop volume.
 `;
 
+
+const REF_RE = /(#[a-z0-9_]+|@[a-z0-9_]+|\{\{[a-z0-9_.]+\}\})/gi;
+
+const PAUSES: { at: number; label: string }[] = (() => {
+  const seen = new Set<string>();
+  const out: { at: number; label: string }[] = [];
+  for (const m of AOP.matchAll(REF_RE)) {
+    const token = m[0];
+    if (seen.has(token) || m.index === undefined) continue;
+    seen.add(token);
+    const kind = token.startsWith("#") ? "AOP" : token.startsWith("@") ? "skill" : "attribute";
+    out.push({ at: m.index + token.length, label: `Resolving ${kind} ${token}` });
+    if (out.length >= 12) break;
+  }
+  return out;
+})();
+
+function Inline({ text }: { text: string }) {
+  const parts = text.split(/(\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`|#[a-z0-9_]+|@[a-z0-9_]+|\{\{[a-z0-9_.]+\}\})/gi);
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (/^\*\*[^*]+\*\*$/.test(part)) return <strong key={i}>{part.slice(2, -2)}</strong>;
+        if (/^\*[^*]+\*$/.test(part)) return <em key={i}>{part.slice(1, -1)}</em>;
+        if (/^`[^`]+`$/.test(part)) {
+          const inner = part.slice(1, -1);
+          return (
+            <code key={i} className="rounded bg-surface-2 px-1 py-0.5 font-mono text-[0.85em]">
+              <Inline text={inner} />
+            </code>
+          );
+        }
+        if (/^\{\{/.test(part))
+          return (
+            <span key={i} className="rounded bg-[color-mix(in_oklab,var(--ai-2)_18%,transparent)] px-1 font-mono text-[0.85em] text-[var(--ai-2)]">
+              {part}
+            </span>
+          );
+        if (/^#/.test(part))
+          return (
+            <span key={i} className="rounded bg-[color-mix(in_oklab,var(--ai)_16%,transparent)] px-1 font-medium text-[var(--ai)]">
+              {part}
+            </span>
+          );
+        if (/^@/.test(part))
+          return (
+            <span key={i} className="rounded bg-[color-mix(in_oklab,var(--brand)_16%,transparent)] px-1 font-medium text-brand">
+              {part}
+            </span>
+          );
+        return <span key={i}>{part}</span>;
+      })}
+    </>
+  );
+}
+
+function Markdown({ text }: { text: string }) {
+  const lines = text.split("\n");
+  const blocks: ReactNode[] = [];
+  let list: string[] = [];
+  let table: string[] = [];
+
+  const flushList = (key: string) => {
+    if (!list.length) return;
+    blocks.push(
+      <ul key={key} className="ml-4 list-disc space-y-1">
+        {list.map((li, i) => (
+          <li key={i}>
+            <Inline text={li} />
+          </li>
+        ))}
+      </ul>,
+    );
+    list = [];
+  };
+  const flushTable = (key: string) => {
+    if (!table.length) return;
+    const rows = table.map((r) => r.split("|").slice(1, -1).map((c) => c.trim()));
+    const head = rows[0] ?? [];
+    const body = rows.slice(1).filter((r) => !r.every((c) => /^-+$/.test(c)));
+    blocks.push(
+      <div key={key} className="overflow-x-auto rounded-lg border border-border">
+        <table className="w-full text-sm">
+          <thead className="bg-surface-2/70">
+            <tr>
+              {head.map((h, i) => (
+                <th key={i} className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <Inline text={h} />
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border">
+            {body.map((r, i) => (
+              <tr key={i}>
+                {r.map((c, j) => (
+                  <td key={j} className="px-3 py-2 align-top">
+                    <Inline text={c} />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>,
+    );
+    table = [];
+  };
+
+  lines.forEach((raw, idx) => {
+    const line = raw.trimEnd();
+    if (/^\|/.test(line)) {
+      flushList(`l${idx}`);
+      table.push(line);
+      return;
+    }
+    flushTable(`t${idx}`);
+    if (/^[-*] /.test(line)) {
+      list.push(line.slice(2));
+      return;
+    }
+    flushList(`l${idx}`);
+    if (!line.trim()) return;
+    if (/^---+$/.test(line)) {
+      blocks.push(<hr key={idx} className="border-border" />);
+    } else if (/^### /.test(line)) {
+      blocks.push(<h3 key={idx} className="pt-1 text-sm font-semibold"><Inline text={line.slice(4)} /></h3>);
+    } else if (/^## /.test(line)) {
+      blocks.push(<h2 key={idx} className="pt-2 text-base font-semibold tracking-tight"><Inline text={line.slice(3)} /></h2>);
+    } else if (/^# /.test(line)) {
+      blocks.push(<h1 key={idx} className="ai-text text-xl font-bold tracking-tight"><Inline text={line.slice(2)} /></h1>);
+    } else if (/^> /.test(line)) {
+      blocks.push(
+        <blockquote key={idx} className="border-l-2 border-[color-mix(in_oklab,var(--ai)_50%,transparent)] bg-surface-2/50 px-3 py-2 italic">
+          <Inline text={line.slice(2)} />
+        </blockquote>,
+      );
+    } else if (/^\d+\. /.test(line)) {
+      blocks.push(
+        <p key={idx} className="ml-4">
+          <Inline text={line} />
+        </p>,
+      );
+    } else {
+      blocks.push(
+        <p key={idx}>
+          <Inline text={line} />
+        </p>,
+      );
+    }
+  });
+  flushList("l-end");
+  flushTable("t-end");
+
+  return <div className="space-y-2.5">{blocks}</div>;
+}
+
 type Phase = "cards" | "running" | "findings" | "drafting" | "aop";
 
 function Duet() {
@@ -128,6 +286,7 @@ function Duet() {
   const [phase, setPhase] = useState<Phase>("cards");
   const [visibleSteps, setVisibleSteps] = useState(0);
   const [aopChars, setAopChars] = useState(0);
+  const [resolving, setResolving] = useState<string | null>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
@@ -150,25 +309,52 @@ function Duet() {
 
   useEffect(() => {
     if (phase !== "aop") return;
-    const id = setInterval(() => {
-      setAopChars((c) => {
-        if (c >= AOP.length) {
-          clearInterval(id);
-          return c;
-        }
-        return c + 40;
-      });
-    }, 16);
-    return () => clearInterval(id);
+    let cancelled = false;
+    let i = 0;
+    const TICK = 24;
+    const TOTAL_TYPING_MS = 15000 - PAUSES.length * 500;
+    const perTick = Math.max(1, Math.ceil(AOP.length / (TOTAL_TYPING_MS / TICK)));
+    let pauseIdx = 0;
+    let timer: ReturnType<typeof setTimeout>;
+
+    const step = () => {
+      if (cancelled) return;
+      const nextPause = PAUSES[pauseIdx];
+      const target = nextPause ? Math.min(i + perTick, nextPause.at) : i + perTick;
+      i = Math.min(target, AOP.length);
+      setAopChars(i);
+      if (nextPause && i >= nextPause.at) {
+        pauseIdx += 1;
+        setResolving(nextPause.label);
+        timer = setTimeout(() => {
+          if (cancelled) return;
+          setResolving(null);
+          timer = setTimeout(step, TICK);
+        }, 500);
+        return;
+      }
+      if (i < AOP.length) timer = setTimeout(step, TICK);
+      else setResolving(null);
+    };
+
+    timer = setTimeout(step, TICK);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, [phase]);
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
-          <Sparkle size={20} /> Duet
+    <div className="ai-canvas -mx-6 -my-8 min-h-screen space-y-6 px-6 py-8">
+      <div className="ai-panel relative overflow-hidden rounded-2xl px-6 py-6">
+        <span aria-hidden className="shimmer-line absolute inset-x-0 top-0 h-px" />
+        <h1 className="flex items-center gap-2.5 text-3xl font-bold tracking-tight">
+          <span className="ai-glow grid size-9 place-items-center rounded-xl bg-surface">
+            <Sparkle size={18} className="text-[var(--ai)]" />
+          </span>
+          <span className="ai-text">Duet</span>
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
           Agents improving agents. Duet reads your conversation data, AOPs, tools and KPIs, then drafts the change.
         </p>
       </div>
@@ -177,16 +363,16 @@ function Duet() {
         <>
           <div className="grid gap-4 md:grid-cols-3">
             {RECOMMENDATIONS.map((r) => (
-              <div key={r.title} className="flex flex-col rounded-lg border border-border bg-card p-5">
-                <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <div key={r.title} className="ai-panel surface-card-hover flex flex-col rounded-xl p-5">
+                <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-[color-mix(in_oklab,var(--ai)_35%,transparent)] bg-surface/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
                   <r.icon size={11} /> {r.kind}
                 </span>
                 <h3 className="mt-3 text-sm font-semibold leading-snug">{r.title}</h3>
                 <p className="mt-2 flex-1 text-xs leading-relaxed text-muted-foreground">{r.body}</p>
-                <p className="mt-3 text-xs font-medium">{r.impact}</p>
+                <p className="ai-text mt-3 text-xs font-semibold">{r.impact}</p>
                 <button
                   type="button"
-                  className="mt-3 w-fit rounded-md border border-border px-2.5 py-1 text-xs font-medium hover:bg-accent"
+                  className="mt-3 w-fit rounded-md border border-border bg-surface px-2.5 py-1 text-xs font-medium transition-shadow hover:ai-glow"
                 >
                   Explore further
                 </button>
@@ -201,13 +387,13 @@ function Duet() {
                 onChange={(e) => setPrompt(e.target.value)}
                 rows={4}
                 placeholder="Describe an opportunity you want Duet to explore…"
-                className="w-full resize-none rounded-md border border-border bg-background px-3 py-2 text-sm leading-relaxed"
+                className="w-full resize-none rounded-lg border border-border bg-surface px-3 py-2 text-sm leading-relaxed outline-none focus:ai-glow"
               />
               <button
                 type="button"
                 onClick={run}
                 disabled={!prompt.trim()}
-                className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3.5 py-1.5 text-sm font-medium text-primary-foreground disabled:opacity-40"
+                className="brand-bar inline-flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-sm font-medium text-primary-foreground transition-shadow hover:ai-glow disabled:opacity-40"
               >
                 Go <ArrowRight size={14} />
               </button>
@@ -216,20 +402,20 @@ function Duet() {
         </>
       ) : (
         <div className="space-y-4">
-          <div className="ml-auto max-w-2xl rounded-lg bg-primary px-4 py-3 text-sm leading-relaxed text-primary-foreground">
+          <div className="brand-bar ml-auto max-w-2xl rounded-2xl px-4 py-3 text-sm leading-relaxed text-primary-foreground">
             {prompt}
           </div>
 
           <div className="max-w-3xl space-y-2">
             {RUN_STEPS.slice(0, phase === "running" ? visibleSteps : RUN_STEPS.length).map((s) => (
-              <p key={s} className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Check size={14} className="text-emerald-500" />
+              <p key={s} className="ai-panel flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground">
+                <Check size={14} className="text-[var(--ai-2)]" />
                 {s}
               </p>
             ))}
             {phase === "running" && visibleSteps < RUN_STEPS.length ? (
-              <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Loader2 size={14} className="animate-spin" /> Analyzing…
+              <p className="ai-panel flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground">
+                <Loader2 size={14} className="animate-spin text-[var(--ai)]" /> Analyzing…
               </p>
             ) : null}
           </div>
@@ -249,7 +435,7 @@ function Duet() {
                     <button
                       type="button"
                       onClick={approve}
-                      className="rounded-md bg-primary px-3.5 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90"
+                      className="brand-bar rounded-md px-3.5 py-1.5 text-sm font-medium text-primary-foreground transition-shadow hover:ai-glow"
                     >
                       Approve · draft the AOP
                     </button>
@@ -268,22 +454,30 @@ function Duet() {
 
           {phase === "drafting" ? (
             <p className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Loader2 size={14} className="animate-spin" /> Opening canvas and authoring the AOP…
+              <Loader2 size={14} className="animate-spin text-[var(--ai)]" /> Opening canvas and authoring the AOP…
             </p>
           ) : null}
 
           {phase === "aop" ? (
             <Card title="Canvas · Proactive Genre-Fit Nudge at Checkout">
               <div className="px-5 py-5">
-                <pre className="max-h-[32rem] overflow-auto whitespace-pre-wrap rounded-md border border-border bg-muted/40 p-5 text-sm leading-relaxed">
-                  {AOP.slice(0, aopChars)}
-                  {aopChars < AOP.length ? <span className="animate-pulse">▍</span> : null}
-                </pre>
+                <div className="ai-panel max-h-[32rem] overflow-auto rounded-xl p-6 text-sm leading-relaxed">
+                  <Markdown text={AOP.slice(0, aopChars)} />
+                  {aopChars < AOP.length && !resolving ? (
+                    <span className="ml-0.5 inline-block animate-pulse font-mono">▍</span>
+                  ) : null}
+                  {resolving ? (
+                    <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-[color-mix(in_oklab,var(--ai)_35%,transparent)] bg-surface/80 px-3 py-1 text-xs text-muted-foreground">
+                      <Loader2 size={12} className="animate-spin text-[var(--ai)]" />
+                      {resolving}…
+                    </p>
+                  ) : null}
+                </div>
                 {aopChars >= AOP.length ? (
                   <div className="mt-4 flex flex-wrap gap-2">
                     <button
                       type="button"
-                      className="rounded-md bg-primary px-3.5 py-1.5 text-sm font-medium text-primary-foreground hover:opacity-90"
+                      className="brand-bar rounded-md px-3.5 py-1.5 text-sm font-medium text-primary-foreground transition-shadow hover:ai-glow"
                     >
                       Simulate a new chat with this AOP
                     </button>

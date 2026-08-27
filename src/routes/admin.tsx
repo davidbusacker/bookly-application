@@ -30,10 +30,11 @@ const NAV = [
 
 function ConsoleLayout() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-20 border-b border-border bg-card/95 backdrop-blur">
+    <div className="app-canvas min-h-screen bg-background text-foreground">
+      <header className="sticky top-0 z-20 border-b border-border bg-surface/80 shadow-[var(--shadow-soft)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-6 gap-y-3 px-6 py-3">
-          <Link to="/admin" className="flex items-baseline gap-2">
+          <Link to="/admin" className="flex items-center gap-2.5">
+            <span aria-hidden className="brand-bar grid size-7 place-items-center rounded-lg text-sm font-bold text-primary-foreground">B</span>
             <span className="text-lg font-bold tracking-tight">Bookly</span>
             <span className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
               Store console
@@ -45,7 +46,7 @@ function ConsoleLayout() {
                 key={n.to}
                 to={n.to}
                 activeOptions={{ exact: "exact" in n ? n.exact : false }}
-                activeProps={{ className: "bg-primary text-primary-foreground" }}
+                activeProps={{ className: "bg-primary text-primary-foreground shadow-[var(--shadow-soft)]" }}
                 inactiveProps={{ className: "text-muted-foreground hover:bg-accent hover:text-foreground" }}
                 className="rounded-md px-3 py-1.5 text-sm font-medium transition-colors"
               >
@@ -56,11 +57,11 @@ function ConsoleLayout() {
           <div className="ml-auto flex items-center gap-2">
             <Link
               to="/decagon"
-              className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-accent"
+              className="ai-panel rounded-md px-3 py-1.5 text-sm font-medium transition-shadow hover:ai-glow"
             >
               Decagon CX
             </Link>
-            <a href="/docs" className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-accent">
+            <a href="/docs" className="rounded-md border border-border bg-surface px-3 py-1.5 text-sm font-medium transition-colors hover:bg-accent">
               API docs
             </a>
           </div>
