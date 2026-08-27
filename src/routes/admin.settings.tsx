@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { apiSend } from "@/lib/bookly/api-client";
 import { Card, ErrorNote } from "@/components/console/ui";
-import { AgentTracesTile } from "@/components/console/agent-traces-tile";
 
 export const Route = createFileRoute("/admin/settings")({
   head: () => ({
