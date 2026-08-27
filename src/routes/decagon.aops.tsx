@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { Eye, Pencil } from "lucide-react";
 import { Card } from "@/components/console/ui";
 import { Markdown } from "@/components/decagon/markdown";
+import { AopEditor } from "@/components/decagon/aop-editor";
 import { AOPS } from "@/lib/decagon/library";
 
 export const Route = createFileRoute("/decagon/aops")({
@@ -30,7 +32,10 @@ const STATUS_CLASS: Record<string, string> = {
 
 function AopLibrary() {
   const [slug, setSlug] = useState(AOPS[0]?.slug ?? "");
+  const [edits, setEdits] = useState<Record<string, string>>({});
+  const [editing, setEditing] = useState(false);
   const active = AOPS.find((a) => a.slug === slug) ?? AOPS[0];
+  const body = active ? (edits[active.slug] ?? active.body) : "";
 
   return (
     <div className="space-y-6">
@@ -48,7 +53,10 @@ function AopLibrary() {
               <button
                 key={a.slug}
                 type="button"
-                onClick={() => setSlug(a.slug)}
+                onClick={() => {
+                  setSlug(a.slug);
+                  setEditing(false);
+                }}
                 className={`rounded-lg px-3 py-2.5 text-left transition-colors ${
                   a.slug === active?.slug ? "bg-accent" : "hover:bg-accent/50"
                 }`}
@@ -59,7 +67,10 @@ function AopLibrary() {
                     {a.status}
                   </span>
                 </span>
-                <span className="mt-0.5 block font-mono text-[11px] text-muted-foreground">#{a.slug}</span>
+                <span className="mt-0.5 block font-mono text-[11px] text-muted-foreground">
+                  #{a.slug}
+                  {edits[a.slug] !== undefined ? " · edited" : ""}
+                </span>
               </button>
             ))}
           </div>
@@ -68,13 +79,38 @@ function AopLibrary() {
         {active ? (
           <Card
             title={`#${active.slug}`}
-            action={<span className="text-xs text-muted-foreground">Surface · {active.surface}</span>}
+            action={
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-muted-foreground">Surface · {active.surface}</span>
+                <button
+                  type="button"
+                  onClick={() => setEditing((v) => !v)}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1 text-xs font-medium transition-shadow hover:ai-glow"
+                >
+                  {editing ? <Eye size={12} /> : <Pencil size={12} />}
+                  {editing ? "Preview" : "Edit mode"}
+                </button>
+              </div>
+            }
           >
             <div className="space-y-4 px-5 py-5">
               <p className="text-sm text-muted-foreground">{active.summary}</p>
-              <div className="ai-panel rounded-xl p-6 text-sm leading-relaxed">
-                <Markdown text={active.body} />
-              </div>
+              {editing ? (
+                <>
+                  <AopEditor
+                    value={body}
+                    onChange={(next) => setEdits((e) => ({ ...e, [active.slug]: next }))}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Type <span className="font-mono">#</span> for an AOP, <span className="font-mono">@</span> for a tool or skill, or{" "}
+                    <span className="font-mono">{"{{"}</span> for an attribute — keep typing to filter, ↑↓ to move, Enter to insert.
+                  </p>
+                </>
+              ) : (
+                <div className="ai-panel rounded-xl p-6 text-sm leading-relaxed">
+                  <Markdown text={body} />
+                </div>
+              )}
             </div>
           </Card>
         ) : null}

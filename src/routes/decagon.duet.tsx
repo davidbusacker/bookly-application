@@ -153,8 +153,16 @@ function Duet() {
   const [draft, setDraft] = useState(AOP);
 
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const canvasRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
+
+  // Keep the newest authored line in view while the AOP is being typed out
+  useEffect(() => {
+    if (editing) return;
+    const el = canvasRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [aopChars, resolving, editing]);
 
   const run = () => {
     if (!prompt.trim()) return;
@@ -347,12 +355,12 @@ function Duet() {
                   <>
                     <AopEditor value={draft} onChange={setDraft} />
                     <p className="mt-2 text-xs text-muted-foreground">
-                      Type <span className="font-mono">#</span> to reference an AOP or <span className="font-mono">@</span> for a tool
-                      or skill — keep typing to filter, ↑↓ to move, Enter to insert.
+                      Type <span className="font-mono">#</span> for an AOP, <span className="font-mono">@</span> for a tool or skill, or{" "}
+                      <span className="font-mono">{"{{"}</span> for an attribute — keep typing to filter, ↑↓ to move, Enter to insert.
                     </p>
                   </>
                 ) : (
-                  <div className="ai-panel max-h-[32rem] overflow-auto rounded-xl p-6 text-sm leading-relaxed">
+                  <div ref={canvasRef} className="ai-panel max-h-[32rem] overflow-auto rounded-xl p-6 text-sm leading-relaxed">
                     <Markdown text={aopChars >= AOP.length ? draft : AOP.slice(0, aopChars)} />
                     {aopChars < AOP.length && !resolving ? (
                       <span className="ml-0.5 inline-block animate-pulse font-mono">▍</span>
