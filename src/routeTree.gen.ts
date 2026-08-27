@@ -23,6 +23,7 @@ import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
 import { Route as DecagonIndexRouteImport } from './routes/decagon.index'
 import { Route as DecagonAopsRouteImport } from './routes/decagon.aops'
+import { Route as DecagonCatalogRouteImport } from './routes/decagon.catalog'
 import { Route as DecagonDuetRouteImport } from './routes/decagon.duet'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AdminCustomersIndexRouteImport } from './routes/admin.customers.index'
@@ -141,6 +142,11 @@ const DecagonIndexRoute = DecagonIndexRouteImport.update({
 const DecagonAopsRoute = DecagonAopsRouteImport.update({
   id: '/aops',
   path: '/aops',
+  getParentRoute: () => DecagonRoute,
+} as any)
+const DecagonCatalogRoute = DecagonCatalogRouteImport.update({
+  id: '/catalog',
+  path: '/catalog',
   getParentRoute: () => DecagonRoute,
 } as any)
 const DecagonDuetRoute = DecagonDuetRouteImport.update({
@@ -418,6 +424,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/decagon/aops': typeof DecagonAopsRoute
+  '/decagon/catalog': typeof DecagonCatalogRoute
   '/decagon/duet': typeof DecagonDuetRoute
   '/admin/': typeof AdminIndexRoute
   '/decagon/': typeof DecagonIndexRoute
@@ -479,6 +486,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/decagon/aops': typeof DecagonAopsRoute
+  '/decagon/catalog': typeof DecagonCatalogRoute
   '/decagon/duet': typeof DecagonDuetRoute
   '/admin': typeof AdminIndexRoute
   '/decagon': typeof DecagonIndexRoute
@@ -543,6 +551,7 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/decagon/aops': typeof DecagonAopsRoute
+  '/decagon/catalog': typeof DecagonCatalogRoute
   '/decagon/duet': typeof DecagonDuetRoute
   '/admin/': typeof AdminIndexRoute
   '/decagon/': typeof DecagonIndexRoute
@@ -608,6 +617,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/transactions'
     | '/decagon/aops'
+    | '/decagon/catalog'
     | '/decagon/duet'
     | '/admin/'
     | '/decagon/'
@@ -669,6 +679,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/transactions'
     | '/decagon/aops'
+    | '/decagon/catalog'
     | '/decagon/duet'
     | '/admin'
     | '/decagon'
@@ -732,6 +743,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/transactions'
     | '/decagon/aops'
+    | '/decagon/catalog'
     | '/decagon/duet'
     | '/admin/'
     | '/decagon/'
@@ -930,6 +942,13 @@ declare module '@tanstack/react-router' {
       path: '/aops'
       fullPath: '/decagon/aops'
       preLoaderRoute: typeof DecagonAopsRouteImport
+      parentRoute: typeof DecagonRoute
+    }
+    '/decagon/catalog': {
+      id: '/decagon/catalog'
+      path: '/catalog'
+      fullPath: '/decagon/catalog'
+      preLoaderRoute: typeof DecagonCatalogRouteImport
       parentRoute: typeof DecagonRoute
     }
     '/decagon/duet': {
@@ -1294,6 +1313,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface DecagonRouteChildren {
   DecagonAopsRoute: typeof DecagonAopsRoute
+  DecagonCatalogRoute: typeof DecagonCatalogRoute
   DecagonDuetRoute: typeof DecagonDuetRoute
   DecagonIndexRoute: typeof DecagonIndexRoute
   DecagonConvosIdRoute: typeof DecagonConvosIdRoute
@@ -1302,6 +1322,7 @@ interface DecagonRouteChildren {
 
 const DecagonRouteChildren: DecagonRouteChildren = {
   DecagonAopsRoute: DecagonAopsRoute,
+  DecagonCatalogRoute: DecagonCatalogRoute,
   DecagonDuetRoute: DecagonDuetRoute,
   DecagonIndexRoute: DecagonIndexRoute,
   DecagonConvosIdRoute: DecagonConvosIdRoute,
