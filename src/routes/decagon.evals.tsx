@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, CheckCircle2, TrendingDown, TrendingUp } from "lucide-react";
 import { Card, Stat, Table } from "@/components/console/ui";
+import { TrendChart, type TrendPoint } from "@/components/decagon/trend-chart";
 
 export const Route = createFileRoute("/decagon/evals")({
   head: () => ({
