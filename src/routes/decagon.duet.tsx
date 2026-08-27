@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, Check, FileText, Loader2, Sparkle, Wrench } from "lucide-react";
+import { ArrowRight, Check, Eye, FileText, Loader2, Pencil, Sparkle, Wrench } from "lucide-react";
 import { Card } from "@/components/console/ui";
 import { Markdown } from "@/components/decagon/markdown";
+import { AopEditor } from "@/components/decagon/aop-editor";
 
 type Search = { topic?: string };
 
