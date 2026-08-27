@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Download } from "lucide-react";
+import { Check, Copy, Download } from "lucide-react";
 import { apiSend } from "@/lib/bookly/api-client";
 import { Card, ErrorNote } from "@/components/console/ui";
 import logoBlack from "@/assets/bookly-logo-black.png";
