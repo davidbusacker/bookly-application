@@ -25,6 +25,7 @@ import { Route as DecagonIndexRouteImport } from './routes/decagon.index'
 import { Route as DecagonAopsRouteImport } from './routes/decagon.aops'
 import { Route as DecagonCatalogRouteImport } from './routes/decagon.catalog'
 import { Route as DecagonDuetRouteImport } from './routes/decagon.duet'
+import { Route as DecagonEvalsRouteImport } from './routes/decagon.evals'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AdminCustomersIndexRouteImport } from './routes/admin.customers.index'
 import { Route as AdminCustomersIdRouteImport } from './routes/admin.customers.$id'
@@ -152,6 +153,11 @@ const DecagonCatalogRoute = DecagonCatalogRouteImport.update({
 const DecagonDuetRoute = DecagonDuetRouteImport.update({
   id: '/duet',
   path: '/duet',
+  getParentRoute: () => DecagonRoute,
+} as any)
+const DecagonEvalsRoute = DecagonEvalsRouteImport.update({
+  id: '/evals',
+  path: '/evals',
   getParentRoute: () => DecagonRoute,
 } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
@@ -426,6 +432,7 @@ export interface FileRoutesByFullPath {
   '/decagon/aops': typeof DecagonAopsRoute
   '/decagon/catalog': typeof DecagonCatalogRoute
   '/decagon/duet': typeof DecagonDuetRoute
+  '/decagon/evals': typeof DecagonEvalsRoute
   '/admin/': typeof AdminIndexRoute
   '/decagon/': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -488,6 +495,7 @@ export interface FileRoutesByTo {
   '/decagon/aops': typeof DecagonAopsRoute
   '/decagon/catalog': typeof DecagonCatalogRoute
   '/decagon/duet': typeof DecagonDuetRoute
+  '/decagon/evals': typeof DecagonEvalsRoute
   '/admin': typeof AdminIndexRoute
   '/decagon': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -553,6 +561,7 @@ export interface FileRoutesById {
   '/decagon/aops': typeof DecagonAopsRoute
   '/decagon/catalog': typeof DecagonCatalogRoute
   '/decagon/duet': typeof DecagonDuetRoute
+  '/decagon/evals': typeof DecagonEvalsRoute
   '/admin/': typeof AdminIndexRoute
   '/decagon/': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -619,6 +628,7 @@ export interface FileRouteTypes {
     | '/decagon/aops'
     | '/decagon/catalog'
     | '/decagon/duet'
+    | '/decagon/evals'
     | '/admin/'
     | '/decagon/'
     | '/.mcp/invoke-tool/$tool'
@@ -681,6 +691,7 @@ export interface FileRouteTypes {
     | '/decagon/aops'
     | '/decagon/catalog'
     | '/decagon/duet'
+    | '/decagon/evals'
     | '/admin'
     | '/decagon'
     | '/.mcp/invoke-tool/$tool'
@@ -745,6 +756,7 @@ export interface FileRouteTypes {
     | '/decagon/aops'
     | '/decagon/catalog'
     | '/decagon/duet'
+    | '/decagon/evals'
     | '/admin/'
     | '/decagon/'
     | '/.mcp/invoke-tool/$tool'
@@ -956,6 +968,13 @@ declare module '@tanstack/react-router' {
       path: '/duet'
       fullPath: '/decagon/duet'
       preLoaderRoute: typeof DecagonDuetRouteImport
+      parentRoute: typeof DecagonRoute
+    }
+    '/decagon/evals': {
+      id: '/decagon/evals'
+      path: '/evals'
+      fullPath: '/decagon/evals'
+      preLoaderRoute: typeof DecagonEvalsRouteImport
       parentRoute: typeof DecagonRoute
     }
     '/.mcp/invoke-tool/$tool': {
@@ -1315,6 +1334,7 @@ interface DecagonRouteChildren {
   DecagonAopsRoute: typeof DecagonAopsRoute
   DecagonCatalogRoute: typeof DecagonCatalogRoute
   DecagonDuetRoute: typeof DecagonDuetRoute
+  DecagonEvalsRoute: typeof DecagonEvalsRoute
   DecagonIndexRoute: typeof DecagonIndexRoute
   DecagonConvosIdRoute: typeof DecagonConvosIdRoute
   DecagonConvosIndexRoute: typeof DecagonConvosIndexRoute
@@ -1324,6 +1344,7 @@ const DecagonRouteChildren: DecagonRouteChildren = {
   DecagonAopsRoute: DecagonAopsRoute,
   DecagonCatalogRoute: DecagonCatalogRoute,
   DecagonDuetRoute: DecagonDuetRoute,
+  DecagonEvalsRoute: DecagonEvalsRoute,
   DecagonIndexRoute: DecagonIndexRoute,
   DecagonConvosIdRoute: DecagonConvosIdRoute,
   DecagonConvosIndexRoute: DecagonConvosIndexRoute,
