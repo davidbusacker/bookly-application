@@ -208,7 +208,7 @@ function Donut({
 }) {
   let angle = 0;
   return (
-    <div className="relative mx-auto">
+    <div className="relative mx-auto h-64 w-64">
       <svg viewBox="0 0 240 240" className="h-64 w-64">
         {slices.map((s) => {
           const sweep = (s.value / (total || 1)) * Math.PI * 2;
