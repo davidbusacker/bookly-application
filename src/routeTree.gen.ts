@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as DecagonRouteImport } from './routes/decagon'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as McpRouteImport } from './routes/mcp'
@@ -74,6 +75,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DecagonRoute = DecagonRouteImport.update({
+  id: '/decagon',
+  path: '/decagon',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocsRoute = DocsRouteImport.update({
@@ -378,6 +384,7 @@ const ApiPublicV1OrdersIdReturnsEligibilityRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/decagon': typeof DecagonRoute
   '/docs': typeof DocsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
@@ -435,6 +442,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/decagon': typeof DecagonRoute
   '/docs': typeof DocsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
@@ -494,6 +502,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/decagon': typeof DecagonRoute
   '/docs': typeof DocsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
@@ -554,6 +563,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/decagon'
     | '/docs'
     | '/llms.txt'
     | '/mcp'
@@ -611,6 +621,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/decagon'
     | '/docs'
     | '/llms.txt'
     | '/mcp'
@@ -669,6 +680,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/decagon'
     | '/docs'
     | '/llms.txt'
     | '/mcp'
@@ -728,6 +740,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  DecagonRoute: typeof DecagonRoute
   DocsRoute: typeof DocsRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   McpRoute: typeof McpRoute
@@ -787,6 +800,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/decagon': {
+      id: '/decagon'
+      path: '/decagon'
+      fullPath: '/decagon'
+      preLoaderRoute: typeof DecagonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/docs': {
@@ -1203,6 +1223,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  DecagonRoute: DecagonRoute,
   DocsRoute: DocsRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   McpRoute: McpRoute,
