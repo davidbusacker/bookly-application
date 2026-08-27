@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { BarChart3, FileText, MessagesSquare, Sparkle, Store, Wrench } from "lucide-react";
+import { BarChart3, FileText, MessagesSquare, Sparkle, Wrench } from "lucide-react";
+import { InterfaceDot } from "@/components/interface-dot";
 
 export const Route = createFileRoute("/decagon")({
   component: DecagonLayout,

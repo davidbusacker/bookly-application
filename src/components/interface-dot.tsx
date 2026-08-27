@@ -14,13 +14,9 @@ export function InterfaceDot() {
       to={to}
       title={inDecagon ? "Switch to Bookly store" : "Switch to Decagon CX"}
       aria-label={inDecagon ? "Switch to Bookly store" : "Switch to Decagon CX"}
-      className="fixed left-2 top-2 z-50 grid size-4 place-items-center rounded-full opacity-30 transition-opacity hover:opacity-90"
+      className="fixed left-2 top-2 z-50 grid size-4 place-items-center opacity-30 transition-opacity hover:opacity-90"
     >
-      <span
-        aria-hidden
-        className={`size-2 rounded-full ${inDecagon ? "bg-primary" : "ai-text bg-current"}`}
-        style={inDecagon ? undefined : { background: "var(--ai-accent, currentColor)" }}
-      />
+      <span aria-hidden className={`size-2 rounded-full ${inDecagon ? "bg-primary" : "bg-foreground"}`} />
     </Link>
   );
 }

@@ -1,4 +1,5 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { InterfaceDot } from "@/components/interface-dot";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
