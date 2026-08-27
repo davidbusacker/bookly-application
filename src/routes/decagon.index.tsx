@@ -137,18 +137,20 @@ function Insights() {
                 </p>
               )}
 
-              {slices.map((s) => {
+              {slices.map((s, i) => {
                 const total = slices.reduce((a, x) => a + x.value, 0) || 1;
                 const clickable = drill ? true : s.key === "initiate_return";
+                const slidingAway = exiting === "in" && s.key !== "initiate_return";
                 return (
                   <button
                     key={s.key}
                     type="button"
                     disabled={!clickable}
-                    onClick={() => (drill ? setSub(s.key) : setDrill(s.key))}
-                    className={`flex w-full items-center gap-3 rounded-md px-2 py-2 text-left transition-colors ${
+                    onClick={() => (drill ? setSub(s.key) : animateDrill(s.key))}
+                    style={{ transitionDelay: exiting ? `${i * 35}ms` : undefined }}
+                    className={`flex w-full items-center gap-3 rounded-md px-2 py-2 text-left transition-all duration-300 ease-in ${
                       clickable ? "hover:bg-accent" : "cursor-default"
-                    }`}
+                    } ${slidingAway ? "translate-x-8 opacity-0" : ""}`}
                   >
                     <span className="h-3 w-3 shrink-0 rounded-sm" style={{ background: s.color }} />
                     <span className="flex-1 truncate text-sm font-medium">{s.label}</span>
