@@ -55,12 +55,6 @@ function ConsoleLayout() {
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-2">
-            <Link
-              to="/decagon"
-              className="ai-panel rounded-md px-3 py-1.5 text-sm font-medium transition-shadow hover:ai-glow"
-            >
-              Decagon CX
-            </Link>
             <a href="/docs" className="rounded-md border border-border bg-surface px-3 py-1.5 text-sm font-medium transition-colors hover:bg-accent">
               API docs
             </a>

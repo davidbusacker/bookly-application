@@ -37,13 +37,6 @@ function DecagonLayout() {
             </Link>
           ))}
         </nav>
-        <Link
-          to="/admin"
-          className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
-        >
-          <Store size={16} />
-          Bookly store
-        </Link>
       </aside>
 
       <div className="min-w-0 flex-1">
