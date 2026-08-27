@@ -153,8 +153,16 @@ function Duet() {
   const [draft, setDraft] = useState(AOP);
 
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const canvasRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
+
+  // Keep the newest authored line in view while the AOP is being typed out
+  useEffect(() => {
+    if (editing) return;
+    const el = canvasRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [aopChars, resolving, editing]);
 
   const run = () => {
     if (!prompt.trim()) return;
