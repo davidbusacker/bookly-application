@@ -36,6 +36,18 @@ export const Route = createFileRoute("/decagon/")({
 function Insights() {
   const [drill, setDrill] = useState<string | null>(null);
   const [sub, setSub] = useState<string | null>(null);
+  // While non-null, we're animating out: holds the slices being shown during exit.
+  const [exiting, setExiting] = useState<"in" | "out" | null>(null);
+
+  const animateDrill = (next: string | null) => {
+    if (exiting) return;
+    setExiting(next ? "in" : "out");
+    window.setTimeout(() => {
+      setDrill(next);
+      setSub(null);
+      setExiting(null);
+    }, 340);
+  };
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["decagon-traces"],
@@ -67,7 +79,7 @@ function Insights() {
             <span className="flex items-center gap-1.5">
               <button
                 type="button"
-                onClick={() => setDrill(null)}
+                onClick={() => animateDrill(null)}
                 className="text-muted-foreground transition-colors hover:text-foreground"
               >
                 All intents
@@ -83,7 +95,7 @@ function Insights() {
           drill ? (
             <button
               type="button"
-              onClick={() => setDrill(null)}
+              onClick={() => animateDrill(null)}
               className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-xs font-medium hover:bg-accent"
             >
               <ArrowLeft size={13} /> Back to all intents
@@ -94,19 +106,30 @@ function Insights() {
         {isLoading && !data ? (
           <Loading />
         ) : (
-          <div className="grid gap-8 px-5 py-6 lg:grid-cols-[320px_1fr]">
-            <Donut
-              slices={slices}
-              total={slices.reduce((a, s) => a + s.value, 0)}
-              caption={drill ? "Sub-reasons" : "Primary intents"}
-              onSelect={(key) => {
-                if (!drill) {
-                  if (key === "initiate_return") setDrill(key);
-                } else {
-                  setSub(key);
-                }
-              }}
-            />
+          <div
+            key={drill ?? "all"}
+            className={`grid gap-8 px-5 py-6 lg:grid-cols-[320px_1fr] ${
+              exiting ? "pointer-events-none" : "animate-fade-in"
+            }`}
+          >
+            <div
+              className={`transition-all duration-300 ease-in ${
+                exiting ? "scale-90 opacity-0" : "scale-100 opacity-100"
+              }`}
+            >
+              <Donut
+                slices={slices}
+                total={slices.reduce((a, s) => a + s.value, 0)}
+                caption={drill ? "Sub-reasons" : "Primary intents"}
+                onSelect={(key) => {
+                  if (!drill) {
+                    if (key === "initiate_return") animateDrill(key);
+                  } else {
+                    setSub(key);
+                  }
+                }}
+              />
+            </div>
 
             <div className="space-y-2">
               {drill ? null : (
@@ -115,18 +138,20 @@ function Insights() {
                 </p>
               )}
 
-              {slices.map((s) => {
+              {slices.map((s, i) => {
                 const total = slices.reduce((a, x) => a + x.value, 0) || 1;
                 const clickable = drill ? true : s.key === "initiate_return";
+                const slidingAway = exiting === "in" && s.key !== "initiate_return";
                 return (
                   <button
                     key={s.key}
                     type="button"
                     disabled={!clickable}
-                    onClick={() => (drill ? setSub(s.key) : setDrill(s.key))}
-                    className={`flex w-full items-center gap-3 rounded-md px-2 py-2 text-left transition-colors ${
+                    onClick={() => (drill ? setSub(s.key) : animateDrill(s.key))}
+                    style={{ transitionDelay: exiting ? `${i * 35}ms` : undefined }}
+                    className={`flex w-full items-center gap-3 rounded-md px-2 py-2 text-left transition-all duration-300 ease-in ${
                       clickable ? "hover:bg-accent" : "cursor-default"
-                    }`}
+                    } ${slidingAway ? "translate-x-8 opacity-0" : ""}`}
                   >
                     <span className="h-3 w-3 shrink-0 rounded-sm" style={{ background: s.color }} />
                     <span className="flex-1 truncate text-sm font-medium">{s.label}</span>
