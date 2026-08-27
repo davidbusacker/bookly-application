@@ -36,6 +36,18 @@ export const Route = createFileRoute("/decagon/")({
 function Insights() {
   const [drill, setDrill] = useState<string | null>(null);
   const [sub, setSub] = useState<string | null>(null);
+  // While non-null, we're animating out: holds the slices being shown during exit.
+  const [exiting, setExiting] = useState<"in" | "out" | null>(null);
+
+  const animateDrill = (next: string | null) => {
+    if (exiting) return;
+    setExiting(next ? "in" : "out");
+    window.setTimeout(() => {
+      setDrill(next);
+      setSub(null);
+      setExiting(null);
+    }, 340);
+  };
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["decagon-traces"],
