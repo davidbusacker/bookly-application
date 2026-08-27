@@ -1,4 +1,5 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import { InterfaceDot } from "@/components/interface-dot";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -31,6 +32,7 @@ const NAV = [
 function ConsoleLayout() {
   return (
     <div className="app-canvas min-h-screen bg-background text-foreground">
+      <InterfaceDot />
       <header className="sticky top-0 z-20 border-b border-border bg-surface/80 shadow-[var(--shadow-soft)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-6 gap-y-3 px-6 py-3">
           <Link to="/admin" className="flex items-center gap-2.5">
@@ -55,12 +57,6 @@ function ConsoleLayout() {
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-2">
-            <Link
-              to="/decagon"
-              className="ai-panel rounded-md px-3 py-1.5 text-sm font-medium transition-shadow hover:ai-glow"
-            >
-              Decagon CX
-            </Link>
             <a href="/docs" className="rounded-md border border-border bg-surface px-3 py-1.5 text-sm font-medium transition-colors hover:bg-accent">
               API docs
             </a>

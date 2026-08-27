@@ -1,5 +1,6 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { BarChart3, FileText, MessagesSquare, Sparkle, Store, Wrench } from "lucide-react";
+import { BarChart3, FileText, MessagesSquare, Sparkle, Wrench } from "lucide-react";
+import { InterfaceDot } from "@/components/interface-dot";
 
 export const Route = createFileRoute("/decagon")({
   component: DecagonLayout,
@@ -17,6 +18,7 @@ const NAV = [
 function DecagonLayout() {
   return (
     <div className="app-canvas flex min-h-screen bg-background text-foreground">
+      <InterfaceDot />
       <aside className="sticky top-0 hidden h-screen w-56 shrink-0 flex-col border-r border-sidebar-border bg-sidebar/80 px-3 py-5 backdrop-blur-xl md:flex">
         <div className="px-2 pb-6">
           <p className="ai-text text-lg font-bold tracking-tight">decagon</p>
@@ -37,13 +39,6 @@ function DecagonLayout() {
             </Link>
           ))}
         </nav>
-        <Link
-          to="/admin"
-          className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
-        >
-          <Store size={16} />
-          Bookly store
-        </Link>
       </aside>
 
       <div className="min-w-0 flex-1">
