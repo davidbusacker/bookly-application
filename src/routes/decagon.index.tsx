@@ -62,7 +62,34 @@ function Insights() {
       {error ? <ErrorNote error={error} /> : null}
 
       <Card
-        title={drill ? `Intent · ${INTENTS.find((i) => i.key === drill)?.label ?? drill}` : "What customers contact us about"}
+        title={
+          drill ? (
+            <span className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setDrill(null)}
+                className="text-muted-foreground transition-colors hover:text-foreground"
+              >
+                All intents
+              </button>
+              <span className="text-muted-foreground">/</span>
+              <span>Intent · {INTENTS.find((i) => i.key === drill)?.label ?? drill}</span>
+            </span>
+          ) : (
+            "What customers contact us about"
+          )
+        }
+        action={
+          drill ? (
+            <button
+              type="button"
+              onClick={() => setDrill(null)}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-xs font-medium hover:bg-accent"
+            >
+              <ArrowLeft size={13} /> Back to all intents
+            </button>
+          ) : null
+        }
       >
         {isLoading && !data ? (
           <Loading />
@@ -82,19 +109,12 @@ function Insights() {
             />
 
             <div className="space-y-2">
-              {drill ? (
-                <button
-                  type="button"
-                  onClick={() => setDrill(null)}
-                  className="mb-2 inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-xs font-medium hover:bg-accent"
-                >
-                  <ArrowLeft size={13} /> All intents
-                </button>
-              ) : (
+              {drill ? null : (
                 <p className="mb-2 text-xs text-muted-foreground">
                   Click <span className="font-semibold text-foreground">Initiate return</span> to drill into sub-reasons.
                 </p>
               )}
+
               {slices.map((s) => {
                 const total = slices.reduce((a, x) => a + x.value, 0) || 1;
                 const clickable = drill ? true : s.key === "initiate_return";
