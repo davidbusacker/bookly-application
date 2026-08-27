@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, ArrowRight, ExternalLink, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronDown, ExternalLink, X } from "lucide-react";
 import { apiGet, type AgentTrace } from "@/lib/bookly/api-client";
 import { Card, ErrorNote, Loading } from "@/components/console/ui";
 import {
