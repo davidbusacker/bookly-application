@@ -15,9 +15,9 @@ const ATTR_ITEMS: Suggestion[] = (() => {
   const seen = new Map<string, Suggestion>();
   for (const a of AOPS) {
     for (const m of a.body.matchAll(/\{\{([^}]+)\}\}/g)) {
-      const path = m[1].trim();
-      if (!seen.has(path)) {
-        const [ns] = path.split(".");
+      const path = m[1]?.trim();
+      if (path && !seen.has(path)) {
+        const ns = path.split(".")[0] ?? path;
         seen.set(path, { insert: path, label: `{{${path}}}`, hint: `${ns} attribute` });
       }
     }
