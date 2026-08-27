@@ -22,6 +22,7 @@ import { Route as AdminReturnsRouteImport } from './routes/admin.returns'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
 import { Route as DecagonIndexRouteImport } from './routes/decagon.index'
+import { Route as DecagonDuetRouteImport } from './routes/decagon.duet'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AdminCustomersIndexRouteImport } from './routes/admin.customers.index'
 import { Route as AdminCustomersIdRouteImport } from './routes/admin.customers.$id'
@@ -135,6 +136,11 @@ const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
 const DecagonIndexRoute = DecagonIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => DecagonRoute,
+} as any)
+const DecagonDuetRoute = DecagonDuetRouteImport.update({
+  id: '/duet',
+  path: '/duet',
   getParentRoute: () => DecagonRoute,
 } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
@@ -411,6 +417,7 @@ export interface FileRoutesByFullPath {
   '/admin/returns': typeof AdminReturnsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
+  '/decagon/duet': typeof DecagonDuetRoute
   '/admin/': typeof AdminIndexRoute
   '/decagon/': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -471,6 +478,7 @@ export interface FileRoutesByTo {
   '/admin/returns': typeof AdminReturnsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
+  '/decagon/duet': typeof DecagonDuetRoute
   '/admin': typeof AdminIndexRoute
   '/decagon': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -534,6 +542,7 @@ export interface FileRoutesById {
   '/admin/returns': typeof AdminReturnsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
+  '/decagon/duet': typeof DecagonDuetRoute
   '/admin/': typeof AdminIndexRoute
   '/decagon/': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -598,6 +607,7 @@ export interface FileRouteTypes {
     | '/admin/returns'
     | '/admin/settings'
     | '/admin/transactions'
+    | '/decagon/duet'
     | '/admin/'
     | '/decagon/'
     | '/.mcp/invoke-tool/$tool'
@@ -658,6 +668,7 @@ export interface FileRouteTypes {
     | '/admin/returns'
     | '/admin/settings'
     | '/admin/transactions'
+    | '/decagon/duet'
     | '/admin'
     | '/decagon'
     | '/.mcp/invoke-tool/$tool'
@@ -720,6 +731,7 @@ export interface FileRouteTypes {
     | '/admin/returns'
     | '/admin/settings'
     | '/admin/transactions'
+    | '/decagon/duet'
     | '/admin/'
     | '/decagon/'
     | '/.mcp/invoke-tool/$tool'
@@ -911,6 +923,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/decagon/'
       preLoaderRoute: typeof DecagonIndexRouteImport
+      parentRoute: typeof DecagonRoute
+    }
+    '/decagon/duet': {
+      id: '/decagon/duet'
+      path: '/duet'
+      fullPath: '/decagon/duet'
+      preLoaderRoute: typeof DecagonDuetRouteImport
       parentRoute: typeof DecagonRoute
     }
     '/.mcp/invoke-tool/$tool': {
@@ -1276,12 +1295,14 @@ const AdminRouteChildren: AdminRouteChildren = {
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface DecagonRouteChildren {
+  DecagonDuetRoute: typeof DecagonDuetRoute
   DecagonIndexRoute: typeof DecagonIndexRoute
   DecagonConvosIdRoute: typeof DecagonConvosIdRoute
   DecagonConvosIndexRoute: typeof DecagonConvosIndexRoute
 }
 
 const DecagonRouteChildren: DecagonRouteChildren = {
+  DecagonDuetRoute: DecagonDuetRoute,
   DecagonIndexRoute: DecagonIndexRoute,
   DecagonConvosIdRoute: DecagonConvosIdRoute,
   DecagonConvosIndexRoute: DecagonConvosIndexRoute,
