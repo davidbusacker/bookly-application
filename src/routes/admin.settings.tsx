@@ -1,8 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { Download } from "lucide-react";
 import { apiSend } from "@/lib/bookly/api-client";
 import { Card, ErrorNote } from "@/components/console/ui";
+import logoBlack from "@/assets/bookly-logo-black.png";
+import logoWhite from "@/assets/bookly-logo-white.png";
 
 export const Route = createFileRoute("/admin/settings")({
   head: () => ({
@@ -100,6 +103,52 @@ function AdminSettings() {
           <p className="text-xs text-muted-foreground">
             API equivalent: <span className="font-mono">POST /api/public/v1/admin/reset-demo</span>
           </p>
+        </div>
+      </Card>
+
+      <Card title="Media kit">
+        <div className="space-y-4 px-5 py-5">
+          <p className="text-sm text-muted-foreground">
+            Official Bookly brand assets — tech-forward mark and wordmark on a transparent background.
+          </p>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="overflow-hidden rounded-lg border border-border">
+              <div className="flex h-36 items-center justify-center bg-[repeating-conic-gradient(hsl(var(--muted))_0%_25%,transparent_0%_50%)] bg-[size:16px_16px] p-6">
+                <img src={logoBlack} alt="Bookly logo, black variant" width={965} height={342} className="max-h-16 w-auto" loading="lazy" />
+              </div>
+              <div className="flex items-center justify-between border-t border-border px-4 py-3">
+                <div>
+                  <p className="text-sm font-medium">Black</p>
+                  <p className="text-xs text-muted-foreground">PNG · transparent · 965×342</p>
+                </div>
+                <a
+                  href={logoBlack}
+                  download="bookly-logo-black.png"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium hover:bg-accent"
+                >
+                  <Download size={13} /> Download
+                </a>
+              </div>
+            </div>
+            <div className="overflow-hidden rounded-lg border border-border">
+              <div className="flex h-36 items-center justify-center bg-foreground/90 p-6">
+                <img src={logoWhite} alt="Bookly logo, white variant" width={965} height={343} className="max-h-16 w-auto" loading="lazy" />
+              </div>
+              <div className="flex items-center justify-between border-t border-border px-4 py-3">
+                <div>
+                  <p className="text-sm font-medium">White</p>
+                  <p className="text-xs text-muted-foreground">PNG · transparent · 965×343</p>
+                </div>
+                <a
+                  href={logoWhite}
+                  download="bookly-logo-white.png"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium hover:bg-accent"
+                >
+                  <Download size={13} /> Download
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </Card>
 

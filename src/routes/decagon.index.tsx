@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, ArrowRight, ExternalLink, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronDown, ExternalLink, X } from "lucide-react";
 import { apiGet, type AgentTrace } from "@/lib/bookly/api-client";
 import { Card, ErrorNote, Loading } from "@/components/console/ui";
 import {
@@ -55,20 +55,40 @@ function Insights() {
   });
 
   const traces = useMemo(() => data?.data ?? [], [data]);
-  const slices = useMemo(
+  // Demo scale factor: simulate a much larger conversation volume than we have traces.
+  const scale = useMemo(() => 100 + Math.floor(Math.random() * 101), []);
+  const rawSlices = useMemo(
     () => (drill ? subReasonSlices(traces, drill) : intentSlices(traces)),
     [traces, drill],
   );
-  const buckets = useMemo(() => lengthByChannel(traces), [traces]);
+  const slices = useMemo(
+    () => rawSlices.map((s) => ({ ...s, value: s.value * scale })),
+    [rawSlices, scale],
+  );
+  const buckets = useMemo(
+    () =>
+      lengthByChannel(traces).map((b) => ({ ...b, chat: b.chat * scale, voice: b.voice * scale })),
+    [traces, scale],
+  );
   const voice = traces.filter((t) => traceChannel(t) === "voice").length;
+  const fmt = (n: number) => n.toLocaleString();
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Insights</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {traces.length} AI conversations analyzed · {traces.length - voice} chat · {voice} phone
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Insights</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {fmt(traces.length * scale)} AI conversations analyzed · {fmt((traces.length - voice) * scale)} chat ·{" "}
+            {fmt(voice * scale)} phone
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <FilterChip label="Date range" value="Last 45 days" />
+          <FilterChip label="Channel" value="All channels" />
+          <FilterChip label="Agent" value="Bookly CX v2.4" />
+          <FilterChip label="Region" value="All regions" />
+        </div>
       </div>
 
       {error ? <ErrorNote error={error} /> : null}
@@ -155,7 +175,7 @@ function Insights() {
                   >
                     <span className="h-3 w-3 shrink-0 rounded-sm" style={{ background: s.color }} />
                     <span className="flex-1 truncate text-sm font-medium">{s.label}</span>
-                    <span className="tabular-nums text-sm text-muted-foreground">{s.value}</span>
+                    <span className="tabular-nums text-sm text-muted-foreground">{fmt(s.value)}</span>
                     <span className="w-12 text-right tabular-nums text-xs text-muted-foreground">
                       {Math.round((s.value / total) * 100)}%
                     </span>
@@ -187,7 +207,7 @@ function Insights() {
           intentKey={drill}
           subKey={sub}
           label={subReasonSlices(traces, drill).find((s) => s.key === sub)?.label ?? sub}
-          count={subReasonSlices(traces, drill).find((s) => s.key === sub)?.value ?? 0}
+          count={(subReasonSlices(traces, drill).find((s) => s.key === sub)?.value ?? 0) * scale}
           onClose={() => setSub(null)}
         />
       ) : null}
@@ -208,7 +228,7 @@ function Donut({
 }) {
   let angle = 0;
   return (
-    <div className="relative mx-auto">
+    <div className="relative mx-auto h-64 w-64">
       <svg viewBox="0 0 240 240" className="h-64 w-64">
         {slices.map((s) => {
           const sweep = (s.value / (total || 1)) * Math.PI * 2;
@@ -228,10 +248,21 @@ function Donut({
         })}
       </svg>
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-3xl font-bold tabular-nums">{total}</span>
+        <span className="text-3xl font-bold tabular-nums">{total.toLocaleString()}</span>
         <span className="text-[11px] uppercase tracking-wider text-muted-foreground">{caption}</span>
       </div>
     </div>
+  );
+}
+
+/** Non-functional demo filter chip — looks interactive, intentionally inert. */
+function FilterChip({ label, value }: { label: string; value: string }) {
+  return (
+    <span className="inline-flex cursor-default items-center gap-2 rounded-md border border-border bg-card px-3 py-1.5 text-xs shadow-xs">
+      <span className="text-muted-foreground">{label}</span>
+      <span className="font-medium">{value}</span>
+      <ChevronDown size={12} className="text-muted-foreground" />
+    </span>
   );
 }
 
@@ -322,7 +353,7 @@ function SubReasonPanel({
               {INTENTS.find((i) => i.key === intentKey)?.label} · sub-reason
             </p>
             <h2 className="text-lg font-bold tracking-tight">{label}</h2>
-            <p className="text-xs text-muted-foreground">{count} conversations in the last 45 days</p>
+            <p className="text-xs text-muted-foreground">{count.toLocaleString()} conversations in the last 45 days</p>
           </div>
           <button type="button" onClick={onClose} className="rounded-md p-1 hover:bg-accent" aria-label="Close">
             <X size={16} />
