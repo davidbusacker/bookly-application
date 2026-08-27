@@ -106,19 +106,29 @@ function Insights() {
         {isLoading && !data ? (
           <Loading />
         ) : (
-          <div className="grid gap-8 px-5 py-6 lg:grid-cols-[320px_1fr]">
-            <Donut
-              slices={slices}
-              total={slices.reduce((a, s) => a + s.value, 0)}
-              caption={drill ? "Sub-reasons" : "Primary intents"}
-              onSelect={(key) => {
-                if (!drill) {
-                  if (key === "initiate_return") setDrill(key);
-                } else {
-                  setSub(key);
-                }
-              }}
-            />
+          <div
+            className={`grid gap-8 px-5 py-6 transition-all duration-300 ease-in lg:grid-cols-[320px_1fr] ${
+              exiting ? "pointer-events-none -translate-x-4 opacity-0" : "translate-x-0 opacity-100"
+            }`}
+          >
+            <div
+              className={`transition-all duration-300 ease-in ${
+                exiting ? "scale-90 opacity-0" : "scale-100 opacity-100"
+              }`}
+            >
+              <Donut
+                slices={slices}
+                total={slices.reduce((a, s) => a + s.value, 0)}
+                caption={drill ? "Sub-reasons" : "Primary intents"}
+                onSelect={(key) => {
+                  if (!drill) {
+                    if (key === "initiate_return") animateDrill(key);
+                  } else {
+                    setSub(key);
+                  }
+                }}
+              />
+            </div>
 
             <div className="space-y-2">
               {drill ? null : (
