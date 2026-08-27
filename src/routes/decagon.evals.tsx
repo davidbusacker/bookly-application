@@ -131,26 +131,15 @@ function Evals() {
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
         <Card title="Composite quality trend · last 12 runs">
           <div className="px-5 py-6">
-            <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-48 w-full">
-              <polyline
-                points={points}
-                fill="none"
-                stroke="var(--primary)"
-                strokeWidth="1.2"
-                vectorEffect="non-scaling-stroke"
-              />
-              {TREND.map((v, i) => {
-                const x = (i / (TREND.length - 1)) * 100;
-                const y = 100 - ((v - min) / (max - min)) * 100;
-                return <circle key={i} cx={x} cy={y} r="1" fill="var(--primary)" vectorEffect="non-scaling-stroke" />;
-              })}
-            </svg>
+            <TrendChart data={TREND} />
             <div className="mt-3 flex justify-between text-[11px] text-muted-foreground">
-              <span>12 runs ago · {TREND[0]?.toFixed(1)}%</span>
-              <span>Latest · {TREND[TREND.length - 1]?.toFixed(1)}%</span>
+              <span>12 runs ago · {TREND[0]?.value.toFixed(1)}%</span>
+              <span>Hover to scrub</span>
+              <span>Latest · {TREND[TREND.length - 1]?.value.toFixed(1)}%</span>
             </div>
           </div>
         </Card>
+
 
         <Card title="Quality dimensions">
           <div className="space-y-3 px-5 py-6">
