@@ -55,20 +55,40 @@ function Insights() {
   });
 
   const traces = useMemo(() => data?.data ?? [], [data]);
-  const slices = useMemo(
+  // Demo scale factor: simulate a much larger conversation volume than we have traces.
+  const scale = useMemo(() => 100 + Math.floor(Math.random() * 101), []);
+  const rawSlices = useMemo(
     () => (drill ? subReasonSlices(traces, drill) : intentSlices(traces)),
     [traces, drill],
   );
-  const buckets = useMemo(() => lengthByChannel(traces), [traces]);
+  const slices = useMemo(
+    () => rawSlices.map((s) => ({ ...s, value: s.value * scale })),
+    [rawSlices, scale],
+  );
+  const buckets = useMemo(
+    () =>
+      lengthByChannel(traces).map((b) => ({ ...b, chat: b.chat * scale, voice: b.voice * scale })),
+    [traces, scale],
+  );
   const voice = traces.filter((t) => traceChannel(t) === "voice").length;
+  const fmt = (n: number) => n.toLocaleString();
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Insights</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {traces.length} AI conversations analyzed · {traces.length - voice} chat · {voice} phone
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Insights</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {fmt(traces.length * scale)} AI conversations analyzed · {fmt((traces.length - voice) * scale)} chat ·{" "}
+            {fmt(voice * scale)} phone
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <FilterChip label="Date range" value="Last 45 days" />
+          <FilterChip label="Channel" value="All channels" />
+          <FilterChip label="Agent" value="Bookly CX v2.4" />
+          <FilterChip label="Region" value="All regions" />
+        </div>
       </div>
 
       {error ? <ErrorNote error={error} /> : null}
