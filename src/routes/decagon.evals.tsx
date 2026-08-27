@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, CheckCircle2, TrendingDown, TrendingUp } from "lucide-react";
-import { Card, Stat, Table, TR, TD } from "@/components/console/ui";
+import { Card, Stat, Table } from "@/components/console/ui";
 
 export const Route = createFileRoute("/decagon/evals")({
   head: () => ({
@@ -165,36 +165,20 @@ function Evals() {
       <Card title="Test suites">
         <Table head={["Suite", "Scope", "Cases", "Score", "Δ vs prev", "Cadence", "Last run", "Status"]}>
           {SUITES.map((s) => (
-            <TR key={s.name}>
-              <TD>
-                <span className="font-medium">{s.name}</span>
-              </TD>
-              <TD>
-                <span className="text-muted-foreground">{s.scope}</span>
-              </TD>
-              <TD>
-                <span className="tabular-nums">{s.cases}</span>
-              </TD>
-              <TD>
-                <span className="tabular-nums font-semibold">{s.score.toFixed(1)}%</span>
-              </TD>
-              <TD>
-                <Delta value={s.score - s.prev} />
-              </TD>
-              <TD>
-                <span className="text-muted-foreground">{s.cadence}</span>
-              </TD>
-              <TD>
-                <span className="text-muted-foreground">{s.lastRun}</span>
-              </TD>
-              <TD>
-                <span
-                  className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium capitalize ${STATUS_STYLE[s.status]}`}
-                >
+            <tr key={s.name} className="hover:bg-accent/40">
+              <td className="px-5 py-2.5 font-medium">{s.name}</td>
+              <td className="px-5 py-2.5 text-muted-foreground">{s.scope}</td>
+              <td className="px-5 py-2.5 tabular-nums">{s.cases}</td>
+              <td className="px-5 py-2.5 tabular-nums font-semibold">{s.score.toFixed(1)}%</td>
+              <td className="px-5 py-2.5"><Delta value={s.score - s.prev} /></td>
+              <td className="px-5 py-2.5 text-muted-foreground">{s.cadence}</td>
+              <td className="whitespace-nowrap px-5 py-2.5 text-muted-foreground">{s.lastRun}</td>
+              <td className="px-5 py-2.5">
+                <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium capitalize ${STATUS_STYLE[s.status]}`}>
                   {s.status}
                 </span>
-              </TD>
-            </TR>
+              </td>
+            </tr>
           ))}
         </Table>
       </Card>
