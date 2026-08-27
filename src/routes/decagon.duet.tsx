@@ -355,8 +355,8 @@ function Duet() {
                   <>
                     <AopEditor value={draft} onChange={setDraft} />
                     <p className="mt-2 text-xs text-muted-foreground">
-                      Type <span className="font-mono">#</span> to reference an AOP or <span className="font-mono">@</span> for a tool
-                      or skill — keep typing to filter, ↑↓ to move, Enter to insert.
+                      Type <span className="font-mono">#</span> for an AOP, <span className="font-mono">@</span> for a tool or skill, or{" "}
+                      <span className="font-mono">{"{{"}</span> for an attribute — keep typing to filter, ↑↓ to move, Enter to insert.
                     </p>
                   </>
                 ) : (
