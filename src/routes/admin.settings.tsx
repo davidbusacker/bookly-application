@@ -121,13 +121,16 @@ function AdminSettings() {
                   <p className="text-sm font-medium">Black</p>
                   <p className="text-xs text-muted-foreground">PNG · transparent · 965×342</p>
                 </div>
-                <a
-                  href={logoBlack}
-                  download="bookly-logo-black.png"
-                  className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium hover:bg-accent"
-                >
-                  <Download size={13} /> Download
-                </a>
+                <div className="flex items-center gap-2">
+                  <CopyImageButton url={logoBlack} label="Copy black logo" />
+                  <a
+                    href={logoBlack}
+                    download="bookly-logo-black.png"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium hover:bg-accent"
+                  >
+                    <Download size={13} /> Download
+                  </a>
+                </div>
               </div>
             </div>
             <div className="overflow-hidden rounded-lg border border-border">
@@ -139,13 +142,16 @@ function AdminSettings() {
                   <p className="text-sm font-medium">White</p>
                   <p className="text-xs text-muted-foreground">PNG · transparent · 965×343</p>
                 </div>
-                <a
-                  href={logoWhite}
-                  download="bookly-logo-white.png"
-                  className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium hover:bg-accent"
-                >
-                  <Download size={13} /> Download
-                </a>
+                <div className="flex items-center gap-2">
+                  <CopyImageButton url={logoWhite} label="Copy white logo" />
+                  <a
+                    href={logoWhite}
+                    download="bookly-logo-white.png"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium hover:bg-accent"
+                  >
+                    <Download size={13} /> Download
+                  </a>
+                </div>
               </div>
             </div>
           </div>
