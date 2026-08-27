@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Download } from "lucide-react";
+import { Check, Copy, Download } from "lucide-react";
 import { apiSend } from "@/lib/bookly/api-client";
 import { Card, ErrorNote } from "@/components/console/ui";
 import logoBlack from "@/assets/bookly-logo-black.png";
@@ -26,6 +26,42 @@ export const Route = createFileRoute("/admin/settings")({
 });
 
 type ResetResult = { reset: boolean; reset_at: string; summary?: unknown };
+
+function CopyImageButton({ url, label }: { url: string; label: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const item = new ClipboardItem({ [blob.type]: blob });
+      await navigator.clipboard.write([item]);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // Fallback for browsers that don't support image clipboard writes.
+      try {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      } catch {
+        // ignore
+      }
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={copy}
+      aria-label={label}
+      className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium hover:bg-accent"
+    >
+      {copied ? <Check size={13} /> : <Copy size={13} />}
+      {copied ? "Copied" : "Copy"}
+    </button>
+  );
+}
 
 function AdminSettings() {
   const qc = useQueryClient();
@@ -121,13 +157,16 @@ function AdminSettings() {
                   <p className="text-sm font-medium">Black</p>
                   <p className="text-xs text-muted-foreground">PNG · transparent · 965×342</p>
                 </div>
-                <a
-                  href={logoBlack}
-                  download="bookly-logo-black.png"
-                  className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium hover:bg-accent"
-                >
-                  <Download size={13} /> Download
-                </a>
+                <div className="flex items-center gap-2">
+                  <CopyImageButton url={logoBlack} label="Copy black logo" />
+                  <a
+                    href={logoBlack}
+                    download="bookly-logo-black.png"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium hover:bg-accent"
+                  >
+                    <Download size={13} /> Download
+                  </a>
+                </div>
               </div>
             </div>
             <div className="overflow-hidden rounded-lg border border-border">
@@ -139,13 +178,16 @@ function AdminSettings() {
                   <p className="text-sm font-medium">White</p>
                   <p className="text-xs text-muted-foreground">PNG · transparent · 965×343</p>
                 </div>
-                <a
-                  href={logoWhite}
-                  download="bookly-logo-white.png"
-                  className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium hover:bg-accent"
-                >
-                  <Download size={13} /> Download
-                </a>
+                <div className="flex items-center gap-2">
+                  <CopyImageButton url={logoWhite} label="Copy white logo" />
+                  <a
+                    href={logoWhite}
+                    download="bookly-logo-white.png"
+                    className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs font-medium hover:bg-accent"
+                  >
+                    <Download size={13} /> Download
+                  </a>
+                </div>
               </div>
             </div>
           </div>
