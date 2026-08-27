@@ -107,8 +107,9 @@ function Insights() {
           <Loading />
         ) : (
           <div
-            className={`grid gap-8 px-5 py-6 transition-all duration-300 ease-in lg:grid-cols-[320px_1fr] ${
-              exiting ? "pointer-events-none -translate-x-4 opacity-0" : "translate-x-0 opacity-100"
+            key={drill ?? "all"}
+            className={`grid gap-8 px-5 py-6 lg:grid-cols-[320px_1fr] ${
+              exiting ? "pointer-events-none" : "animate-fade-in"
             }`}
           >
             <div
