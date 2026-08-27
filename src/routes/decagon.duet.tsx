@@ -483,7 +483,7 @@ function Duet() {
                       Simulate a new chat with this AOP
                     </button>
                     <button type="button" className="rounded-md border border-border px-3.5 py-1.5 text-sm font-medium hover:bg-accent">
-                      Publish to #store_chatbot
+                      Configure A/B test
                     </button>
                   </div>
                 ) : null}
