@@ -30,7 +30,6 @@ import { Route as AdminOrdersIndexRouteImport } from './routes/admin.orders.inde
 import { Route as AdminOrdersIdRouteImport } from './routes/admin.orders.$id'
 import { Route as AdminRefundsIndexRouteImport } from './routes/admin.refunds.index'
 import { Route as AdminRefundsIdRouteImport } from './routes/admin.refunds.$id'
-import { Route as AdminTracesIdRouteImport } from './routes/admin.traces.$id'
 import { Route as ApiPublicOpenapiDotjsonRouteImport } from './routes/api/public/openapi[.]json'
 import { Route as ApiPublicToolsDotjsonRouteImport } from './routes/api/public/tools[.]json'
 import { Route as DecagonConvosIndexRouteImport } from './routes/decagon.convos.index'
@@ -177,11 +176,6 @@ const AdminRefundsIndexRoute = AdminRefundsIndexRouteImport.update({
 const AdminRefundsIdRoute = AdminRefundsIdRouteImport.update({
   id: '/refunds/$id',
   path: '/refunds/$id',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminTracesIdRoute = AdminTracesIdRouteImport.update({
-  id: '/traces/$id',
-  path: '/traces/$id',
   getParentRoute: () => AdminRoute,
 } as any)
 const ApiPublicOpenapiDotjsonRoute = ApiPublicOpenapiDotjsonRouteImport.update({
@@ -424,7 +418,6 @@ export interface FileRoutesByFullPath {
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/refunds/$id': typeof AdminRefundsIdRoute
-  '/admin/traces/$id': typeof AdminTracesIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/decagon/convos/$id': typeof DecagonConvosIdRoute
@@ -485,7 +478,6 @@ export interface FileRoutesByTo {
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/refunds/$id': typeof AdminRefundsIdRoute
-  '/admin/traces/$id': typeof AdminTracesIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/decagon/convos/$id': typeof DecagonConvosIdRoute
@@ -549,7 +541,6 @@ export interface FileRoutesById {
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/refunds/$id': typeof AdminRefundsIdRoute
-  '/admin/traces/$id': typeof AdminTracesIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
   '/decagon/convos/$id': typeof DecagonConvosIdRoute
@@ -614,7 +605,6 @@ export interface FileRouteTypes {
     | '/admin/customers/$id'
     | '/admin/orders/$id'
     | '/admin/refunds/$id'
-    | '/admin/traces/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/decagon/convos/$id'
@@ -675,7 +665,6 @@ export interface FileRouteTypes {
     | '/admin/customers/$id'
     | '/admin/orders/$id'
     | '/admin/refunds/$id'
-    | '/admin/traces/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/decagon/convos/$id'
@@ -738,7 +727,6 @@ export interface FileRouteTypes {
     | '/admin/customers/$id'
     | '/admin/orders/$id'
     | '/admin/refunds/$id'
-    | '/admin/traces/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
     | '/decagon/convos/$id'
@@ -979,13 +967,6 @@ declare module '@tanstack/react-router' {
       path: '/refunds/$id'
       fullPath: '/admin/refunds/$id'
       preLoaderRoute: typeof AdminRefundsIdRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/traces/$id': {
-      id: '/admin/traces/$id'
-      path: '/traces/$id'
-      fullPath: '/admin/traces/$id'
-      preLoaderRoute: typeof AdminTracesIdRouteImport
       parentRoute: typeof AdminRoute
     }
     '/api/public/openapi.json': {
@@ -1272,7 +1253,6 @@ interface AdminRouteChildren {
   AdminCustomersIdRoute: typeof AdminCustomersIdRoute
   AdminOrdersIdRoute: typeof AdminOrdersIdRoute
   AdminRefundsIdRoute: typeof AdminRefundsIdRoute
-  AdminTracesIdRoute: typeof AdminTracesIdRoute
   AdminCustomersIndexRoute: typeof AdminCustomersIndexRoute
   AdminOrdersIndexRoute: typeof AdminOrdersIndexRoute
   AdminRefundsIndexRoute: typeof AdminRefundsIndexRoute
@@ -1286,7 +1266,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCustomersIdRoute: AdminCustomersIdRoute,
   AdminOrdersIdRoute: AdminOrdersIdRoute,
   AdminRefundsIdRoute: AdminRefundsIdRoute,
-  AdminTracesIdRoute: AdminTracesIdRoute,
   AdminCustomersIndexRoute: AdminCustomersIndexRoute,
   AdminOrdersIndexRoute: AdminOrdersIndexRoute,
   AdminRefundsIndexRoute: AdminRefundsIndexRoute,

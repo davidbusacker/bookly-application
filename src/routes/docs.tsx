@@ -81,7 +81,7 @@ function Docs() {
           <p className="mt-2 text-sm text-muted-foreground">
             After every conversation the CX agent must POST a trace to{" "}
             <code>/api/public/v1/agent-traces</code>. Staff read these in the console under{" "}
-            <a href="/admin/traces" className="underline underline-offset-4">Agent traces</a>. The same
+            <a href="/decagon/convos" className="underline underline-offset-4">Decagon Convos</a>. The same
             instructions are served in <code>/api/public/tools.json</code>, <code>/llms.txt</code> and the
             OpenAPI description.
           </p>
