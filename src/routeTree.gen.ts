@@ -32,6 +32,7 @@ import { Route as AdminRefundsIdRouteImport } from './routes/admin.refunds.$id'
 import { Route as AdminTracesIdRouteImport } from './routes/admin.traces.$id'
 import { Route as ApiPublicOpenapiDotjsonRouteImport } from './routes/api/public/openapi[.]json'
 import { Route as ApiPublicToolsDotjsonRouteImport } from './routes/api/public/tools[.]json'
+import { Route as DecagonConvosIndexRouteImport } from './routes/decagon.convos.index'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as ApiPublicV1MetaRouteImport } from './routes/api/public/v1/meta'
 import { Route as ApiPublicV1AdminResetDemoRouteImport } from './routes/api/public/v1/admin/reset-demo'
@@ -185,6 +186,11 @@ const ApiPublicToolsDotjsonRoute = ApiPublicToolsDotjsonRouteImport.update({
   id: '/api/public/tools.json',
   path: '/api/public/tools.json',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DecagonConvosIndexRoute = DecagonConvosIndexRouteImport.update({
+  id: '/convos/',
+  path: '/convos/',
+  getParentRoute: () => DecagonRoute,
 } as any)
 const ApiPublicV1HealthRoute = ApiPublicV1HealthRouteImport.update({
   id: '/api/public/v1/health',
@@ -411,6 +417,7 @@ export interface FileRoutesByFullPath {
   '/admin/customers/': typeof AdminCustomersIndexRoute
   '/admin/orders/': typeof AdminOrdersIndexRoute
   '/admin/refunds/': typeof AdminRefundsIndexRoute
+  '/decagon/convos/': typeof DecagonConvosIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/admin/reset-demo': typeof ApiPublicV1AdminResetDemoRoute
@@ -469,6 +476,7 @@ export interface FileRoutesByTo {
   '/admin/customers': typeof AdminCustomersIndexRoute
   '/admin/orders': typeof AdminOrdersIndexRoute
   '/admin/refunds': typeof AdminRefundsIndexRoute
+  '/decagon/convos': typeof DecagonConvosIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/admin/reset-demo': typeof ApiPublicV1AdminResetDemoRoute
@@ -530,6 +538,7 @@ export interface FileRoutesById {
   '/admin/customers/': typeof AdminCustomersIndexRoute
   '/admin/orders/': typeof AdminOrdersIndexRoute
   '/admin/refunds/': typeof AdminRefundsIndexRoute
+  '/decagon/convos/': typeof DecagonConvosIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/admin/reset-demo': typeof ApiPublicV1AdminResetDemoRoute
@@ -592,6 +601,7 @@ export interface FileRouteTypes {
     | '/admin/customers/'
     | '/admin/orders/'
     | '/admin/refunds/'
+    | '/decagon/convos/'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/admin/reset-demo'
@@ -650,6 +660,7 @@ export interface FileRouteTypes {
     | '/admin/customers'
     | '/admin/orders'
     | '/admin/refunds'
+    | '/decagon/convos'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/admin/reset-demo'
@@ -710,6 +721,7 @@ export interface FileRouteTypes {
     | '/admin/customers/'
     | '/admin/orders/'
     | '/admin/refunds/'
+    | '/decagon/convos/'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/admin/reset-demo'
@@ -958,6 +970,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/public/tools.json'
       preLoaderRoute: typeof ApiPublicToolsDotjsonRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/decagon/convos/': {
+      id: '/decagon/convos/'
+      path: '/convos'
+      fullPath: '/decagon/convos/'
+      preLoaderRoute: typeof DecagonConvosIndexRouteImport
+      parentRoute: typeof DecagonRoute
     }
     '/api/public/v1/health': {
       id: '/api/public/v1/health'
@@ -1239,10 +1258,12 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface DecagonRouteChildren {
   DecagonIndexRoute: typeof DecagonIndexRoute
+  DecagonConvosIndexRoute: typeof DecagonConvosIndexRoute
 }
 
 const DecagonRouteChildren: DecagonRouteChildren = {
   DecagonIndexRoute: DecagonIndexRoute,
+  DecagonConvosIndexRoute: DecagonConvosIndexRoute,
 }
 
 const DecagonRouteWithChildren =
