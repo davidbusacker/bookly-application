@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowRight, Check, FileText, Loader2, Sparkle, Wrench } from "lucide-react";
+import { ArrowRight, Check, Eye, FileText, Loader2, Pencil, Sparkle, Wrench } from "lucide-react";
 import { Card } from "@/components/console/ui";
 import { Markdown } from "@/components/decagon/markdown";
+import { AopEditor } from "@/components/decagon/aop-editor";
 
 type Search = { topic?: string };
 
@@ -148,6 +149,9 @@ function Duet() {
   const [visibleSteps, setVisibleSteps] = useState(0);
   const [aopChars, setAopChars] = useState(0);
   const [resolving, setResolving] = useState<string | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(AOP);
+
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
@@ -165,8 +169,11 @@ function Duet() {
   const approve = () => {
     setPhase("drafting");
     setAopChars(0);
+    setEditing(false);
+    setDraft(AOP);
     timers.current.push(setTimeout(() => setPhase("aop"), 600));
   };
+
 
   useEffect(() => {
     if (phase !== "aop") return;
@@ -320,20 +327,44 @@ function Duet() {
           ) : null}
 
           {phase === "aop" ? (
-            <Card title="Canvas · Proactive Genre-Fit Nudge at Checkout">
+            <Card
+              title="Canvas · Proactive Genre-Fit Nudge at Checkout"
+              action={
+                aopChars >= AOP.length ? (
+                  <button
+                    type="button"
+                    onClick={() => setEditing((v) => !v)}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1 text-xs font-medium transition-shadow hover:ai-glow"
+                  >
+                    {editing ? <Eye size={12} /> : <Pencil size={12} />}
+                    {editing ? "Preview" : "Edit mode"}
+                  </button>
+                ) : null
+              }
+            >
               <div className="px-5 py-5">
-                <div className="ai-panel max-h-[32rem] overflow-auto rounded-xl p-6 text-sm leading-relaxed">
-                  <Markdown text={AOP.slice(0, aopChars)} />
-                  {aopChars < AOP.length && !resolving ? (
-                    <span className="ml-0.5 inline-block animate-pulse font-mono">▍</span>
-                  ) : null}
-                  {resolving ? (
-                    <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-[color-mix(in_oklab,var(--ai)_35%,transparent)] bg-surface/80 px-3 py-1 text-xs text-muted-foreground">
-                      <Loader2 size={12} className="animate-spin text-[var(--ai)]" />
-                      {resolving}…
+                {editing ? (
+                  <>
+                    <AopEditor value={draft} onChange={setDraft} />
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      Type <span className="font-mono">#</span> to reference an AOP or <span className="font-mono">@</span> for a tool
+                      or skill — keep typing to filter, ↑↓ to move, Enter to insert.
                     </p>
-                  ) : null}
-                </div>
+                  </>
+                ) : (
+                  <div className="ai-panel max-h-[32rem] overflow-auto rounded-xl p-6 text-sm leading-relaxed">
+                    <Markdown text={aopChars >= AOP.length ? draft : AOP.slice(0, aopChars)} />
+                    {aopChars < AOP.length && !resolving ? (
+                      <span className="ml-0.5 inline-block animate-pulse font-mono">▍</span>
+                    ) : null}
+                    {resolving ? (
+                      <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-[color-mix(in_oklab,var(--ai)_35%,transparent)] bg-surface/80 px-3 py-1 text-xs text-muted-foreground">
+                        <Loader2 size={12} className="animate-spin text-[var(--ai)]" />
+                        {resolving}…
+                      </p>
+                    ) : null}
+                  </div>
+                )}
                 {aopChars >= AOP.length ? (
                   <div className="mt-4 flex flex-wrap gap-2">
                     <button
@@ -350,6 +381,7 @@ function Duet() {
               </div>
             </Card>
           ) : null}
+
         </div>
       )}
     </div>
