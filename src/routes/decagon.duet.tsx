@@ -149,6 +149,9 @@ function Duet() {
   const [visibleSteps, setVisibleSteps] = useState(0);
   const [aopChars, setAopChars] = useState(0);
   const [resolving, setResolving] = useState<string | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(AOP);
+
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
