@@ -958,6 +958,7 @@ export type Database = {
       reset_bookly_demo: { Args: never; Returns: Json }
       seed_bookly_demo: { Args: never; Returns: Json }
       seed_bookly_inventory: { Args: never; Returns: Json }
+      seed_decagon_traces: { Args: never; Returns: Json }
     }
     Enums: {
       [_ in never]: never
