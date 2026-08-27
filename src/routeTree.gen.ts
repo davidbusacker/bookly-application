@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as DecagonRouteImport } from './routes/decagon'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as McpRouteImport } from './routes/mcp'
@@ -20,6 +21,8 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminReturnsRouteImport } from './routes/admin.returns'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
+import { Route as DecagonIndexRouteImport } from './routes/decagon.index'
+import { Route as DecagonDuetRouteImport } from './routes/decagon.duet'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AdminCustomersIndexRouteImport } from './routes/admin.customers.index'
 import { Route as AdminCustomersIdRouteImport } from './routes/admin.customers.$id'
@@ -27,9 +30,10 @@ import { Route as AdminOrdersIndexRouteImport } from './routes/admin.orders.inde
 import { Route as AdminOrdersIdRouteImport } from './routes/admin.orders.$id'
 import { Route as AdminRefundsIndexRouteImport } from './routes/admin.refunds.index'
 import { Route as AdminRefundsIdRouteImport } from './routes/admin.refunds.$id'
-import { Route as AdminTracesIdRouteImport } from './routes/admin.traces.$id'
 import { Route as ApiPublicOpenapiDotjsonRouteImport } from './routes/api/public/openapi[.]json'
 import { Route as ApiPublicToolsDotjsonRouteImport } from './routes/api/public/tools[.]json'
+import { Route as DecagonConvosIndexRouteImport } from './routes/decagon.convos.index'
+import { Route as DecagonConvosIdRouteImport } from './routes/decagon.convos.$id'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as ApiPublicV1MetaRouteImport } from './routes/api/public/v1/meta'
 import { Route as ApiPublicV1AdminResetDemoRouteImport } from './routes/api/public/v1/admin/reset-demo'
@@ -74,6 +78,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DecagonRoute = DecagonRouteImport.update({
+  id: '/decagon',
+  path: '/decagon',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocsRoute = DocsRouteImport.update({
@@ -123,6 +132,16 @@ const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
   path: '/transactions',
   getParentRoute: () => AdminRoute,
 } as any)
+const DecagonIndexRoute = DecagonIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DecagonRoute,
+} as any)
+const DecagonDuetRoute = DecagonDuetRouteImport.update({
+  id: '/duet',
+  path: '/duet',
+  getParentRoute: () => DecagonRoute,
+} as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
     id: '/.mcp/invoke-tool/$tool',
@@ -159,11 +178,6 @@ const AdminRefundsIdRoute = AdminRefundsIdRouteImport.update({
   path: '/refunds/$id',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminTracesIdRoute = AdminTracesIdRouteImport.update({
-  id: '/traces/$id',
-  path: '/traces/$id',
-  getParentRoute: () => AdminRoute,
-} as any)
 const ApiPublicOpenapiDotjsonRoute = ApiPublicOpenapiDotjsonRouteImport.update({
   id: '/api/public/openapi.json',
   path: '/api/public/openapi.json',
@@ -173,6 +187,16 @@ const ApiPublicToolsDotjsonRoute = ApiPublicToolsDotjsonRouteImport.update({
   id: '/api/public/tools.json',
   path: '/api/public/tools.json',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DecagonConvosIndexRoute = DecagonConvosIndexRouteImport.update({
+  id: '/convos/',
+  path: '/convos/',
+  getParentRoute: () => DecagonRoute,
+} as any)
+const DecagonConvosIdRoute = DecagonConvosIdRouteImport.update({
+  id: '/convos/$id',
+  path: '/convos/$id',
+  getParentRoute: () => DecagonRoute,
 } as any)
 const ApiPublicV1HealthRoute = ApiPublicV1HealthRouteImport.update({
   id: '/api/public/v1/health',
@@ -378,6 +402,7 @@ const ApiPublicV1OrdersIdReturnsEligibilityRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/decagon': typeof DecagonRouteWithChildren
   '/docs': typeof DocsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
@@ -386,17 +411,20 @@ export interface FileRoutesByFullPath {
   '/admin/returns': typeof AdminReturnsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
+  '/decagon/duet': typeof DecagonDuetRoute
   '/admin/': typeof AdminIndexRoute
+  '/decagon/': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/refunds/$id': typeof AdminRefundsIdRoute
-  '/admin/traces/$id': typeof AdminTracesIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
+  '/decagon/convos/$id': typeof DecagonConvosIdRoute
   '/admin/customers/': typeof AdminCustomersIndexRoute
   '/admin/orders/': typeof AdminOrdersIndexRoute
   '/admin/refunds/': typeof AdminRefundsIndexRoute
+  '/decagon/convos/': typeof DecagonConvosIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/admin/reset-demo': typeof ApiPublicV1AdminResetDemoRoute
@@ -443,17 +471,20 @@ export interface FileRoutesByTo {
   '/admin/returns': typeof AdminReturnsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
+  '/decagon/duet': typeof DecagonDuetRoute
   '/admin': typeof AdminIndexRoute
+  '/decagon': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/refunds/$id': typeof AdminRefundsIdRoute
-  '/admin/traces/$id': typeof AdminTracesIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
+  '/decagon/convos/$id': typeof DecagonConvosIdRoute
   '/admin/customers': typeof AdminCustomersIndexRoute
   '/admin/orders': typeof AdminOrdersIndexRoute
   '/admin/refunds': typeof AdminRefundsIndexRoute
+  '/decagon/convos': typeof DecagonConvosIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/admin/reset-demo': typeof ApiPublicV1AdminResetDemoRoute
@@ -494,6 +525,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
+  '/decagon': typeof DecagonRouteWithChildren
   '/docs': typeof DocsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
@@ -502,17 +534,20 @@ export interface FileRoutesById {
   '/admin/returns': typeof AdminReturnsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
+  '/decagon/duet': typeof DecagonDuetRoute
   '/admin/': typeof AdminIndexRoute
+  '/decagon/': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
   '/admin/refunds/$id': typeof AdminRefundsIdRoute
-  '/admin/traces/$id': typeof AdminTracesIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
+  '/decagon/convos/$id': typeof DecagonConvosIdRoute
   '/admin/customers/': typeof AdminCustomersIndexRoute
   '/admin/orders/': typeof AdminOrdersIndexRoute
   '/admin/refunds/': typeof AdminRefundsIndexRoute
+  '/decagon/convos/': typeof DecagonConvosIndexRoute
   '/api/public/v1/health': typeof ApiPublicV1HealthRoute
   '/api/public/v1/meta': typeof ApiPublicV1MetaRoute
   '/api/public/v1/admin/reset-demo': typeof ApiPublicV1AdminResetDemoRoute
@@ -554,6 +589,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/decagon'
     | '/docs'
     | '/llms.txt'
     | '/mcp'
@@ -562,17 +598,20 @@ export interface FileRouteTypes {
     | '/admin/returns'
     | '/admin/settings'
     | '/admin/transactions'
+    | '/decagon/duet'
     | '/admin/'
+    | '/decagon/'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/customers/$id'
     | '/admin/orders/$id'
     | '/admin/refunds/$id'
-    | '/admin/traces/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
+    | '/decagon/convos/$id'
     | '/admin/customers/'
     | '/admin/orders/'
     | '/admin/refunds/'
+    | '/decagon/convos/'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/admin/reset-demo'
@@ -619,17 +658,20 @@ export interface FileRouteTypes {
     | '/admin/returns'
     | '/admin/settings'
     | '/admin/transactions'
+    | '/decagon/duet'
     | '/admin'
+    | '/decagon'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/customers/$id'
     | '/admin/orders/$id'
     | '/admin/refunds/$id'
-    | '/admin/traces/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
+    | '/decagon/convos/$id'
     | '/admin/customers'
     | '/admin/orders'
     | '/admin/refunds'
+    | '/decagon/convos'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/admin/reset-demo'
@@ -669,6 +711,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/decagon'
     | '/docs'
     | '/llms.txt'
     | '/mcp'
@@ -677,17 +720,20 @@ export interface FileRouteTypes {
     | '/admin/returns'
     | '/admin/settings'
     | '/admin/transactions'
+    | '/decagon/duet'
     | '/admin/'
+    | '/decagon/'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/customers/$id'
     | '/admin/orders/$id'
     | '/admin/refunds/$id'
-    | '/admin/traces/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
+    | '/decagon/convos/$id'
     | '/admin/customers/'
     | '/admin/orders/'
     | '/admin/refunds/'
+    | '/decagon/convos/'
     | '/api/public/v1/health'
     | '/api/public/v1/meta'
     | '/api/public/v1/admin/reset-demo'
@@ -728,6 +774,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
+  DecagonRoute: typeof DecagonRouteWithChildren
   DocsRoute: typeof DocsRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   McpRoute: typeof McpRoute
@@ -787,6 +834,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/decagon': {
+      id: '/decagon'
+      path: '/decagon'
+      fullPath: '/decagon'
+      preLoaderRoute: typeof DecagonRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/docs': {
@@ -852,6 +906,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTransactionsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/decagon/': {
+      id: '/decagon/'
+      path: '/'
+      fullPath: '/decagon/'
+      preLoaderRoute: typeof DecagonIndexRouteImport
+      parentRoute: typeof DecagonRoute
+    }
+    '/decagon/duet': {
+      id: '/decagon/duet'
+      path: '/duet'
+      fullPath: '/decagon/duet'
+      preLoaderRoute: typeof DecagonDuetRouteImport
+      parentRoute: typeof DecagonRoute
+    }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
       path: '/.mcp/invoke-tool/$tool'
@@ -901,13 +969,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRefundsIdRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/traces/$id': {
-      id: '/admin/traces/$id'
-      path: '/traces/$id'
-      fullPath: '/admin/traces/$id'
-      preLoaderRoute: typeof AdminTracesIdRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/api/public/openapi.json': {
       id: '/api/public/openapi.json'
       path: '/api/public/openapi.json'
@@ -921,6 +982,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/public/tools.json'
       preLoaderRoute: typeof ApiPublicToolsDotjsonRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/decagon/convos/': {
+      id: '/decagon/convos/'
+      path: '/convos'
+      fullPath: '/decagon/convos/'
+      preLoaderRoute: typeof DecagonConvosIndexRouteImport
+      parentRoute: typeof DecagonRoute
+    }
+    '/decagon/convos/$id': {
+      id: '/decagon/convos/$id'
+      path: '/convos/$id'
+      fullPath: '/decagon/convos/$id'
+      preLoaderRoute: typeof DecagonConvosIdRouteImport
+      parentRoute: typeof DecagonRoute
     }
     '/api/public/v1/health': {
       id: '/api/public/v1/health'
@@ -1178,7 +1253,6 @@ interface AdminRouteChildren {
   AdminCustomersIdRoute: typeof AdminCustomersIdRoute
   AdminOrdersIdRoute: typeof AdminOrdersIdRoute
   AdminRefundsIdRoute: typeof AdminRefundsIdRoute
-  AdminTracesIdRoute: typeof AdminTracesIdRoute
   AdminCustomersIndexRoute: typeof AdminCustomersIndexRoute
   AdminOrdersIndexRoute: typeof AdminOrdersIndexRoute
   AdminRefundsIndexRoute: typeof AdminRefundsIndexRoute
@@ -1192,7 +1266,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminCustomersIdRoute: AdminCustomersIdRoute,
   AdminOrdersIdRoute: AdminOrdersIdRoute,
   AdminRefundsIdRoute: AdminRefundsIdRoute,
-  AdminTracesIdRoute: AdminTracesIdRoute,
   AdminCustomersIndexRoute: AdminCustomersIndexRoute,
   AdminOrdersIndexRoute: AdminOrdersIndexRoute,
   AdminRefundsIndexRoute: AdminRefundsIndexRoute,
@@ -1200,9 +1273,27 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface DecagonRouteChildren {
+  DecagonDuetRoute: typeof DecagonDuetRoute
+  DecagonIndexRoute: typeof DecagonIndexRoute
+  DecagonConvosIdRoute: typeof DecagonConvosIdRoute
+  DecagonConvosIndexRoute: typeof DecagonConvosIndexRoute
+}
+
+const DecagonRouteChildren: DecagonRouteChildren = {
+  DecagonDuetRoute: DecagonDuetRoute,
+  DecagonIndexRoute: DecagonIndexRoute,
+  DecagonConvosIdRoute: DecagonConvosIdRoute,
+  DecagonConvosIndexRoute: DecagonConvosIndexRoute,
+}
+
+const DecagonRouteWithChildren =
+  DecagonRoute._addFileChildren(DecagonRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
+  DecagonRoute: DecagonRouteWithChildren,
   DocsRoute: DocsRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   McpRoute: McpRoute,

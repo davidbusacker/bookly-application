@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.15"
+    PostgrestVersion: "14.17"
   }
   public: {
     Tables: {
@@ -958,6 +958,7 @@ export type Database = {
       reset_bookly_demo: { Args: never; Returns: Json }
       seed_bookly_demo: { Args: never; Returns: Json }
       seed_bookly_inventory: { Args: never; Returns: Json }
+      seed_decagon_traces: { Args: never; Returns: Json }
     }
     Enums: {
       [_ in never]: never

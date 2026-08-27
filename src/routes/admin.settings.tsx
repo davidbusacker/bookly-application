@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { apiSend } from "@/lib/bookly/api-client";
 import { Card, ErrorNote } from "@/components/console/ui";
-import { AgentTracesTile } from "@/components/console/agent-traces-tile";
 
 export const Route = createFileRoute("/admin/settings")({
   head: () => ({
@@ -50,7 +49,6 @@ function AdminSettings() {
 
       {reset.error ? <ErrorNote error={reset.error} /> : null}
 
-      <AgentTracesTile />
 
       <Card title="Reset demo data">
         <div className="space-y-4 px-5 py-5 text-sm">
