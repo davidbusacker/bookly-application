@@ -13,10 +13,10 @@ const NAV = [
 
 function DecagonLayout() {
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
-      <aside className="sticky top-0 hidden h-screen w-56 shrink-0 flex-col border-r border-sidebar-border bg-sidebar px-3 py-5 md:flex">
+    <div className="app-canvas flex min-h-screen bg-background text-foreground">
+      <aside className="sticky top-0 hidden h-screen w-56 shrink-0 flex-col border-r border-sidebar-border bg-sidebar/80 px-3 py-5 backdrop-blur-xl md:flex">
         <div className="px-2 pb-6">
-          <p className="text-lg font-bold tracking-tight text-sidebar-foreground">decagon</p>
+          <p className="ai-text text-lg font-bold tracking-tight">decagon</p>
           <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Bookly workspace</p>
         </div>
         <nav className="flex flex-1 flex-col gap-1">
@@ -25,7 +25,7 @@ function DecagonLayout() {
               key={n.to}
               to={n.to}
               activeOptions={{ exact: "exact" in n ? n.exact : false }}
-              activeProps={{ className: "bg-sidebar-primary text-sidebar-primary-foreground" }}
+              activeProps={{ className: "bg-sidebar-primary text-sidebar-primary-foreground shadow-[var(--shadow-soft)]" }}
               inactiveProps={{ className: "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground" }}
               className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm font-medium transition-colors"
             >

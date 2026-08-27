@@ -49,9 +49,9 @@ export function StatusBadge({ value }: { value?: string | null | undefined }) {
 
 export function Card({ title, action, children, className = "" }: { title?: ReactNode; action?: ReactNode; children: ReactNode; className?: string }) {
   return (
-    <section className={`rounded-xl border border-border bg-card ${className}`}>
+    <section className={`surface-card overflow-hidden rounded-xl border border-border ${className}`}>
       {title ? (
-        <header className="flex items-center justify-between gap-3 border-b border-border px-5 py-3">
+        <header className="flex items-center justify-between gap-3 border-b border-border bg-surface-2/60 px-5 py-3">
           <h2 className="text-sm font-semibold tracking-tight">{title}</h2>
           {action}
         </header>
@@ -63,7 +63,8 @@ export function Card({ title, action, children, className = "" }: { title?: Reac
 
 export function Stat({ label, value, hint }: { label: string; value: ReactNode; hint?: string }) {
   return (
-    <div className="rounded-xl border border-border bg-card px-5 py-4">
+    <div className="surface-card surface-card-hover relative overflow-hidden rounded-xl border border-border px-5 py-4">
+      <span aria-hidden className="brand-bar absolute inset-x-0 top-0 h-0.5 opacity-70" />
       <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</p>
       <p className="mt-1.5 text-2xl font-semibold tabular-nums">{value}</p>
       {hint ? <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p> : null}
@@ -76,7 +77,7 @@ export function Table({ head, children }: { head: string[]; children: ReactNode 
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-border text-left">
+          <tr className="border-b border-border bg-surface-2/50 text-left">
             {head.map((h) => (
               <th key={h} className="whitespace-nowrap px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 {h}
@@ -84,7 +85,7 @@ export function Table({ head, children }: { head: string[]; children: ReactNode 
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-border">{children}</tbody>
+        <tbody className="divide-y divide-border [&>tr]:transition-colors [&>tr:hover]:bg-accent/40">{children}</tbody>
       </table>
     </div>
   );

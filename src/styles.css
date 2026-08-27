@@ -59,48 +59,73 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-soft: var(--brand-soft);
+  --color-ai: var(--ai);
+  --color-ai-2: var(--ai-2);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
+  --radius: 0.75rem;
+  --background: oklch(0.972 0.006 95);
+  --foreground: oklch(0.21 0.03 265);
+  --card: oklch(0.995 0.002 95);
+  --card-foreground: oklch(0.21 0.03 265);
+  --surface: oklch(0.995 0.002 95);
+  --surface-2: oklch(0.955 0.009 95);
+  --popover: oklch(0.995 0.002 95);
+  --popover-foreground: oklch(0.21 0.03 265);
+  --primary: oklch(0.44 0.105 258);
+  --primary-foreground: oklch(0.985 0.004 95);
+  --brand: oklch(0.44 0.105 258);
+  --brand-foreground: oklch(0.985 0.004 95);
+  --brand-soft: oklch(0.94 0.028 258);
+  --ai: oklch(0.55 0.2 295);
+  --ai-2: oklch(0.63 0.15 215);
+  --secondary: oklch(0.951 0.01 95);
+  --secondary-foreground: oklch(0.28 0.04 262);
+  --muted: oklch(0.952 0.009 95);
+  --muted-foreground: oklch(0.52 0.028 262);
+  --accent: oklch(0.945 0.022 258);
+  --accent-foreground: oklch(0.3 0.05 262);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
+  --border: oklch(0.9 0.012 95);
+  --input: oklch(0.9 0.012 95);
+  --ring: oklch(0.55 0.09 258);
+  --chart-1: oklch(0.55 0.2 295);
+  --chart-2: oklch(0.63 0.15 215);
+  --chart-3: oklch(0.7 0.16 60);
+  --chart-4: oklch(0.62 0.16 155);
+  --chart-5: oklch(0.62 0.2 20);
+  --shadow-soft: 0 1px 2px oklch(0.21 0.03 265 / 0.05), 0 8px 24px -12px oklch(0.21 0.03 265 / 0.16);
+  --shadow-lift: 0 2px 4px oklch(0.21 0.03 265 / 0.06), 0 18px 40px -18px oklch(0.21 0.03 265 / 0.28);
+  --sidebar: oklch(0.955 0.011 95);
+  --sidebar-foreground: oklch(0.21 0.03 265);
+  --sidebar-primary: oklch(0.44 0.105 258);
+  --sidebar-primary-foreground: oklch(0.985 0.004 95);
+  --sidebar-accent: oklch(0.93 0.024 258);
+  --sidebar-accent-foreground: oklch(0.28 0.05 262);
+  --sidebar-border: oklch(0.895 0.014 95);
+  --sidebar-ring: oklch(0.55 0.09 258);
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
+  --background: oklch(0.17 0.026 265);
   --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
+  --card: oklch(0.225 0.03 265);
+  --surface: oklch(0.225 0.03 265);
+  --surface-2: oklch(0.27 0.034 265);
+  --brand: oklch(0.72 0.11 258);
+  --brand-foreground: oklch(0.17 0.026 265);
+  --brand-soft: oklch(0.3 0.05 262);
+  --ai: oklch(0.68 0.18 295);
+  --ai-2: oklch(0.72 0.13 215);
+  --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.4), 0 10px 30px -14px oklch(0 0 0 / 0.7);
+  --shadow-lift: 0 2px 6px oklch(0 0 0 / 0.45), 0 22px 48px -20px oklch(0 0 0 / 0.8);
   --card-foreground: oklch(0.984 0.003 247.858);
   --popover: oklch(0.208 0.042 265.755);
   --popover-foreground: oklch(0.984 0.003 247.858);
@@ -141,4 +166,75 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+}
+
+@utility surface-card {
+  background-color: var(--surface);
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow 200ms ease, transform 200ms ease;
+}
+
+@utility surface-card-hover {
+  &:hover {
+    box-shadow: var(--shadow-lift);
+    transform: translateY(-1px);
+  }
+}
+
+@utility app-canvas {
+  background-image:
+    radial-gradient(60rem 32rem at 12% -12%, color-mix(in oklab, var(--brand) 12%, transparent), transparent 70%),
+    radial-gradient(48rem 28rem at 92% 0%, color-mix(in oklab, var(--ai) 10%, transparent), transparent 72%);
+  background-attachment: fixed;
+}
+
+@utility brand-bar {
+  background-image: linear-gradient(90deg, var(--brand), color-mix(in oklab, var(--ai) 70%, var(--brand)));
+}
+
+@utility ai-canvas {
+  background-image:
+    radial-gradient(46rem 26rem at 10% -10%, color-mix(in oklab, var(--ai) 22%, transparent), transparent 70%),
+    radial-gradient(40rem 24rem at 88% 4%, color-mix(in oklab, var(--ai-2) 20%, transparent), transparent 72%),
+    linear-gradient(180deg, color-mix(in oklab, var(--ai) 5%, transparent), transparent 40%);
+  background-attachment: fixed;
+}
+
+@utility ai-panel {
+  border: 1px solid color-mix(in oklab, var(--ai) 28%, transparent);
+  background-image: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--ai) 10%, var(--surface)),
+    var(--surface) 55%,
+    color-mix(in oklab, var(--ai-2) 9%, var(--surface))
+  );
+  box-shadow: var(--shadow-soft), 0 0 0 1px color-mix(in oklab, var(--ai) 8%, transparent) inset;
+}
+
+@utility ai-text {
+  background-image: linear-gradient(92deg, var(--ai), var(--ai-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility ai-glow {
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--ai) 30%, transparent),
+    0 12px 40px -16px color-mix(in oklab, var(--ai) 60%, transparent);
+}
+
+@utility shimmer-line {
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--ai) 55%, transparent),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer-slide 1.8s linear infinite;
+}
+
+@keyframes shimmer-slide {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
 }
