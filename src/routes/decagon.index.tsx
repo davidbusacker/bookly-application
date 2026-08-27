@@ -255,6 +255,17 @@ function Donut({
   );
 }
 
+/** Non-functional demo filter chip — looks interactive, intentionally inert. */
+function FilterChip({ label, value }: { label: string; value: string }) {
+  return (
+    <span className="inline-flex cursor-default items-center gap-2 rounded-md border border-border bg-card px-3 py-1.5 text-xs shadow-xs">
+      <span className="text-muted-foreground">{label}</span>
+      <span className="font-medium">{value}</span>
+      <ChevronDown size={12} className="text-muted-foreground" />
+    </span>
+  );
+}
+
 function BarChart({ buckets }: { buckets: { key: string; label: string; chat: number; voice: number }[] }) {
   const max = Math.max(1, ...buckets.map((b) => Math.max(b.chat, b.voice)));
   return (
