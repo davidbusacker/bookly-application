@@ -21,6 +21,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminReturnsRouteImport } from './routes/admin.returns'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminTransactionsRouteImport } from './routes/admin.transactions'
+import { Route as DecagonIndexRouteImport } from './routes/decagon.index'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AdminCustomersIndexRouteImport } from './routes/admin.customers.index'
 import { Route as AdminCustomersIdRouteImport } from './routes/admin.customers.$id'
@@ -128,6 +129,11 @@ const AdminTransactionsRoute = AdminTransactionsRouteImport.update({
   id: '/transactions',
   path: '/transactions',
   getParentRoute: () => AdminRoute,
+} as any)
+const DecagonIndexRoute = DecagonIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DecagonRoute,
 } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
@@ -384,7 +390,7 @@ const ApiPublicV1OrdersIdReturnsEligibilityRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
-  '/decagon': typeof DecagonRoute
+  '/decagon': typeof DecagonRouteWithChildren
   '/docs': typeof DocsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
@@ -394,6 +400,7 @@ export interface FileRoutesByFullPath {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/': typeof AdminIndexRoute
+  '/decagon/': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
@@ -442,7 +449,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/decagon': typeof DecagonRoute
   '/docs': typeof DocsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
@@ -452,6 +458,7 @@ export interface FileRoutesByTo {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin': typeof AdminIndexRoute
+  '/decagon': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
@@ -502,7 +509,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
-  '/decagon': typeof DecagonRoute
+  '/decagon': typeof DecagonRouteWithChildren
   '/docs': typeof DocsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
@@ -512,6 +519,7 @@ export interface FileRoutesById {
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/transactions': typeof AdminTransactionsRoute
   '/admin/': typeof AdminIndexRoute
+  '/decagon/': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/admin/customers/$id': typeof AdminCustomersIdRoute
   '/admin/orders/$id': typeof AdminOrdersIdRoute
@@ -573,6 +581,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/transactions'
     | '/admin/'
+    | '/decagon/'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/customers/$id'
     | '/admin/orders/$id'
@@ -621,7 +630,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/decagon'
     | '/docs'
     | '/llms.txt'
     | '/mcp'
@@ -631,6 +639,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/transactions'
     | '/admin'
+    | '/decagon'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/customers/$id'
     | '/admin/orders/$id'
@@ -690,6 +699,7 @@ export interface FileRouteTypes {
     | '/admin/settings'
     | '/admin/transactions'
     | '/admin/'
+    | '/decagon/'
     | '/.mcp/invoke-tool/$tool'
     | '/admin/customers/$id'
     | '/admin/orders/$id'
@@ -740,7 +750,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
-  DecagonRoute: typeof DecagonRoute
+  DecagonRoute: typeof DecagonRouteWithChildren
   DocsRoute: typeof DocsRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   McpRoute: typeof McpRoute
@@ -871,6 +881,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/transactions'
       preLoaderRoute: typeof AdminTransactionsRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/decagon/': {
+      id: '/decagon/'
+      path: '/'
+      fullPath: '/decagon/'
+      preLoaderRoute: typeof DecagonIndexRouteImport
+      parentRoute: typeof DecagonRoute
     }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
@@ -1220,10 +1237,21 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface DecagonRouteChildren {
+  DecagonIndexRoute: typeof DecagonIndexRoute
+}
+
+const DecagonRouteChildren: DecagonRouteChildren = {
+  DecagonIndexRoute: DecagonIndexRoute,
+}
+
+const DecagonRouteWithChildren =
+  DecagonRoute._addFileChildren(DecagonRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
-  DecagonRoute: DecagonRoute,
+  DecagonRoute: DecagonRouteWithChildren,
   DocsRoute: DocsRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   McpRoute: McpRoute,
