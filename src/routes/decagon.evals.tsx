@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, CheckCircle2, TrendingDown, TrendingUp } from "lucide-react";
 import { Card, Stat, Table } from "@/components/console/ui";
+import { TrendChart, type TrendPoint } from "@/components/decagon/trend-chart";
 
 export const Route = createFileRoute("/decagon/evals")({
   head: () => ({
@@ -44,7 +45,20 @@ const SUITES: Suite[] = [
   { name: "Tone & brand adherence", scope: "Quality", cases: 160, score: 94.7, prev: 94.1, cadence: "Nightly", lastRun: "9h ago", status: "passing" },
 ];
 
-const TREND = [91.2, 92.0, 91.4, 93.1, 93.8, 93.2, 94.6, 94.1, 95.0, 95.6, 95.2, 95.9];
+const TREND: TrendPoint[] = [
+  { label: "R-01", value: 91.2 },
+  { label: "R-02", value: 92.0 },
+  { label: "R-03", value: 91.4 },
+  { label: "R-04", value: 93.1 },
+  { label: "R-05", value: 93.8 },
+  { label: "R-06", value: 93.2 },
+  { label: "R-07", value: 94.6 },
+  { label: "R-08", value: 94.1 },
+  { label: "R-09", value: 95.0 },
+  { label: "R-10", value: 95.6 },
+  { label: "R-11", value: 95.2 },
+  { label: "R-12", value: 95.9 },
+];
 
 const DIMENSIONS = [
   { label: "Task completion", score: 95.9 },
@@ -91,13 +105,6 @@ function Evals() {
   const cases = SUITES.reduce((a, s) => a + s.cases, 0);
   const regressions = SUITES.filter((s) => s.score < s.prev).length;
 
-  const max = Math.max(...TREND);
-  const min = Math.min(...TREND) - 1;
-  const points = TREND.map((v, i) => {
-    const x = (i / (TREND.length - 1)) * 100;
-    const y = 100 - ((v - min) / (max - min)) * 100;
-    return `${x},${y}`;
-  }).join(" ");
 
   return (
     <div className="space-y-8">
@@ -124,26 +131,15 @@ function Evals() {
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
         <Card title="Composite quality trend · last 12 runs">
           <div className="px-5 py-6">
-            <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-48 w-full">
-              <polyline
-                points={points}
-                fill="none"
-                stroke="var(--primary)"
-                strokeWidth="1.2"
-                vectorEffect="non-scaling-stroke"
-              />
-              {TREND.map((v, i) => {
-                const x = (i / (TREND.length - 1)) * 100;
-                const y = 100 - ((v - min) / (max - min)) * 100;
-                return <circle key={i} cx={x} cy={y} r="1" fill="var(--primary)" vectorEffect="non-scaling-stroke" />;
-              })}
-            </svg>
+            <TrendChart data={TREND} />
             <div className="mt-3 flex justify-between text-[11px] text-muted-foreground">
-              <span>12 runs ago · {TREND[0]?.toFixed(1)}%</span>
-              <span>Latest · {TREND[TREND.length - 1]?.toFixed(1)}%</span>
+              <span>12 runs ago · {TREND[0]?.value.toFixed(1)}%</span>
+              <span>Hover to scrub</span>
+              <span>Latest · {TREND[TREND.length - 1]?.value.toFixed(1)}%</span>
             </div>
           </div>
         </Card>
+
 
         <Card title="Quality dimensions">
           <div className="space-y-3 px-5 py-6">
