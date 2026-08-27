@@ -360,7 +360,7 @@ function Duet() {
                     </p>
                   </>
                 ) : (
-                  <div className="ai-panel max-h-[32rem] overflow-auto rounded-xl p-6 text-sm leading-relaxed">
+                  <div ref={canvasRef} className="ai-panel max-h-[32rem] overflow-auto rounded-xl p-6 text-sm leading-relaxed">
                     <Markdown text={aopChars >= AOP.length ? draft : AOP.slice(0, aopChars)} />
                     {aopChars < AOP.length && !resolving ? (
                       <span className="ml-0.5 inline-block animate-pulse font-mono">▍</span>
