@@ -79,7 +79,7 @@ function Insights() {
             <span className="flex items-center gap-1.5">
               <button
                 type="button"
-                onClick={() => setDrill(null)}
+                onClick={() => animateDrill(null)}
                 className="text-muted-foreground transition-colors hover:text-foreground"
               >
                 All intents
@@ -95,7 +95,7 @@ function Insights() {
           drill ? (
             <button
               type="button"
-              onClick={() => setDrill(null)}
+              onClick={() => animateDrill(null)}
               className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1 text-xs font-medium hover:bg-accent"
             >
               <ArrowLeft size={13} /> Back to all intents
