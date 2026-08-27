@@ -95,14 +95,15 @@ Fire only when **all** of the following hold:
 - @recommend_titles — rank 3 alternates by genre + author affinity
 - @log_conversation — write the interaction back as a trace
 
-## 💬 What the agent says
-> "Quick heads up before you check out 👋 — *{{cart.item.title}}* is a **{{cart.item.category}}** title, and most of your library is **{{customer.top_genre}}**. Plenty of readers love branching out, so no pressure at all! If you'd like something closer to your usual, these are in stock right now: {{recommendations}}."
+## 💬 How the agent should talk about it
+Guidance, not a script — the agent writes the message in its own voice using the customer's context.
 
-**Tone rules**
-- ✅ Warm, brief, one message, easy to dismiss
-- ✅ Always affirm the original choice as a valid pick
-- ❌ Never imply the customer will dislike the book
-- ❌ Never fire more than once per checkout session
+- Lead with the observation, not a warning: name the genre of \`{{cart.item.title}}\` and how it differs from \`{{customer.top_genre}}\`
+- Frame branching out as a good thing; the customer's pick is always a valid pick
+- Offer \`{{recommendations}}\` as an *option*, never as a correction
+- Keep it to one short, easily dismissed message per checkout session
+- ❌ Never predict that the customer will dislike the book, imply a bad decision, or repeat the nudge
+
 
 ## 🔁 Branches
 | Customer response | Action |
