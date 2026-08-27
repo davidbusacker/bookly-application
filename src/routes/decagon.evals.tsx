@@ -128,14 +128,14 @@ function Evals() {
               <polyline
                 points={points}
                 fill="none"
-                stroke="hsl(var(--primary))"
+                stroke="var(--primary)"
                 strokeWidth="1.2"
                 vectorEffect="non-scaling-stroke"
               />
               {TREND.map((v, i) => {
                 const x = (i / (TREND.length - 1)) * 100;
                 const y = 100 - ((v - min) / (max - min)) * 100;
-                return <circle key={i} cx={x} cy={y} r="1" fill="hsl(var(--primary))" vectorEffect="non-scaling-stroke" />;
+                return <circle key={i} cx={x} cy={y} r="1" fill="var(--primary)" vectorEffect="non-scaling-stroke" />;
               })}
             </svg>
             <div className="mt-3 flex justify-between text-[11px] text-muted-foreground">
