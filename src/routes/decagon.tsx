@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { BarChart3, FileText, MessagesSquare, Sparkle, Wrench } from "lucide-react";
+import { BarChart3, FileText, FlaskConical, MessagesSquare, Sparkle, Wrench } from "lucide-react";
 import { InterfaceDot } from "@/components/interface-dot";
 
 export const Route = createFileRoute("/decagon")({
@@ -9,10 +9,12 @@ export const Route = createFileRoute("/decagon")({
 const NAV = [
   { to: "/decagon", label: "Insights", icon: BarChart3, exact: true },
   { to: "/decagon/convos", label: "Convos", icon: MessagesSquare },
+  { to: "/decagon/evals", label: "Evaluations", icon: FlaskConical },
   { to: "/decagon/aops", label: "AOPs", icon: FileText },
   { to: "/decagon/catalog", label: "Tools & skills", icon: Wrench },
   { to: "/decagon/duet", label: "Duet", icon: Sparkle },
 ] as const;
+
 
 
 function DecagonLayout() {
