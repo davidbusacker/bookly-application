@@ -248,7 +248,7 @@ function Donut({
         })}
       </svg>
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-3xl font-bold tabular-nums">{total}</span>
+        <span className="text-3xl font-bold tabular-nums">{total.toLocaleString()}</span>
         <span className="text-[11px] uppercase tracking-wider text-muted-foreground">{caption}</span>
       </div>
     </div>
@@ -353,7 +353,7 @@ function SubReasonPanel({
               {INTENTS.find((i) => i.key === intentKey)?.label} · sub-reason
             </p>
             <h2 className="text-lg font-bold tracking-tight">{label}</h2>
-            <p className="text-xs text-muted-foreground">{count} conversations in the last 45 days</p>
+            <p className="text-xs text-muted-foreground">{count.toLocaleString()} conversations in the last 45 days</p>
           </div>
           <button type="button" onClick={onClose} className="rounded-md p-1 hover:bg-accent" aria-label="Close">
             <X size={16} />
