@@ -53,12 +53,17 @@ function ConsoleLayout() {
               </Link>
             ))}
           </nav>
-          <a
-            href="/docs"
-            className="ml-auto rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-accent"
-          >
-            API docs
-          </a>
+          <div className="ml-auto flex items-center gap-2">
+            <Link
+              to="/decagon"
+              className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-accent"
+            >
+              Decagon CX
+            </Link>
+            <a href="/docs" className="rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:bg-accent">
+              API docs
+            </a>
+          </div>
         </div>
       </header>
       <main className="mx-auto max-w-7xl px-6 py-8">
