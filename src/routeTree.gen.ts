@@ -33,6 +33,7 @@ import { Route as AdminTracesIdRouteImport } from './routes/admin.traces.$id'
 import { Route as ApiPublicOpenapiDotjsonRouteImport } from './routes/api/public/openapi[.]json'
 import { Route as ApiPublicToolsDotjsonRouteImport } from './routes/api/public/tools[.]json'
 import { Route as DecagonConvosIndexRouteImport } from './routes/decagon.convos.index'
+import { Route as DecagonConvosIdRouteImport } from './routes/decagon.convos.$id'
 import { Route as ApiPublicV1HealthRouteImport } from './routes/api/public/v1/health'
 import { Route as ApiPublicV1MetaRouteImport } from './routes/api/public/v1/meta'
 import { Route as ApiPublicV1AdminResetDemoRouteImport } from './routes/api/public/v1/admin/reset-demo'
@@ -190,6 +191,11 @@ const ApiPublicToolsDotjsonRoute = ApiPublicToolsDotjsonRouteImport.update({
 const DecagonConvosIndexRoute = DecagonConvosIndexRouteImport.update({
   id: '/convos/',
   path: '/convos/',
+  getParentRoute: () => DecagonRoute,
+} as any)
+const DecagonConvosIdRoute = DecagonConvosIdRouteImport.update({
+  id: '/convos/$id',
+  path: '/convos/$id',
   getParentRoute: () => DecagonRoute,
 } as any)
 const ApiPublicV1HealthRoute = ApiPublicV1HealthRouteImport.update({
@@ -414,6 +420,7 @@ export interface FileRoutesByFullPath {
   '/admin/traces/$id': typeof AdminTracesIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
+  '/decagon/convos/$id': typeof DecagonConvosIdRoute
   '/admin/customers/': typeof AdminCustomersIndexRoute
   '/admin/orders/': typeof AdminOrdersIndexRoute
   '/admin/refunds/': typeof AdminRefundsIndexRoute
@@ -473,6 +480,7 @@ export interface FileRoutesByTo {
   '/admin/traces/$id': typeof AdminTracesIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
+  '/decagon/convos/$id': typeof DecagonConvosIdRoute
   '/admin/customers': typeof AdminCustomersIndexRoute
   '/admin/orders': typeof AdminOrdersIndexRoute
   '/admin/refunds': typeof AdminRefundsIndexRoute
@@ -535,6 +543,7 @@ export interface FileRoutesById {
   '/admin/traces/$id': typeof AdminTracesIdRoute
   '/api/public/openapi.json': typeof ApiPublicOpenapiDotjsonRoute
   '/api/public/tools.json': typeof ApiPublicToolsDotjsonRoute
+  '/decagon/convos/$id': typeof DecagonConvosIdRoute
   '/admin/customers/': typeof AdminCustomersIndexRoute
   '/admin/orders/': typeof AdminOrdersIndexRoute
   '/admin/refunds/': typeof AdminRefundsIndexRoute
@@ -598,6 +607,7 @@ export interface FileRouteTypes {
     | '/admin/traces/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
+    | '/decagon/convos/$id'
     | '/admin/customers/'
     | '/admin/orders/'
     | '/admin/refunds/'
@@ -657,6 +667,7 @@ export interface FileRouteTypes {
     | '/admin/traces/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
+    | '/decagon/convos/$id'
     | '/admin/customers'
     | '/admin/orders'
     | '/admin/refunds'
@@ -718,6 +729,7 @@ export interface FileRouteTypes {
     | '/admin/traces/$id'
     | '/api/public/openapi.json'
     | '/api/public/tools.json'
+    | '/decagon/convos/$id'
     | '/admin/customers/'
     | '/admin/orders/'
     | '/admin/refunds/'
@@ -976,6 +988,13 @@ declare module '@tanstack/react-router' {
       path: '/convos'
       fullPath: '/decagon/convos/'
       preLoaderRoute: typeof DecagonConvosIndexRouteImport
+      parentRoute: typeof DecagonRoute
+    }
+    '/decagon/convos/$id': {
+      id: '/decagon/convos/$id'
+      path: '/convos/$id'
+      fullPath: '/decagon/convos/$id'
+      preLoaderRoute: typeof DecagonConvosIdRouteImport
       parentRoute: typeof DecagonRoute
     }
     '/api/public/v1/health': {
@@ -1258,11 +1277,13 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface DecagonRouteChildren {
   DecagonIndexRoute: typeof DecagonIndexRoute
+  DecagonConvosIdRoute: typeof DecagonConvosIdRoute
   DecagonConvosIndexRoute: typeof DecagonConvosIndexRoute
 }
 
 const DecagonRouteChildren: DecagonRouteChildren = {
   DecagonIndexRoute: DecagonIndexRoute,
+  DecagonConvosIdRoute: DecagonConvosIdRoute,
   DecagonConvosIndexRoute: DecagonConvosIndexRoute,
 }
 
