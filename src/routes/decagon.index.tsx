@@ -175,7 +175,7 @@ function Insights() {
                   >
                     <span className="h-3 w-3 shrink-0 rounded-sm" style={{ background: s.color }} />
                     <span className="flex-1 truncate text-sm font-medium">{s.label}</span>
-                    <span className="tabular-nums text-sm text-muted-foreground">{s.value}</span>
+                    <span className="tabular-nums text-sm text-muted-foreground">{fmt(s.value)}</span>
                     <span className="w-12 text-right tabular-nums text-xs text-muted-foreground">
                       {Math.round((s.value / total) * 100)}%
                     </span>
@@ -207,7 +207,7 @@ function Insights() {
           intentKey={drill}
           subKey={sub}
           label={subReasonSlices(traces, drill).find((s) => s.key === sub)?.label ?? sub}
-          count={subReasonSlices(traces, drill).find((s) => s.key === sub)?.value ?? 0}
+          count={(subReasonSlices(traces, drill).find((s) => s.key === sub)?.value ?? 0) * scale}
           onClose={() => setSub(null)}
         />
       ) : null}
