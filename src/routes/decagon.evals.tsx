@@ -105,13 +105,6 @@ function Evals() {
   const cases = SUITES.reduce((a, s) => a + s.cases, 0);
   const regressions = SUITES.filter((s) => s.score < s.prev).length;
 
-  const max = Math.max(...TREND);
-  const min = Math.min(...TREND) - 1;
-  const points = TREND.map((v, i) => {
-    const x = (i / (TREND.length - 1)) * 100;
-    const y = 100 - ((v - min) / (max - min)) * 100;
-    return `${x},${y}`;
-  }).join(" ");
 
   return (
     <div className="space-y-8">
