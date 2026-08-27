@@ -169,8 +169,11 @@ function Duet() {
   const approve = () => {
     setPhase("drafting");
     setAopChars(0);
+    setEditing(false);
+    setDraft(AOP);
     timers.current.push(setTimeout(() => setPhase("aop"), 600));
   };
+
 
   useEffect(() => {
     if (phase !== "aop") return;
