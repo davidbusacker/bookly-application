@@ -316,10 +316,41 @@ function FilterChip({ label, value }: { label: string; value: string }) {
   );
 }
 
+const MTTR_TREND = [6.4, 6.1, 5.8, 5.9, 5.4, 5.1, 4.9, 5.0, 4.6, 4.4, 4.3, 4.2];
+const CSAT_TREND = [4.18, 4.21, 4.19, 4.26, 4.24, 4.3, 4.33, 4.29, 4.36, 4.38, 4.4, 4.42];
+const MTTR_BY_INTENT = [
+  { label: "Initiate return", value: "5m 48s", pct: 92 },
+  { label: "Order status", value: "2m 11s", pct: 35 },
+  { label: "Refund status", value: "4m 02s", pct: 64 },
+  { label: "Stock check", value: "1m 47s", pct: 28 },
+];
+const CSAT_DIST = [
+  { score: 5, pct: 62 },
+  { score: 4, pct: 24 },
+  { score: 3, pct: 8 },
+  { score: 2, pct: 4 },
+  { score: 1, pct: 2 },
+];
+
+function Spark({ points }: { points: number[] }) {
+  const max = Math.max(...points);
+  const min = Math.min(...points);
+  const span = max - min || 1;
+  const d = points
+    .map((p, i) => `${(i / (points.length - 1)) * 100},${28 - ((p - min) / span) * 24}`)
+    .join(" L ");
+  return (
+    <svg viewBox="0 0 100 30" preserveAspectRatio="none" className="mt-3 h-10 w-full">
+      <path d={`M ${d}`} fill="none" stroke="var(--primary)" strokeWidth={1.6} vectorEffect="non-scaling-stroke" />
+    </svg>
+  );
+}
+
 function BarChart({ buckets }: { buckets: { key: string; label: string; chat: number; voice: number }[] }) {
   const max = Math.max(1, ...buckets.map((b) => Math.max(b.chat, b.voice)));
   return (
-    <div className="flex h-56 items-end gap-6">
+    <div className="flex h-52 items-end gap-3">
+
       {buckets.map((b) => (
         <div key={b.key} className="flex flex-1 flex-col items-center gap-2">
           <div className="flex h-44 w-full items-end justify-center gap-1.5">
