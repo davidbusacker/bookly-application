@@ -133,7 +133,7 @@ function AopLibrary() {
               </span>
             }
           >
-            <div className="p-2">
+            <div className="space-y-1 p-2">
               {versions.map((v) => {
                 const open = v.version === selectedVersion?.version;
                 return (
