@@ -350,12 +350,12 @@ function BarChart({ buckets }: { buckets: { key: string; label: string; chat: nu
   const max = Math.max(1, ...buckets.map((b) => Math.max(b.chat, b.voice)));
   return (
     <div className="flex h-52 items-end gap-3">
-
       {buckets.map((b) => (
         <div key={b.key} className="flex flex-1 flex-col items-center gap-2">
-          <div className="flex h-44 w-full items-end justify-center gap-1.5">
+          <div className="flex h-40 w-full items-end justify-center gap-1">
             {(["chat", "voice"] as const).map((k) => (
-              <div key={k} className="flex w-6 flex-col items-center justify-end" style={{ height: "100%" }}>
+              <div key={k} className="flex w-4 flex-col items-center justify-end" style={{ height: "100%" }}>
+
                 <span className="mb-1 text-[10px] tabular-nums text-muted-foreground">{b[k]}</span>
                 <div
                   className="w-full rounded-t-sm"
