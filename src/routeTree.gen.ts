@@ -26,6 +26,7 @@ import { Route as DecagonAopsRouteImport } from './routes/decagon.aops'
 import { Route as DecagonCatalogRouteImport } from './routes/decagon.catalog'
 import { Route as DecagonDuetRouteImport } from './routes/decagon.duet'
 import { Route as DecagonEvalsRouteImport } from './routes/decagon.evals'
+import { Route as DecagonWatchtowerRouteImport } from './routes/decagon.watchtower'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as AdminCustomersIndexRouteImport } from './routes/admin.customers.index'
 import { Route as AdminCustomersIdRouteImport } from './routes/admin.customers.$id'
@@ -158,6 +159,11 @@ const DecagonDuetRoute = DecagonDuetRouteImport.update({
 const DecagonEvalsRoute = DecagonEvalsRouteImport.update({
   id: '/evals',
   path: '/evals',
+  getParentRoute: () => DecagonRoute,
+} as any)
+const DecagonWatchtowerRoute = DecagonWatchtowerRouteImport.update({
+  id: '/watchtower',
+  path: '/watchtower',
   getParentRoute: () => DecagonRoute,
 } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
@@ -433,6 +439,7 @@ export interface FileRoutesByFullPath {
   '/decagon/catalog': typeof DecagonCatalogRoute
   '/decagon/duet': typeof DecagonDuetRoute
   '/decagon/evals': typeof DecagonEvalsRoute
+  '/decagon/watchtower': typeof DecagonWatchtowerRoute
   '/admin/': typeof AdminIndexRoute
   '/decagon/': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -496,6 +503,7 @@ export interface FileRoutesByTo {
   '/decagon/catalog': typeof DecagonCatalogRoute
   '/decagon/duet': typeof DecagonDuetRoute
   '/decagon/evals': typeof DecagonEvalsRoute
+  '/decagon/watchtower': typeof DecagonWatchtowerRoute
   '/admin': typeof AdminIndexRoute
   '/decagon': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -562,6 +570,7 @@ export interface FileRoutesById {
   '/decagon/catalog': typeof DecagonCatalogRoute
   '/decagon/duet': typeof DecagonDuetRoute
   '/decagon/evals': typeof DecagonEvalsRoute
+  '/decagon/watchtower': typeof DecagonWatchtowerRoute
   '/admin/': typeof AdminIndexRoute
   '/decagon/': typeof DecagonIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -629,6 +638,7 @@ export interface FileRouteTypes {
     | '/decagon/catalog'
     | '/decagon/duet'
     | '/decagon/evals'
+    | '/decagon/watchtower'
     | '/admin/'
     | '/decagon/'
     | '/.mcp/invoke-tool/$tool'
@@ -692,6 +702,7 @@ export interface FileRouteTypes {
     | '/decagon/catalog'
     | '/decagon/duet'
     | '/decagon/evals'
+    | '/decagon/watchtower'
     | '/admin'
     | '/decagon'
     | '/.mcp/invoke-tool/$tool'
@@ -757,6 +768,7 @@ export interface FileRouteTypes {
     | '/decagon/catalog'
     | '/decagon/duet'
     | '/decagon/evals'
+    | '/decagon/watchtower'
     | '/admin/'
     | '/decagon/'
     | '/.mcp/invoke-tool/$tool'
@@ -975,6 +987,13 @@ declare module '@tanstack/react-router' {
       path: '/evals'
       fullPath: '/decagon/evals'
       preLoaderRoute: typeof DecagonEvalsRouteImport
+      parentRoute: typeof DecagonRoute
+    }
+    '/decagon/watchtower': {
+      id: '/decagon/watchtower'
+      path: '/watchtower'
+      fullPath: '/decagon/watchtower'
+      preLoaderRoute: typeof DecagonWatchtowerRouteImport
       parentRoute: typeof DecagonRoute
     }
     '/.mcp/invoke-tool/$tool': {
@@ -1335,6 +1354,7 @@ interface DecagonRouteChildren {
   DecagonCatalogRoute: typeof DecagonCatalogRoute
   DecagonDuetRoute: typeof DecagonDuetRoute
   DecagonEvalsRoute: typeof DecagonEvalsRoute
+  DecagonWatchtowerRoute: typeof DecagonWatchtowerRoute
   DecagonIndexRoute: typeof DecagonIndexRoute
   DecagonConvosIdRoute: typeof DecagonConvosIdRoute
   DecagonConvosIndexRoute: typeof DecagonConvosIndexRoute
@@ -1345,6 +1365,7 @@ const DecagonRouteChildren: DecagonRouteChildren = {
   DecagonCatalogRoute: DecagonCatalogRoute,
   DecagonDuetRoute: DecagonDuetRoute,
   DecagonEvalsRoute: DecagonEvalsRoute,
+  DecagonWatchtowerRoute: DecagonWatchtowerRoute,
   DecagonIndexRoute: DecagonIndexRoute,
   DecagonConvosIdRoute: DecagonConvosIdRoute,
   DecagonConvosIndexRoute: DecagonConvosIndexRoute,

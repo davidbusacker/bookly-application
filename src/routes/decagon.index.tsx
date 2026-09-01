@@ -188,19 +188,69 @@ function Insights() {
         )}
       </Card>
 
-      <Card title="Conversation length by channel">
-        <div className="px-5 py-6">
-          <div className="mb-4 flex gap-5 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <span className="h-3 w-3 rounded-sm" style={{ background: CHANNEL_COLOR.chat }} /> Chat messages
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="h-3 w-3 rounded-sm" style={{ background: CHANNEL_COLOR.voice }} /> Phone calls
-            </span>
+      <div className="grid gap-5 lg:grid-cols-3">
+        <Card title="Mean time to resolution">
+          <div className="px-5 py-5">
+            <div className="flex items-end gap-3">
+              <span className="text-3xl font-semibold tabular-nums">4m 12s</span>
+              <span className="mb-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">▼ 18% vs prior 45d</span>
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">Chat 3m 04s · Phone 6m 41s · P90 11m 22s</p>
+            <Spark points={MTTR_TREND} />
+            <div className="mt-4 space-y-2">
+              {MTTR_BY_INTENT.map((r) => (
+                <div key={r.label} className="flex items-center gap-3 text-xs">
+                  <span className="w-28 shrink-0 truncate text-muted-foreground">{r.label}</span>
+                  <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
+                    <span className="block h-full rounded-full bg-primary" style={{ width: `${r.pct}%` }} />
+                  </span>
+                  <span className="w-12 text-right tabular-nums">{r.value}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <BarChart buckets={buckets} />
-        </div>
-      </Card>
+        </Card>
+
+        <Card title="CSAT">
+          <div className="px-5 py-5">
+            <div className="flex items-end gap-3">
+              <span className="text-3xl font-semibold tabular-nums">4.42</span>
+              <span className="mb-1 text-xs text-muted-foreground">/ 5 · 3,180 surveys</span>
+            </div>
+            <p className="mt-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">▲ 0.14 vs prior 45d</p>
+            <Spark points={CSAT_TREND} />
+            <div className="mt-4 space-y-1.5">
+              {CSAT_DIST.map((d) => (
+                <div key={d.score} className="flex items-center gap-3 text-xs">
+                  <span className="w-6 tabular-nums text-muted-foreground">{d.score}★</span>
+                  <span className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+                    <span
+                      className="block h-full rounded-full"
+                      style={{ width: `${d.pct}%`, background: d.score >= 4 ? CHANNEL_COLOR.chat : CHANNEL_COLOR.voice }}
+                    />
+                  </span>
+                  <span className="w-9 text-right tabular-nums text-muted-foreground">{d.pct}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+
+        <Card title="Conversation length by channel">
+          <div className="px-5 py-5">
+            <div className="mb-3 flex gap-4 text-[11px] text-muted-foreground">
+              <span className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-sm" style={{ background: CHANNEL_COLOR.chat }} /> Chat
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-sm" style={{ background: CHANNEL_COLOR.voice }} /> Phone
+              </span>
+            </div>
+            <BarChart buckets={buckets} />
+          </div>
+        </Card>
+      </div>
+
 
       {sub && drill ? (
         <SubReasonPanel
@@ -266,15 +316,46 @@ function FilterChip({ label, value }: { label: string; value: string }) {
   );
 }
 
+const MTTR_TREND = [6.4, 6.1, 5.8, 5.9, 5.4, 5.1, 4.9, 5.0, 4.6, 4.4, 4.3, 4.2];
+const CSAT_TREND = [4.18, 4.21, 4.19, 4.26, 4.24, 4.3, 4.33, 4.29, 4.36, 4.38, 4.4, 4.42];
+const MTTR_BY_INTENT = [
+  { label: "Initiate return", value: "5m 48s", pct: 92 },
+  { label: "Order status", value: "2m 11s", pct: 35 },
+  { label: "Refund status", value: "4m 02s", pct: 64 },
+  { label: "Stock check", value: "1m 47s", pct: 28 },
+];
+const CSAT_DIST = [
+  { score: 5, pct: 62 },
+  { score: 4, pct: 24 },
+  { score: 3, pct: 8 },
+  { score: 2, pct: 4 },
+  { score: 1, pct: 2 },
+];
+
+function Spark({ points }: { points: number[] }) {
+  const max = Math.max(...points);
+  const min = Math.min(...points);
+  const span = max - min || 1;
+  const d = points
+    .map((p, i) => `${(i / (points.length - 1)) * 100},${28 - ((p - min) / span) * 24}`)
+    .join(" L ");
+  return (
+    <svg viewBox="0 0 100 30" preserveAspectRatio="none" className="mt-3 h-10 w-full">
+      <path d={`M ${d}`} fill="none" stroke="var(--primary)" strokeWidth={1.6} vectorEffect="non-scaling-stroke" />
+    </svg>
+  );
+}
+
 function BarChart({ buckets }: { buckets: { key: string; label: string; chat: number; voice: number }[] }) {
   const max = Math.max(1, ...buckets.map((b) => Math.max(b.chat, b.voice)));
   return (
-    <div className="flex h-56 items-end gap-6">
+    <div className="flex h-52 items-end gap-3">
       {buckets.map((b) => (
         <div key={b.key} className="flex flex-1 flex-col items-center gap-2">
-          <div className="flex h-44 w-full items-end justify-center gap-1.5">
+          <div className="flex h-40 w-full items-end justify-center gap-1">
             {(["chat", "voice"] as const).map((k) => (
-              <div key={k} className="flex w-6 flex-col items-center justify-end" style={{ height: "100%" }}>
+              <div key={k} className="flex w-4 flex-col items-center justify-end" style={{ height: "100%" }}>
+
                 <span className="mb-1 text-[10px] tabular-nums text-muted-foreground">{b[k]}</span>
                 <div
                   className="w-full rounded-t-sm"
