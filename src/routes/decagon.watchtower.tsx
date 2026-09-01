@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Plus, Settings2, Trash2, X } from "lucide-react";
+import { Plus, Settings2, Trash2 } from "lucide-react";
 import { Card } from "@/components/console/ui";
 
 export const Route = createFileRoute("/decagon/watchtower")({
@@ -358,5 +358,3 @@ function Viz({ widget }: { widget: Widget }) {
     </svg>
   );
 }
-
-export { X as _unusedIcon };
