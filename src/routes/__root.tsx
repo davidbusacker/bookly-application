@@ -116,6 +116,24 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+
+  // Warm both environments (Bookly admin + Decagon) right after hydration so
+  // switching between them is instant instead of re-fetching everything.
+  useEffect(() => {
+    let cancelled = false;
+    const id = window.setTimeout(() => {
+      if (cancelled) return;
+      void prefetchAllEnvironments(queryClient);
+      for (const to of PRELOAD_ROUTES) {
+        void router.preloadRoute({ to }).catch(() => undefined);
+      }
+    }, 150);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(id);
+    };
+  }, [queryClient, router]);
 
   return (
     <QueryClientProvider client={queryClient}>
