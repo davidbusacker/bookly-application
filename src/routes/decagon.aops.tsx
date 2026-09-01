@@ -50,13 +50,13 @@ function Metric({ label, value }: { label: string; value: string }) {
 function VersionPerf({ v }: { v: AopVersion }) {
   if (v.convos === 0) {
     return (
-      <p className="px-3 pb-3 text-xs text-muted-foreground">
+      <p className="px-3 pb-3 pt-2 text-xs text-muted-foreground">
         No eval data — this version has never served production traffic.
       </p>
     );
   }
   return (
-    <div className="space-y-2 px-3 pb-3">
+    <div className="space-y-2 px-3 pb-3 pt-2.5">
       <div className="grid grid-cols-2 gap-2">
         <Metric label="Eval quality" value={`${v.quality}`} />
         <Metric label="Containment" value={`${v.containment}%`} />
