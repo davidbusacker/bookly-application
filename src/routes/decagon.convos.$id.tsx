@@ -7,6 +7,16 @@ import { TraceTranscript } from "@/components/console/trace-transcript";
 import { traceChannel } from "@/lib/decagon/insights";
 
 export const Route = createFileRoute("/decagon/convos/$id")({
+  head: ({ params }) => ({
+    meta: [
+      { title: `Convo ${params.id} — Decagon · Bookly` },
+      { name: "description", content: `Full transcript and QA details for Bookly AI support conversation ${params.id}.` },
+      { property: "og:title", content: `Convo ${params.id} — Decagon` },
+      { property: "og:description", content: "Turn-by-turn AI support conversation transcript." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: ConvoDetail,
 });
 
