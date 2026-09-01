@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { PRELOAD_ROUTES, prefetchAllEnvironments } from "../lib/bookly/prefetch";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
