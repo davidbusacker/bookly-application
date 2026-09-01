@@ -24,7 +24,16 @@ function DecagonLayout() {
       <aside className="sticky top-0 hidden h-screen w-56 shrink-0 flex-col border-r border-sidebar-border bg-sidebar/80 px-3 py-5 backdrop-blur-xl md:flex">
         <div className="px-2 pb-6">
           <p className="ai-text text-lg font-bold tracking-tight">decagon</p>
-          <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Bookly workspace</p>
+          <div className="relative mt-1 inline-flex max-w-full items-center">
+            <select
+              aria-label="Workspace"
+              defaultValue="bookly-prd"
+              className="appearance-none rounded-md border border-border bg-surface-1 py-1 pl-2 pr-7 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+            >
+              <option value="bookly-prd">Bookly (PRD)</option>
+            </select>
+            <ChevronDown size={12} className="pointer-events-none absolute right-2 text-muted-foreground" aria-hidden />
+          </div>
         </div>
         <nav className="flex flex-1 flex-col gap-1">
           {NAV.map((n) => (
