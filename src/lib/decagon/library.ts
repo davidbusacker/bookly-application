@@ -211,3 +211,43 @@ export const CATALOG: CatalogEntry[] = [
   { id: "s4", kind: "skill", name: "policy_answer", description: "Answers shipping, returns and privacy questions from published policy.", surface: "support_agent", status: "live" },
   { id: "s5", kind: "skill", name: "escalate_to_human", description: "Hands off with a structured summary when confidence drops below 0.6.", surface: "support_agent", status: "live" },
 ];
+
+export type AopVersion = {
+  version: string;
+  label: string;
+  author: string;
+  date: string;
+  live: boolean;
+  quality: number;
+  containment: number;
+  csat: number;
+  convos: number;
+  note: string;
+};
+
+// Lightweight audit trail: each published version with the eval performance
+// recorded while that version was serving traffic.
+export const AOP_VERSIONS: Record<string, AopVersion[]> = {
+  return_intake_aop: [
+    { version: "v4", label: "Exchange-first branch", author: "M. Okafor", date: "Aug 12, 2026", live: true, quality: 92, containment: 78, csat: 4.6, convos: 8421, note: "Offer exchange before refund on fit reasons." },
+    { version: "v3", label: "Damaged-on-arrival handoff", author: "Duet", date: "Jun 03, 2026", live: false, quality: 88, containment: 74, csat: 4.4, convos: 12980, note: "Route damaged items to #reship_aop." },
+    { version: "v2", label: "Window wording rewrite", author: "R. Vance", date: "Feb 19, 2026", live: false, quality: 81, containment: 69, csat: 4.1, convos: 15310, note: "Policy stated as fact, not favor." },
+    { version: "v1", label: "Initial publish", author: "M. Okafor", date: "Oct 07, 2025", live: false, quality: 74, containment: 61, csat: 3.9, convos: 9044, note: "First production AOP." },
+  ],
+  refund_policy_aop: [
+    { version: "v3", label: "Loyalty early-processing", author: "Duet", date: "Jul 28, 2026", live: true, quality: 90, containment: 81, csat: 4.5, convos: 6210, note: "Advance refunds for high-loyalty customers." },
+    { version: "v2", label: "Range-based timing", author: "S. Iyer", date: "Mar 11, 2026", live: false, quality: 84, containment: 76, csat: 4.2, convos: 11045, note: "Quote 3–5 day windows, never single dates." },
+    { version: "v1", label: "Initial publish", author: "S. Iyer", date: "Nov 22, 2025", live: false, quality: 77, containment: 70, csat: 4.0, convos: 8730, note: "First production AOP." },
+  ],
+  order_status_aop: [
+    { version: "v2", label: "Stale-scan proactive offer", author: "Duet", date: "Jul 02, 2026", live: true, quality: 94, containment: 86, csat: 4.7, convos: 19402, note: "Flag scans older than 48h." },
+    { version: "v1", label: "Initial publish", author: "M. Okafor", date: "Jan 15, 2026", live: false, quality: 85, containment: 79, csat: 4.3, convos: 22110, note: "Lead with latest carrier scan." },
+  ],
+  genre_fit_nudge_aop: [
+    { version: "v1", label: "Draft — not yet published", author: "Duet", date: "Aug 28, 2026", live: false, quality: 0, containment: 0, csat: 0, convos: 0, note: "Awaiting A/B test configuration." },
+  ],
+  password_reset_aop: [
+    { version: "v2", label: "Voice redaction rules", author: "Bookly Trust", date: "May 09, 2026", live: true, quality: 89, containment: 72, csat: 4.4, convos: 3311, note: "Never read PII aloud on voice." },
+    { version: "v1", label: "Initial publish", author: "Bookly Trust", date: "Dec 04, 2025", live: false, quality: 80, containment: 65, csat: 4.1, convos: 4102, note: "First production AOP." },
+  ],
+};
