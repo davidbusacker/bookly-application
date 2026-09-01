@@ -188,19 +188,69 @@ function Insights() {
         )}
       </Card>
 
-      <Card title="Conversation length by channel">
-        <div className="px-5 py-6">
-          <div className="mb-4 flex gap-5 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <span className="h-3 w-3 rounded-sm" style={{ background: CHANNEL_COLOR.chat }} /> Chat messages
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="h-3 w-3 rounded-sm" style={{ background: CHANNEL_COLOR.voice }} /> Phone calls
-            </span>
+      <div className="grid gap-5 lg:grid-cols-3">
+        <Card title="Mean time to resolution">
+          <div className="px-5 py-5">
+            <div className="flex items-end gap-3">
+              <span className="text-3xl font-semibold tabular-nums">4m 12s</span>
+              <span className="mb-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">▼ 18% vs prior 45d</span>
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">Chat 3m 04s · Phone 6m 41s · P90 11m 22s</p>
+            <Spark points={MTTR_TREND} />
+            <div className="mt-4 space-y-2">
+              {MTTR_BY_INTENT.map((r) => (
+                <div key={r.label} className="flex items-center gap-3 text-xs">
+                  <span className="w-28 shrink-0 truncate text-muted-foreground">{r.label}</span>
+                  <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
+                    <span className="block h-full rounded-full bg-primary" style={{ width: `${r.pct}%` }} />
+                  </span>
+                  <span className="w-12 text-right tabular-nums">{r.value}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <BarChart buckets={buckets} />
-        </div>
-      </Card>
+        </Card>
+
+        <Card title="CSAT">
+          <div className="px-5 py-5">
+            <div className="flex items-end gap-3">
+              <span className="text-3xl font-semibold tabular-nums">4.42</span>
+              <span className="mb-1 text-xs text-muted-foreground">/ 5 · 3,180 surveys</span>
+            </div>
+            <p className="mt-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">▲ 0.14 vs prior 45d</p>
+            <Spark points={CSAT_TREND} />
+            <div className="mt-4 space-y-1.5">
+              {CSAT_DIST.map((d) => (
+                <div key={d.score} className="flex items-center gap-3 text-xs">
+                  <span className="w-6 tabular-nums text-muted-foreground">{d.score}★</span>
+                  <span className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+                    <span
+                      className="block h-full rounded-full"
+                      style={{ width: `${d.pct}%`, background: d.score >= 4 ? CHANNEL_COLOR.chat : CHANNEL_COLOR.voice }}
+                    />
+                  </span>
+                  <span className="w-9 text-right tabular-nums text-muted-foreground">{d.pct}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+
+        <Card title="Conversation length by channel">
+          <div className="px-5 py-5">
+            <div className="mb-3 flex gap-4 text-[11px] text-muted-foreground">
+              <span className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-sm" style={{ background: CHANNEL_COLOR.chat }} /> Chat
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-sm" style={{ background: CHANNEL_COLOR.voice }} /> Phone
+              </span>
+            </div>
+            <BarChart buckets={buckets} />
+          </div>
+        </Card>
+      </div>
+
 
       {sub && drill ? (
         <SubReasonPanel
