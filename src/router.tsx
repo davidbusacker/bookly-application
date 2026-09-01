@@ -3,7 +3,10 @@ import { createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 
 export const getRouter = () => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    // Prefetched data stays fresh briefly so switching environments reads cache.
+    defaultOptions: { queries: { staleTime: 15_000 } },
+  });
 
   const router = createRouter({
     routeTree,
